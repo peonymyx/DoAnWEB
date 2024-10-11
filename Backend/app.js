@@ -2,15 +2,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
+require("dotenv").config();
+
 const twilio = require("twilio");
-const accountSid = "AC98ec8af4b7e7d930f3e387ba12b885a2";
-const authToken = "8641e6bc8612e63e53026e20810c8f83";
+const accountSid = process.env.ACCOUNT_SID;
+const authToken = process.env.AUTH_TOKEN;
 const client = require("twilio")(accountSid, authToken);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const port = 3000;
-require("dotenv").config();
 const http = require("http");
 const socketIo = require("socket.io");
 
