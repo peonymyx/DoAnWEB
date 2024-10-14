@@ -12,13 +12,19 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().min(6).max(15).required(),
-  confirmPassword: yup.string().oneOf([yup.ref("password"), null]),
-  username: yup.string().required(),
-  phone: yup.string().required(),
-  address: yup.string().required(),
-  gender: yup.string().required(),
+  email: yup.string().email().required("Email là bắt buộc."),
+  password: yup
+    .string()
+    .min(6, "Mật khẩu phải có ít nhất 6 ký tự.")
+    .max(15, "Mật khẩu không được vượt quá 15 ký tự.")
+    .required("Mật khẩu là bắt buộc."),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Mật khẩu xác nhận không khớp."),
+  username: yup.string().required("Tên người dùng là bắt buộc."),
+  phone: yup.string().required("Số điện thoại là bắt buộc."),
+  address: yup.string().required("Địa chỉ là bắt buộc."),
+  gender: yup.string().required("Giới tính là bắt buộc."),
 });
 
 const SignUp = () => {
@@ -52,6 +58,7 @@ const SignUp = () => {
       navigate("/login");
     } catch (error) {
       console.log(error);
+      console.log(error.response.data);
       dispatch(registerFailure(error.message));
     }
   };

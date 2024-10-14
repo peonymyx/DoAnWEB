@@ -50,7 +50,6 @@ const userSchema = new Schema(
       // required: true,
       unique: false,
       trim: true,
-      minlength: 3,
     },
     gender: {
       type: String,
