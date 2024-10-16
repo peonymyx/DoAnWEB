@@ -95,7 +95,7 @@ app.use("/api/v1/signin", require("./router/signInRouter"));
 app.use("/api/v1/forgotpassword", require("./router/forgot-password"));
 app.use("/api/v1/resetpassword", require("./router/reset-password"));
 
-app.use('/api/v1/coupons', require("./router/couponRouter"));
+app.use("/api/v1/coupons", require("./router/couponRouter"));
 app.use("/api/v1/addProduct", require("./router/ProductRouter"));
 app.use("/api/v1/getProduct", require("./router/ProductRouter"));
 app.use("/api/v1/deleteProduct", require("./router/ProductRouter"));
@@ -112,6 +112,8 @@ app.use("/api/v1/otherProduct", require("./router/oderProduct"));
 app.use("/", require("./router/payment"));
 app.use("/api/v1/statistical", require("./router/statistical"));
 app.use("/api/v1", require("./router/userRouter"));
+app.use("/api/v1/bestSeller", require("./router/bestSeller"));
+app.use("/api/v1/filter", require("./router/filterRouter"));
 server.listen(port, () => {
   console.log(`listening on port ${port}`);
 });

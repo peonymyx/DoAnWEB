@@ -3,7 +3,7 @@
 // Lấy và thống kê 3 sản phẩm bán chạy nhất theo thứ tự số lượng giảm dần
 const bestSeller = async (req, res) => {
     try {
-        const bestSellers = OrderDetail.aggregate([
+        const bestSellers = await OrderDetail.aggregate([
             {
                 $group: {
                     _id: "$Product_id",
@@ -19,7 +19,7 @@ const bestSeller = async (req, res) => {
                 }
             }
         ]);
-        res.status(200).json(bestSellers);
+        res.status(200).json({ bestSellers });
     } catch (error) {
         res.status(500).json({ message: 'Có lỗi xảy ra', error });
     }
