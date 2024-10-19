@@ -7,7 +7,7 @@ import { getCategory } from "../../redux/categorySlice";
 function Activities() {
   const productListRef = useRef(null);
   const dispatch = useDispatch();
-  const product = useSelector((state) => state.product.product);
+  const product = useSelector((state) => state.product.products);
   const category = useSelector((state) => state.category.category);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -76,7 +76,7 @@ function Activities() {
           {filteredProduct.length > 0 ? (
             filteredProduct.map((item) => (
               <div className="col-md-3 mb-4" key={item._id}>
-                <Link to={`/vacxindetail/${item._id}`} className="text-decoration-none">
+                <Link to={`/productdetail/${item._id}`} className="text-decoration-none">
                   <div className="card h-100 mx-auto wow zoomIn bg-white dark:bg-gray-800 dark:border-gray-700" data-wow-delay="0.9s" style={{ border: '1px solid #ddd', borderRadius: '5px', overflow: 'hidden' }}>
                     <img src={item.image} alt={item.name} className="card-img-top" style={{ objectFit: 'cover', height: '200px' }} />
                     <div style={{marginLeft:"-160px"}} className="card-body d-flex flex-column justify-content-center align-items-center text-center">

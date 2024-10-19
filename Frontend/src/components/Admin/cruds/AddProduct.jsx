@@ -10,6 +10,7 @@ import { getCategory } from "../../../redux/categorySlice";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Sidebar from "../../Nav/Sidebar";
+import { handleUploadToImgBB } from "../../../config/apiConfig";
 
 const schema = yup.object().shape({
   name: yup.string().required("Vui lòng nhập tên"),
@@ -56,7 +57,12 @@ const AddProduct = () => {
 
   const handleAddProduct = async (data) => {
     const { name, address, category, price } = data;
+    const imageUrl = await handleUploadToImgBB(imageUpload);
 
+    if (!imageUrl) {
+      console.error("Failed to upload image");
+      return;
+    }
     await dispatch(
       addProduct({
         name,
@@ -65,7 +71,7 @@ const AddProduct = () => {
         category,
         description: description,
         price,
-        image: imageUpload,
+        image: imageUrl,
       })
     );
   };

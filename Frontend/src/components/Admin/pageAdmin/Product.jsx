@@ -34,7 +34,7 @@ const formatPrice = (price) => {
 
 const Product = () => {
   const dispatch = useDispatch();
-  const product = useSelector((state) => state.product.product);
+  const product = useSelector((state) => state.product.products); // Lấy toàn bộ state sản phẩm
   const loading = useSelector((state) => state.product.isLoading);
   const isLoading = useSelector((state) => state.product.isLoading);
   const [searchTerm, setSearchTerm] = useState(""); // State lưu trữ từ khóa tìm kiếm
@@ -44,13 +44,19 @@ const Product = () => {
     setSearchTerm(e.target.value);
   };
 
+  useEffect(() => {
+    dispatch(getProduct());
+  }, [dispatch]);
+
+  console.log("Product từ Redux:", product);
+
   // Bước 2: Filter dữ liệu dựa trên từ khóa tìm kiếm
   const filteredProduct = product.filter((v) =>
     v.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  useEffect(() => {
-    dispatch(getProduct());
-  }, [dispatch]);
+
+    console.log("filtered",filteredProduct);
+    
 
   const handleDelete = (id) => async () => {
     dispatch(deleteProduct(id));
