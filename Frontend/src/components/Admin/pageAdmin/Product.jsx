@@ -55,12 +55,15 @@ const Product = () => {
     v.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-    console.log("filtered",filteredProduct);
-    
+  console.log("filtered", filteredProduct);
 
   const handleDelete = (id) => async () => {
-    dispatch(deleteProduct(id));
-    dispatch(deleteStorageByproduct_id(id));
+    await dispatch(deleteProduct(id));
+    
+    // Add a timeout of 2 seconds (2000 milliseconds)
+    setTimeout(() => {
+        window.location.reload(); // Reload the page after the timeout
+    }, 2000);
   };
 
   return (

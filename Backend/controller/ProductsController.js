@@ -2,9 +2,8 @@ const product = require("../models/Product");
 const mongoose = require('mongoose'); 
 
 const addProduct = async (req, res) => {
-  const image = req.file.path;
   console.log(req.body);
-  const { name, description, size, category, price } = req.body;
+  const { name, description, size, category, price,  image} = req.body;
   try {
     const Product = new product({
       name,
