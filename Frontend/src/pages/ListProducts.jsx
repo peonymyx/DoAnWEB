@@ -8,7 +8,7 @@ import axios from "axios";
 function ListProducts() {
   const productListRef = useRef(null);
   const dispatch = useDispatch();
-  const product = useSelector((state) => state.product.product);
+  const product = useSelector((state) => state.product.products);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categoryList, setCategoryList] = useState([]);
   const category = useSelector((state) => state.category.category);

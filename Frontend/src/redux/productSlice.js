@@ -138,14 +138,31 @@ const productSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(deleteProduct.fulfilled, (state, action) => {
-      state.isLoading = false;
-      // console.log(current(state));
+      // state.isLoading = false;
+      // // console.log(current(state));
 
+      // const index = state.products.findIndex(
+      //   (product) => product._id === action.payload.product._id
+      // );
+      // console.log(index);
+      // state.products.splice(index, 1);
+      state.isLoading = false;
+
+      console.log('Action payload:', action.payload); // Kiểm tra giá trị của action.payload
+      
+      if (!action.payload || !action.payload.product) {
+        console.error('Invalid payload:', action.payload);
+        return;
+      }
+    
       const index = state.products.findIndex(
         (product) => product._id === action.payload.product._id
       );
-      console.log(index);
-      state.products.splice(index, 1);
+      console.log('Index to delete:', index);
+    
+      if (index !== -1) {
+        state.products.splice(index, 1); // Xóa sản phẩm chỉ khi index hợp lệ
+      }
     });
     builder.addCase(deleteProduct.rejected, (state, action) => {
       state.isLoading = false;

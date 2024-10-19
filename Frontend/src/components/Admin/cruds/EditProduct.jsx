@@ -23,7 +23,7 @@ const EditProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = Cookies.get("token");
-  const product = useSelector((state) => state.product.product);
+  const product = useSelector((state) => state.product.products);
   const isLoading = useSelector((state) => state.product.isLoading);
   const [selectedSize, setSelectedSize] = useState([]);
   const [imageUpload, setImageUpload] = useState("");
@@ -57,12 +57,12 @@ const EditProduct = () => {
     dispatch(
       updateProduct({
         id,
-        name,
-        description,
-        size: selectedSize.join(","), // Join selected sizes into a string
-        category,
-        price,
-        image: imageUpload ? imageUpload : product.image,
+        name: name !== undefined ? name : product.name, // Giữ nguyên nếu không có thay đổi
+        description: description !== undefined ? description : product.description, // Giữ nguyên nếu không có thay đổi
+        size: selectedSize.length > 0 ? selectedSize.join(",") : product.size, // Giữ nguyên nếu không có thay đổi
+        category: category !== undefined ? category : product.category, // Giữ nguyên nếu không có thay đổi
+        price: price !== undefined ? price : product.price, // Giữ nguyên nếu không có thay đổi
+        image: imageUpload ? imageUpload : product.image, 
       })
     ).then(() => {
       Swal.fire({
@@ -96,7 +96,7 @@ const EditProduct = () => {
           >
             <div className="mb-4">
               <label htmlFor="name" className="text-lg text-gray-600">
-                Tên sản phẩm:
+                Tên sản phẩm: 
               </label>
               <input
                 name="name"
