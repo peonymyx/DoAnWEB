@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteStorageByproduct_id } from "../../../redux/storageSlice";
 
 import { deleteProduct, getProduct } from "../../../redux/productSlice";
 import { Link } from "react-router-dom";
