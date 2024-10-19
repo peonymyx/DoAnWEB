@@ -10,6 +10,7 @@ import { getCategory } from "../../../redux/categorySlice";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Sidebar from "../../Nav/Sidebar";
+import { handleUploadToImgBB } from "../../../config/apiConfig";
 
 const schema = yup.object().shape({
   name: yup.string().required("Vui lòng nhập tên"),
@@ -56,7 +57,12 @@ const AddProduct = () => {
 
   const handleAddProduct = async (data) => {
     const { name, address, category, price } = data;
+    const imageUrl = await handleUploadToImgBB(imageUpload);
 
+    if (!imageUrl) {
+      console.error("Failed to upload image");
+      return;
+    }
     await dispatch(
       addProduct({
         name,
@@ -65,7 +71,7 @@ const AddProduct = () => {
         category,
         description: description,
         price,
-        image: imageUpload,
+        image: imageUrl,
       })
     );
   };
@@ -129,8 +135,8 @@ const AddProduct = () => {
               ))}
             </div> */}
             <div className="flex gap-2 items-center mt-2">
-            <label htmlFor="name" className="text-sm text-gray-600">
-               Chọn Size:
+              <label htmlFor="name" className="text-sm text-gray-600">
+                Chọn Size:
               </label>
               {selectedSize.map((size) => (
                 <div
@@ -166,8 +172,10 @@ const AddProduct = () => {
                 Danh muc
               </label>
               <select
-              className="w-full border border-gray-300 rounded-lg py-2 px-3 outline-none bg-transparent focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              name="category" {...register("category")}>
+                className="w-full border border-gray-300 rounded-lg py-2 px-3 outline-none bg-transparent focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                name="category"
+                {...register("category")}
+              >
                 {category.map((item) => (
                   <option key={item._id} value={item._id}>
                     {item.name}
@@ -207,7 +215,6 @@ const AddProduct = () => {
               />
               <p className="text-red-500 mt-1">{errors.description?.message}</p>
             </div>
-    
 
             <button className="block w-full h-10 bg-blue-800 text-white rounded-md">
               Thêm

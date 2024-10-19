@@ -1,4 +1,5 @@
 const product = require("../models/Product");
+const mongoose = require('mongoose'); 
 
 const addProduct = async (req, res) => {
   const image = req.file.path;
@@ -9,10 +10,13 @@ const addProduct = async (req, res) => {
       name,
       description,
       size,
-      category,
+      category: new mongoose.Types.ObjectId(category),
       image,
       price,
     });
+    if (!mongoose.Types.ObjectId.isValid(category)) {
+      return res.status(400).json({ error: "Invalid category ID" });
+    }
     await Product.save();
     // update Storage
 
@@ -53,14 +57,18 @@ const updateProduct = async (req, res) => {
   let image = req.file ? req.file.path : req.body.image;
   const { name, description, size, category, price } = req.body;
   try {
-    const Product = await product.findByIdAndUpdate(id, {
-      name, 
-      description, 
-      size, 
-      category,
-      price,
-      image
-    }, { new: true }); 
+    const Product = await product.findByIdAndUpdate(
+      id,
+      {
+        name,
+        description,
+        size,
+        category,
+        price,
+        image,
+      },
+      { new: true }
+    );
     res.status(200).json({ Product });
   } catch (error) {
     res.status(500).json({ message: error.message });
