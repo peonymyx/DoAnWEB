@@ -1,14 +1,16 @@
-import React from "react";
 import Header from "./Header";
 import { Outlet } from "react-router-dom";
 
-const Layoutmain = () => {
+const LayoutMain = () => {
   return (
     <div>
-      <Header></Header>
-      <Outlet></Outlet>
+      <Header />
+      {/* Add margin-top to push Outlet content below the header */}
+      <div className="mt-[110px]">
+        {/* Adjust '80px' to match your header height */}
+        <Outlet />
+      </div>
     </div>
   );
 };
-
-export default Layoutmain;
+export default LayoutMain;

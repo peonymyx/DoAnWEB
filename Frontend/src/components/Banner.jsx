@@ -1,8 +1,6 @@
-import React from 'react';
-
 const Banner = () => {
   return (
-    <div className="container-fluid p-0 mt-20">
+    <div className="container-fluid p-0">
       <div
         id="header-carousel"
         className="carousel slide carousel-fade"
@@ -17,10 +15,16 @@ const Banner = () => {
             />
             <div className="carousel-caption d-flex flex-column align-items-center justify-content-center">
               <div className="p-3" style={{ maxWidth: "900px" }}>
-                <h5 className="text-white text-uppercase mb-3 animated slideInDown fw-bold" style={{ color: 'white', textShadow: '2px 2px 5px red' }}>
+                <h5
+                  className="text-white text-uppercase mb-3 animated slideInDown fw-bold"
+                  style={{ color: "white", textShadow: "2px 2px 5px red" }}
+                >
                   Hãy trân trọng sức khỏe của bạn
                 </h5>
-                <h1 className="display-1 text-dark mb-md-4 animated zoomIn fw-bold" style={{ color: 'white', textShadow: '2px 2px 5px red' }}>
+                <h1
+                  className="display-1 text-dark mb-md-4 animated zoomIn fw-bold"
+                  style={{ color: "white", textShadow: "2px 2px 5px red" }}
+                >
                   HÃY TIÊM PHÒNG VẮC-XIN NGAY HÔM NAY
                 </h1>
                 <a
@@ -46,11 +50,17 @@ const Banner = () => {
             />
             <div className="carousel-caption d-flex flex-column align-items-center justify-content-center">
               <div className="p-3" style={{ maxWidth: "900px" }}>
-                <h5 className="text-white text-uppercase mb-3 animated slideInDown fw-bold" style={{ color: 'white', textShadow: '2px 2px 5px red' }}>
+                <h5
+                  className="text-white text-uppercase mb-3 animated slideInDown fw-bold"
+                  style={{ color: "white", textShadow: "2px 2px 5px red" }}
+                >
                   Hãy trân trọng sức khỏe của bạn
                 </h5>
-                <h1 className="display-1 text-white mb-md-4 animated zoomIn fw-bold" style={{ color: 'white', textShadow: '2px 2px 5px red' }}>
-                  CHÚNG TÔI LUÔN SẴN SÀNG PHỤC VỤ BẠN 
+                <h1
+                  className="display-1 text-white mb-md-4 animated zoomIn fw-bold"
+                  style={{ color: "white", textShadow: "2px 2px 5px red" }}
+                >
+                  CHÚNG TÔI LUÔN SẴN SÀNG PHỤC VỤ BẠN
                 </h1>
                 <a
                   href="/RegisterVaccination"
@@ -70,7 +80,7 @@ const Banner = () => {
         </div>
       </div>
       <button
-      style={{marginTop:"-100px",position:"absolute"}}
+        style={{ marginTop: "-100px", position: "absolute" }}
         className="carousel-control-prev"
         type="button"
         data-bs-target="#header-carousel"
@@ -80,7 +90,7 @@ const Banner = () => {
         <span className="visually-hidden">Previous</span>
       </button>
       <button
-      style={{marginTop:"-100px",position:"absolute"}}
+        style={{ marginTop: "-100px", position: "absolute" }}
         className="carousel-control-next"
         type="button"
         data-bs-target="#header-carousel"
