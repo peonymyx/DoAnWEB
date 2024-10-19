@@ -67,51 +67,61 @@ const Header = () => {
         </div>
 
         {/* Desktop Buttons */}
-        <div className="hidden lg:flex items-center space-x-6">
-          <img
-            className="w-[40px] h-[40px] rounded-full mr-[-20px]"
-            src={user?.avatar}
-            alt=""
-          />
+        <div className="hidden lg:flex items-center space-x-6 relative">
           {user ? (
-            <Link
-              className="nav-link text-black dropdown-toggle text-xl"
-              data-bs-toggle="dropdown"
-              role="button"
-            >
-              {user.username}
-            </Link>
+            <div className="flex">
+              <img
+                className="w-[40px] h-[40px] rounded-full"
+                src={user?.avatar}
+                alt=""
+              />
+              <div className="dropdown relative">
+                <Link
+                  className="nav-link text-black dropdown-toggle text-xl"
+                  data-bs-toggle="dropdown"
+                  role="button"
+                  aria-expanded="false"
+                  onClick={(e) => e.preventDefault()} // Prevent default link behavior
+                >
+                  {user.username}
+                </Link>
+                {/* Dropdown Menu */}
+                <ul className="dropdown-menu absolute hidden bg-white text-black shadow-lg">
+                  <li>
+                    <Link
+                      className="dropdown-item text-lg p-3 py-2"
+                      to={`/UpdateMain/${user._id}`}
+                    >
+                      Chỉnh Sửa Hồ Sơ
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      onClick={handleLogOut}
+                      to="#"
+                      className="dropdown-item text-lg p-3 py-2"
+                    >
+                      Đăng Xuất
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
           ) : (
             <div>
               <button className="font-semibold text-2xl border-none outline-none">
-                <Link to="/register" className="text-[#007bff] hover:underline">
+                <Link
+                  to="/register"
+                  className="text-[#007bff] hover:underline mr-4 text-xl px-3 py-2"
+                >
                   Đăng Ký
                 </Link>
               </button>
-              <button className="px-4 py-2 text-2xl rounded-sm font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]">
+              <button className="mr-2 px-3 py-2 text-xl rounded-sm font-bold  text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-500 hover:bg-transparent hover:text-[#007bff]">
                 <Link to="/login">Đăng Nhập</Link>
               </button>
             </div>
           )}
-          {user ? (
-            <ul>
-              <li className="dropdown-menu">
-                <Link
-                  className="dropdown-item text-lg p-3 py-2"
-                  to={`/UpdateMain/${user._id}`}
-                >
-                  Chỉnh Sửa Hồ Sơ
-                </Link>
-                <Link
-                  onClick={handleLogOut}
-                  to="#"
-                  className="dropdown-item text-lg p-3 py-2"
-                >
-                  Đăng Xuất
-                </Link>
-              </li>
-            </ul>
-          ) : null}
         </div>
 
         {/* Mobile Menu Button and Buttons */}
@@ -134,7 +144,7 @@ const Header = () => {
                   Đăng Ký
                 </Link>
               </button>
-              <button className="mr-2 px-3 py-2 text-xl rounded-sm font-bold  text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]">
+              <button className="mr-2 px-3 py-2 text-xl rounded-sm font-bold  text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-500 hover:bg-transparent hover:text-[#007bff]">
                 <Link to="/login">Đăng nhập</Link>
               </button>
             </div>
