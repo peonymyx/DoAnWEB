@@ -3,17 +3,18 @@ import API from "./api";
 import Swal from "sweetalert2";
 
 const initialState = {
-  product: [],
+  products: [],
   isLoading: false,
   error: null,
 };
 
 export const getProduct = createAsyncThunk(
   "product/getProduct",
-  async ( { rejectWithValue }) => {
+  async (arg, { rejectWithValue }) => {
     try {
       const res = await API.get("/api/v1/getProduct");
-      return res.data.product;
+      console.log("Dữ liệu từ API:", res.data);
+      return res.data.Product;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -51,7 +52,7 @@ export const getProductById = createAsyncThunk(
     try {
       const res = await API.get(`/api/v1/getProductById/${payload}`);
       console.log(res.data);
-      return res.data.product;
+      return res.data.Product;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -116,7 +117,7 @@ const productSlice = createSlice({
     });
     builder.addCase(getProduct.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.product = action.payload;
+      state.products = action.payload;
     });
     builder.addCase(getProduct.rejected, (state, action) => {
       state.isLoading = false;
@@ -127,7 +128,7 @@ const productSlice = createSlice({
     });
     builder.addCase(addProduct.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.product.push(action.payload.product);
+      state.products.push(action.payload.product);
     });
     builder.addCase(addProduct.rejected, (state, action) => {
       state.isLoading = false;
@@ -140,11 +141,11 @@ const productSlice = createSlice({
       state.isLoading = false;
       // console.log(current(state));
 
-      const index = state.product.findIndex(
+      const index = state.products.findIndex(
         (product) => product._id === action.payload.product._id
       );
       console.log(index);
-      state.product.splice(index, 1);
+      state.products.splice(index, 1);
     });
     builder.addCase(deleteProduct.rejected, (state, action) => {
       state.isLoading = false;
@@ -155,7 +156,7 @@ const productSlice = createSlice({
     });
     builder.addCase(getProductById.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.product = action.payload;
+      state.products = action.payload;
     });
     builder.addCase(getProductById.rejected, (state, action) => {
       state.isLoading = false;
@@ -170,14 +171,14 @@ const productSlice = createSlice({
       const { id, description, dosage, image, maxAge, minAge, name, origin } =
         action.meta.arg;
       for (let i = 0; i < state.product.length; i++) {
-        if (state.product[i]._id === id) {
-          state.product[i].description = description;
-          state.product[i].dosage = dosage;
-          state.product[i].image = image;
-          state.product[i].maxAge = maxAge;
-          state.product[i].minAge = minAge;
-          state.product[i].name = name;
-          state.product[i].origin = origin;
+        if (state.products[i]._id === id) {
+          state.products[i].description = description;
+          state.products[i].dosage = dosage;
+          state.products[i].image = image;
+          state.products[i].maxAge = maxAge;
+          state.products[i].minAge = minAge;
+          state.products[i].name = name;
+          state.products[i].origin = origin;
         }
       }
     });

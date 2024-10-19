@@ -16,7 +16,7 @@ function ProductsDetail() {
   const [comment, setComment] = useState("");
   const { id } = useParams();
   const dispatch = useDispatch();
-  const product = useSelector((state) => state.product.product);
+  const product = useSelector((state) => state.product.products);
   const auth = useSelector((state) => state.auth);
   const userId = auth.currentUser?._id;
   const [selectedSize, setSelectedSize] = useState("");
