@@ -78,7 +78,6 @@ const AddProduct = () => {
 
   return (
     <div className="flex h-[100vh]">
-      <Sidebar />
       <div className="container min-h-screen mx-auto p-4">
         <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-xl">
           <h1 className="font-bold text-3xl text-center mb-6">Thêm Sản Phẩm</h1>

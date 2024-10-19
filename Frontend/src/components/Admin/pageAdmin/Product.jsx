@@ -59,10 +59,10 @@ const Product = () => {
 
   const handleDelete = (id) => async () => {
     await dispatch(deleteProduct(id));
-    
+
     // Add a timeout of 2 seconds (2000 milliseconds)
     setTimeout(() => {
-        window.location.reload(); // Reload the page after the timeout
+      window.location.reload(); // Reload the page after the timeout
     }, 2000);
   };
 
@@ -81,7 +81,7 @@ const Product = () => {
             shadow={false}
             className="content-header rounded-none"
           >
-            <div className="mb-12 flex flex-col justify-between gap-8 md:flex-row md:items-center">
+            <div className="mb-8 mt-8 flex flex-col justify-between gap-8 md:flex-row md:items-center">
               <div className="font-bold text-3xl">
                 <h1>Quản Lý Sản Phẩm</h1>
               </div>
@@ -122,7 +122,7 @@ const Product = () => {
               </div>
             </div>
           </CardHeader>
-          <CardBody className="container-fluid w-full px-2  ">
+          <CardBody className="px-4 container-fluid overflow-x-auto">
             {/* {loading ? (
               <div className="body">
                 <div className="spinner"></div>
@@ -137,7 +137,7 @@ const Product = () => {
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
-                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-10"
+                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-10 text-center"
                     >
                       <Typography
                         variant="small"
