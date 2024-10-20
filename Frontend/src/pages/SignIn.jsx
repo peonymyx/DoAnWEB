@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
 
 import { login } from "../redux/authSlice";
 import { useState } from "react";
@@ -25,15 +24,14 @@ const SignIn = () => {
 
   const dispatch = useDispatch();
 
-  // const navigate = useNavigate();
   const handleSignIn = async (data) => {
     try {
       dispatch(login(data));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
-  
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -306,7 +304,7 @@ const SignIn = () => {
             <h1 className="text-3xl font-semibold mb-6 text-black text-center">
               Đăng Nhập
             </h1>
-         
+
             <form
               onSubmit={handleSubmit(handleSignIn)}
               autoComplete="off"
@@ -316,7 +314,7 @@ const SignIn = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-lg mb-2 font-medium text-gray-700"
                 >
                   Email
                 </label>
@@ -324,16 +322,16 @@ const SignIn = () => {
                   type="email"
                   id="email"
                   name="email"
-                  className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 text-lg w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                   placeholder="Hãy nhập email.."
                   {...register("email")}
                 />
-                <p className="text-red-500 mt-1">{errors.email?.message}</p>
+                <p className="text-red-500 mt-2">{errors.email?.message}</p>
               </div>
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-lg font-medium text-gray-700"
                 >
                   Mật Khẩu
                 </label>
@@ -342,14 +340,16 @@ const SignIn = () => {
                     type={showPassword ? "text" : "password"}
                     id="password"
                     name="password"
-                    className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                    className="mt-1 p-2 text-lg w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                     placeholder="Hãy nhập mật khẩu.."
                     {...register("password")}
                   ></input>
-                  <p className="text-red-500 mt-1">{errors.password?.message}</p>
+                  <p className="text-red-500 mt-2">
+                    {errors.password?.message}
+                  </p>
                   <button
                     type="button"
-                    className="show-pass absolute right-2 top-[30%] text-gray-600 cursor-pointer"
+                    className="show-pass absolute right-3 top-[20%] text-gray-600 cursor-pointer"
                     onClick={togglePasswordVisibility}
                   >
                     {showPassword ? (
@@ -363,8 +363,8 @@ const SignIn = () => {
                     )}
                   </button>
                 </div>
-                <div className="flex items-center justify-between mt-2 text-blue-500">
-                  <a href="/forgot-password" className="text-sm underline">
+                <div className="flex items-center justify-end mt-2 text-blue-500">
+                  <a href="/forgot-password" className="text-md underline">
                     Quên mật khẩu?
                   </a>
                 </div>
@@ -372,16 +372,19 @@ const SignIn = () => {
               <div>
                 <button
                   type="submit"
-                  className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
+                  className="w-full bg-black text-white p-2 rounded-md text-lg hover:bg-gray-300 focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-500"
                 >
                   Đăng Nhập
                 </button>
               </div>
             </form>
-            <div className="mt-4 text-sm text-gray-600 text-center">
+            <div className="mt-4 text-md text-gray-600 text-center">
               <p>
                 Bạn chưa có tài khoản?{" "}
-                <a href="/register" className="text-black hover:underline">
+                <a
+                  href="/register"
+                  className="text-black hover:underline font-semibold"
+                >
                   Đăng ký
                 </a>
               </p>
