@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Footer from "../components/post/Footer";
 import { getProduct } from "../redux/productSlice";
 import axios from "axios";
 
@@ -11,7 +10,6 @@ function ListProducts() {
   const product = useSelector((state) => state.product.products);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categoryList, setCategoryList] = useState([]);
-  const category = useSelector((state) => state.category.category);
   const getCategoryList = async () => {
     const res = await axios.get("http://localhost:3000/api/v1/category");
     setCategoryList(res.data.category);
@@ -37,18 +35,18 @@ function ListProducts() {
     <div>
       <div
         ref={productListRef}
-        className="container-fluid  pt-36 wow fadeInUp"
+        className="pt-12 fadeInUp w-[1170px] mx-auto"
         data-wow-delay="0.1s"
       >
         <div className="container">
           <div className="row">
             <div className="col-lg-5">
-              <div className="section-title">
-                <h5 className="position-relative d-inline-block text-primary text-uppercase">
-                  Danh Mục Vắc Xin 
+              <div className="section-title mb-8">
+                <h5 className="text-primary text-uppercase text-3xl">
+                  Danh Mục Quần Áo
                 </h5>
               </div>
-              <div className="col-lg-10 my-4 flex ">
+              <div className="col-lg-10 my-4 flex">
                 <h5 className="mr-3 mt-2">Tùy Chọn: </h5>
                 <div className="w-72">
                   <select
@@ -73,7 +71,7 @@ function ListProducts() {
               filteredProducts?.map((item) => {
                 return (
                   <div key={item._id}>
-                    <Link to={`/vacxindetail/${item._id}`}>
+                    <Link to={`/productdetail/${item._id}`}>
                       <div
                         className="max-w-sm mb-5 wow zoomIn bg-white dark:bg-gray-800 dark:border-gray-700"
                         data-wow-delay="0.9s"
@@ -95,7 +93,6 @@ function ListProducts() {
           </div>
         </div>
       </div>
-      <Footer></Footer>
     </div>
   );
 }

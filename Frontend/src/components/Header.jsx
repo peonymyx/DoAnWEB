@@ -17,13 +17,13 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full shadow-md py-4 px-4 sm:px-6 bg-white font-sans min-h-[70px] tracking-wide z-50">
+    <header className="fixed top-0 left-0 w-full shadow-md sm:px-6 bg-white font-sans min-h-[50px] tracking-wide z-50">
       <div className="flex items-center justify-between w-full px-16">
         <Link to="/" className="flex-shrink-0">
           <img
             src="https://designercomvn.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2018/12/06090103/logo-shop-qu%E1%BA%A7n-%C3%A1o-8.png"
             alt="logo"
-            className="w-20 scale-150"
+            className="w-20 scale-125"
           />
         </Link>
 
