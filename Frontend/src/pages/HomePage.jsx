@@ -1,5 +1,4 @@
 import Banner from "../components/Banner";
-import Footer from "../components/post/Footer";
 import PostNew from "../components/post/PostNew";
 import Vacxinlist from "../components/post/ProductList";
 import Activities from "../components/post/Activities";
@@ -14,7 +13,7 @@ const HomePage = () => {
       <PostNew></PostNew>
       <Vacxinlist></Vacxinlist>
       <Message></Message>
-      <Footer></Footer>
+      {/* <Footer></Footer> */}
     </>
   );
 };

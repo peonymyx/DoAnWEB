@@ -6,7 +6,9 @@ import Chart from "chart.js/auto"; // Import Chart.js library
 const Dashboard = () => {
   const dispatch = useDispatch();
   const chartContainer = useRef(null); // Reference to the chart container
-  const { totalUsers, totalProducts, totalComments, totalOrders } = useSelector((state) => state.statistical.statistical);
+  const { totalUsers, totalProducts, totalComments, totalOrders } = useSelector(
+    (state) => state.statistical.statistical
+  );
 
   useEffect(() => {
     dispatch(fetchStatistical());
@@ -14,21 +16,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     const chartData = {
-      labels: [
-        "Người dùng",
-        "Sản phẩm",
-        "Bình luận",
-        "Đơn hàng",
-      ],
+      labels: ["Người dùng", "Sản phẩm", "Bình luận", "Đơn hàng"],
       datasets: [
         {
           label: "Số lượng",
-          data: [
-            totalUsers,
-            totalProducts,
-            totalComments,
-            totalOrders,
-          ],
+          data: [totalUsers, totalProducts, totalComments, totalOrders],
           backgroundColor: [
             "rgba(255, 99, 132, 0.5)",
             "rgba(54, 162, 235, 0.5)",
@@ -80,9 +72,7 @@ const Dashboard = () => {
       <section className="content">
         <div className="container-fluid">
           {/* Small boxes (Stat box) */}
-          <div className="row">
-            {/* Your small boxes here */}
-          </div>
+          <div className="row">{/* Your small boxes here */}</div>
           {/* /.row */}
           {/* Main row */}
           <div className="row">

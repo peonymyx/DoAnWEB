@@ -29,7 +29,10 @@ function Activities() {
     : product;
 
   const formatPrice = (price) => {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    if (price === null || price === undefined) {
+      return "N/A"; // Hoặc một giá trị mặc định nào đó
+    }
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   return (
@@ -62,7 +65,9 @@ function Activities() {
                     key={item._id}
                     onClick={() => handleCategoryClick(item._id)}
                     className={`btn ${
-                      selectedCategory === item._id ? "btn-primary" : "btn-secondary"
+                      selectedCategory === item._id
+                        ? "btn-primary"
+                        : "btn-secondary"
                     } mx-1`}
                   >
                     {item.name}
@@ -76,12 +81,35 @@ function Activities() {
           {filteredProduct.length > 0 ? (
             filteredProduct.map((item) => (
               <div className="col-md-3 mb-4" key={item._id}>
-                <Link to={`/productdetail/${item._id}`} className="text-decoration-none">
-                  <div className="card h-100 mx-auto wow zoomIn bg-white dark:bg-gray-800 dark:border-gray-700" data-wow-delay="0.9s" style={{ border: '1px solid #ddd', borderRadius: '5px', overflow: 'hidden' }}>
-                    <img src={item.image} alt={item.name} className="card-img-top" style={{ objectFit: 'cover', height: '200px' }} />
-                    <div style={{marginLeft:"-160px"}} className="card-body d-flex flex-column justify-content-center align-items-center text-center">
-                      <h5 className="card-title text-gray-700 dark:text-white">{item.name}</h5>
-                      <p className="card-text text-gray-500 dark:text-gray-300">{formatPrice(item.price)} VNĐ</p>
+                <Link
+                  to={`/productdetail/${item._id}`}
+                  className="text-decoration-none"
+                >
+                  <div
+                    className="card h-100 mx-auto wow zoomIn bg-white dark:bg-gray-800 dark:border-gray-700"
+                    data-wow-delay="0.9s"
+                    style={{
+                      border: "1px solid #ddd",
+                      borderRadius: "5px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="card-img-top"
+                      style={{ objectFit: "cover", height: "200px" }}
+                    />
+                    <div
+                      style={{ marginLeft: "-160px" }}
+                      className="card-body d-flex flex-column justify-content-center align-items-center text-center"
+                    >
+                      <h5 className="card-title text-gray-700 dark:text-white">
+                        {item.name}
+                      </h5>
+                      <p className="card-text text-gray-500 dark:text-gray-300">
+                        {formatPrice(item.price)} VNĐ
+                      </p>
                     </div>
                   </div>
                 </Link>

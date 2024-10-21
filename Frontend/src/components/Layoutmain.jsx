@@ -1,14 +1,17 @@
-import React from "react";
 import Header from "./Header";
+import Footer from "./post/Footer";
 import { Outlet } from "react-router-dom";
 
-const Layoutmain = () => {
+const LayoutMain = () => {
   return (
-    <div>
-      <Header></Header>
-      <Outlet></Outlet>
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <div className="flex-grow mt-[70px]">
+        <Outlet />
+      </div>
+      <Footer />
     </div>
   );
 };
 
-export default Layoutmain;
+export default LayoutMain;

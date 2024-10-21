@@ -42,10 +42,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <HomePage></HomePage>,
       },
-    {
-      path:"/fava",
-      element:<Favatie></Favatie>
-    },
+      {
+        path: "/fava",
+        element: <Favatie></Favatie>,
+      },
       {
         path: "/othersuccess",
         element: <OtherSuccess></OtherSuccess>,
@@ -58,8 +58,6 @@ const router = createBrowserRouter([
         path: "/reset-password",
         element: <ResetPassword></ResetPassword>,
       },
-     
-     
       {
         path: "/cart",
         element: <Cart></Cart>,
@@ -121,14 +119,12 @@ const router = createBrowserRouter([
         path: "/Editproduct/:id",
         element: <EditProduct></EditProduct>,
       },
-   
-    
+
       {
         path: "/AccountManagement",
         element: <AccountManagement></AccountManagement>,
       },
-     
-      
+
       {
         path: "/addCategory",
         element: <AddCategory></AddCategory>,
@@ -137,8 +133,7 @@ const router = createBrowserRouter([
         path: "/category",
         element: <CategoryMain></CategoryMain>,
       },
-     
-     
+
       {
         path: "/mess",
         element: <Message></Message>,
@@ -154,7 +149,7 @@ const router = createBrowserRouter([
       {
         path: "/otherdetails/:id",
         element: <OtherDetails></OtherDetails>,
-      }
+      },
     ],
   },
   {
@@ -165,7 +160,6 @@ const router = createBrowserRouter([
     path: "/register",
     element: <SignUp></SignUp>,
   },
-  
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

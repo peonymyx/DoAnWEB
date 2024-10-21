@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import Nav from "./Nav/Nav";
 import Sidebar from "./Nav/Sidebar";
 import { useSelector } from "react-redux";
 
@@ -18,10 +17,11 @@ const LayoutAdmin = () => {
   }
 
   return (
-    <div className="wrapper">
-      <Nav />
-      <Sidebar />
-      <Outlet />
+    <div className="wrapper flex min-h-screen bg-gray-100">
+      <Sidebar /> {/* Sidebar Component */}
+      <div className="flex-1 lg:ml-72 p-8 mt-12 overflow-x-auto">
+        <Outlet /> {/* Placeholder for nested routes */}
+      </div>
     </div>
   );
 };

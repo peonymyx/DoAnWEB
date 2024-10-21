@@ -37,26 +37,26 @@ const ResetPassword = () => {
     }
   };
   return (
-    <div className="pt-28">
+    <div className="flex items-center justify-center h-[480px]">
       <div
         className="py-2 px-4 border border-gray-200 rounded-full max-w-[400px] mx-auto mt-20 flex items-center gap-x-5"
         aria-label="form-send-password"
       >
         <div className="flex-1">
           <input
-            type="text"
-            className="w-full text-black bg-transparent outline-none placeholder:text-black"
-            placeholder="Enter your new password..."
+            type="password"
+            className="w-full text-lg text-black bg-transparent outline-none placeholder:text-black"
+            placeholder="Nhập mật khẩu mới..."
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <span
           onClick={handleSubmit}
-          className="flex items-center justify-center flex-shrink-0 w-10 h-10 p-2 text-white rotate-45 bg-purple-500 rounded-full cursor-pointer"
+          className="flex-shrink-0 rotate-45 cursor-pointer mb-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="max-w-full"
+            className="w-8 h-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

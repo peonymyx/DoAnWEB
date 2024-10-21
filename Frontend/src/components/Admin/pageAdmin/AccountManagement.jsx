@@ -63,28 +63,24 @@ const AccountManagement = () => {
   }
 
   return (
-    <>
+    <div>
       {isLoading && (
         <div className="loading-overlay">
           <div className="loading-spinner"></div>
         </div>
       )}
-      <div className="content-wrapper">
-        <Card className="w-full ml-2">
-          <CardHeader
-            floated={false}
-            shadow={false}
-            className="content-header rounded-none"
-          >
-            <div className="mb-12 flex flex-col justify-between gap-8 md:flex-row md:items-center">
-              <div className="font-bold mt-7 text-2xl">
+      <div className="flex">
+        <Card className="w-full shadow-none">
+          <CardHeader floated={false} shadow={false} className="rounded-none">
+            <div className="mb-8 mt-8 flex flex-col justify-between gap-8 md:flex-row md:items-center">
+              <div className="font-bold text-3xl">
                 <h1>Quản Lý Tài Khoản</h1>
               </div>
-              <div className="flex w-full shrink-0 gap-2 md:w-max mt-10 mr-3">
-                <div className="flex items-center gap-5 w-[300px] border border-gray-200 rounded-lg py-3 px-5">
+              <div className="flex w-full shrink-0 gap-2 md:w-max mr-3">
+                <div className="flex items-center gap-5 w-[350px] h-[40px] border border-gray-200 rounded-lg py-4 px-4">
                   <input
                     type="text"
-                    className="w-full outline-none bg-transparent"
+                    className="w-full outline-none bg-transparent text-xl"
                     placeholder="Tìm kiếm..."
                   />
                   <span className="flex-shrink-0 text-gray-500">
@@ -108,19 +104,19 @@ const AccountManagement = () => {
               </div>
             </div>
           </CardHeader>
-          <CardBody className="container-fluid px-0 ">
+          <CardBody className="px-4 container-fluid overflow-x-auto">
             <table className="w-full min-w-max table-auto text-left">
               <thead>
                 <tr className="bg-blue-800 text-white">
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
-                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-10 text-center"
                     >
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal leading-none"
+                        className="font-normal leading-none text-2xl"
                       >
                         {head}
                       </Typography>
@@ -146,16 +142,15 @@ const AccountManagement = () => {
                     ) => {
                       const isLast = index === users.length - 1;
                       const classes = isLast
-                        ? "p-4"
-                        : "p-4 border-b border-blue-gray-50";
-
+                        ? "px-10 py-4 text-center"
+                        : "px-10 py-4 border-b border-blue-gray-50 text-center";
                       return (
                         <tr key={username}>
                           <td className={classes}>
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-bold"
+                              className="font-bold text-2xl"
                             >
                               {username}
                             </Typography>
@@ -164,7 +159,7 @@ const AccountManagement = () => {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-normal"
+                              className="font-normal text-2xl"
                             >
                               {phone}
                             </Typography>
@@ -173,7 +168,7 @@ const AccountManagement = () => {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-normal"
+                              className="font-normal text-2xl"
                             >
                               {gender}
                             </Typography>
@@ -182,7 +177,7 @@ const AccountManagement = () => {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-normal"
+                              className="font-normal text-2xl"
                             >
                               {new Date(age).toLocaleDateString("en-GB")}
                             </Typography>
@@ -191,7 +186,7 @@ const AccountManagement = () => {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-normal"
+                              className="font-normal text-2xl"
                             >
                               {new Date(createAt).toLocaleDateString("en-GB")}
                             </Typography>
@@ -200,7 +195,7 @@ const AccountManagement = () => {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-normal"
+                              className="font-normal text-2xl"
                             >
                               {new Date(updatedAt).toLocaleDateString("en-GB")}
                             </Typography>
@@ -209,20 +204,20 @@ const AccountManagement = () => {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-normal"
+                              className="font-normal text-2xl"
                             >
                               {role}
                             </Typography>
                           </td>
                           <td className={classes}>
                             <Button
-                              className="inline-flex items-center gap-2 justify-center text-white bg-blue-500 outline rounded-lg h-[50px] w-[100px]"
+                              className="inline-flex items-center gap-2 justify-center text-white bg-blue-500 outline rounded-lg h-[50px] w-[170px]"
                               onClick={handlePermission(_id)}
                             >
                               <span>
-                                <PencilSquareIcon className="h-4 w-4" />
+                                <PencilSquareIcon className="h-5 w-5" />
                               </span>
-                              <span className="text-xs">Phân Quyền</span>
+                              <span className="text-xl">Phân Quyền</span>
                             </Button>
                           </td>
                         </tr>
@@ -234,7 +229,7 @@ const AccountManagement = () => {
           </CardBody>
         </Card>
       </div>
-    </>
+    </div>
   );
 };
 
