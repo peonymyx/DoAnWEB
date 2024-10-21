@@ -87,6 +87,16 @@ const Header = () => {
                 </Link>
                 {/* Dropdown Menu */}
                 <ul className="dropdown-menu absolute hidden bg-white text-black shadow-lg">
+                  {user.role === "admin" && ( // Check if the user is admin
+                    <li>
+                      <Link
+                        className="dropdown-item text-lg p-3 py-2"
+                        to="/dashboard"
+                      >
+                        Trang Admin
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link
                       className="dropdown-item text-lg p-3 py-2"
@@ -152,6 +162,16 @@ const Header = () => {
           {user ? (
             <ul>
               <li className="dropdown-menu">
+                {user.role === "admin" && ( // Check if the user is admin
+                  <li>
+                    <Link
+                      className="dropdown-item text-lg p-3 py-2"
+                      to="/dashboard"
+                    >
+                      Trang Admin
+                    </Link>
+                  </li>
+                )}
                 <Link
                   className="dropdown-item text-lg p-3 py-2"
                   to={`/UpdateMain/${user._id}`}

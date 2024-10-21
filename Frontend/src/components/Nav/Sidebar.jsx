@@ -50,7 +50,7 @@ const Sidebar = () => {
         {isOpen ? (
           <button
             onClick={toggleSidebar}
-            className="text-white hover:bg-blue-800 rounded-lg p-2 ml-[190px] mt-[8px]"
+            className="text-white hover:bg-blue-800 rounded-lg p-2 ml-[190px] mt-[2px]"
             aria-label="Toggle Sidebar"
           >
             <XMarkIcon className="h-6 w-6" />
@@ -74,18 +74,7 @@ const Sidebar = () => {
         <div className="flex flex-col h-full justify-between">
           {/* Menu Items */}
           <div className="px-3 py-4">
-            <ul className="space-y-6 text-xl">
-              {/* Trang chủ Button */}
-              <li>
-                <Link
-                  to="/"
-                  className="flex items-center p-2 text-white hover:bg-blue-800 rounded-lg"
-                  onClick={() => setIsOpen(false)} // Close sidebar on item click
-                >
-                  <HomeIcon className="h-6 w-6" />
-                  <span className="ml-3">Trang chủ</span>
-                </Link>
-              </li>
+            <ul className="space-y-6 text-xl mt-4">
               <NavItem to="/dashBoard" icon={ChartBarIcon} text="Thống Kê" />
               <NavItem to="/category" icon={TagIcon} text="Danh Mục Sản Phẩm" />
               <NavItem
@@ -118,15 +107,25 @@ const Sidebar = () => {
             </ul>
           </div>
 
-          {/* Footer with Logout Button */}
+          {/* Footer with Home and Logout Buttons */}
           <div className="p-4">
-            <div className="flex justify-center items-center">
-              <button
-                onClick={handleLogOut}
-                className="flex items-center text-white bg-red-400 hover:bg-red-700 p-2 rounded-lg"
+            <div className="flex flex-col items-center space-y-4">
+              {/* Trang chủ button */}
+              <Link
+                to="/"
+                className="flex items-center text-white bg-blue-700 hover:bg-blue-500 p-2 rounded-lg w-full justify-center"
+                onClick={() => setIsOpen(false)}
               >
-                <span className="mr-2">Đăng Xuất</span>
-              </button>
+                <span className="font-semibold">Trang chủ</span>
+              </Link>
+
+              {/* Logout button */}
+              <Link
+                onClick={handleLogOut}
+                className="flex items-center text-white bg-red-500 hover:bg-red-700 p-2 rounded-lg w-full justify-center"
+              >
+                <span className="font-semibold">Đăng xuất</span>
+              </Link>
             </div>
           </div>
         </div>

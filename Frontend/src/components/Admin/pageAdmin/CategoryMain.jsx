@@ -102,7 +102,7 @@ const CategoryMain = () => {
             </div>
           </CardHeader>
 
-          <CardBody className="px-4 container-fluid overflow-x-auto">
+          <CardBody className="px-2 container-fluid overflow-x-auto">
             <table className="w-full min-w-max table-auto text-left">
               <thead>
                 <tr className="bg-blue-800 text-white">
@@ -131,8 +131,8 @@ const CategoryMain = () => {
                     .map(({ _id, name, slug, createdAt, updatedAt }, index) => {
                       const isLast = index === category.length - 1;
                       const classes = isLast
-                        ? "px-10 py-4 text-center"
-                        : "px-10 py-4 border-b border-blue-gray-50 text-center";
+                        ? "px-8 py-4 text-center"
+                        : "px-8 py-4 border-b border-blue-gray-50 text-center";
 
                       return (
                         <tr key={_id}>
@@ -140,7 +140,7 @@ const CategoryMain = () => {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-normal text-2xl"
+                              className="font-normal text-xl"
                             >
                               {_id}
                             </Typography>
@@ -149,7 +149,7 @@ const CategoryMain = () => {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-normal text-2xl"
+                              className="font-normal text-xl"
                             >
                               {name}
                             </Typography>
@@ -158,7 +158,7 @@ const CategoryMain = () => {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-normal text-2xl"
+                              className="font-normal text-xl"
                             >
                               {slug}
                             </Typography>
@@ -167,7 +167,7 @@ const CategoryMain = () => {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-normal text-2xl"
+                              className="font-normal text-xl"
                             >
                               {new Date(createdAt).toLocaleDateString("en-GB")}
                             </Typography>
@@ -176,7 +176,7 @@ const CategoryMain = () => {
                             <Typography
                               variant="small"
                               color="blue-gray"
-                              className="font-normal text-2xl"
+                              className="font-normal text-xl"
                             >
                               {new Date(updatedAt).toLocaleDateString("en-GB")}
                             </Typography>

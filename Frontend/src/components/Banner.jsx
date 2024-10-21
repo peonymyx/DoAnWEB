@@ -6,7 +6,7 @@ const BANNER = [
 
 const Banner = () => {
   return (
-    <div className="relative rounded-lg md:h-[640px] h-[220px]">
+    <div className="relative rounded-lg md:h-[800px] h-[220px]">
       <div
         id="header-carousel"
         className="carousel slide carousel-fade"

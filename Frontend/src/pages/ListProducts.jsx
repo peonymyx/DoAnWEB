@@ -15,12 +15,10 @@ function ListProducts() {
     setCategoryList(res.data.category);
   };
 
-  // Hàm xử lý sự kiện khi thay đổi danh mục
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
   };
 
-  // Lọc danh sách vắc xin theo danh mục
   const filteredProducts =
     selectedCategory === "All"
       ? product
