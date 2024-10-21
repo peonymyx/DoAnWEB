@@ -1,9 +1,9 @@
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "./api";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
-import useSessionStorage from "../hooks/useSessionStorage";
+
 const initialState = {
   users: [],
   isLoading: false,
@@ -21,7 +21,6 @@ export const getUsers = createAsyncThunk(
           token: `Bearer ${token}`,
         },
       });
-      console.log(res.data);
       return res.data.users;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -32,7 +31,6 @@ export const getUsers = createAsyncThunk(
 export const updateRoleUser = createAsyncThunk(
   "user/updateRoleUser",
   async (payload, { rejectWithValue }) => {
-    console.log(payload);
     try {
       const res = await axios.put(
         "http://localhost:3000/api/v1/users/updateRole",
@@ -43,7 +41,6 @@ export const updateRoleUser = createAsyncThunk(
           },
         }
       );
-      console.log(res.data);
       return res.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -100,61 +97,61 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
-  extraReducers: {
-    // trạng thái chờ
-    [updateUser.pending]: (state) => {
-      state.isLoading = true;
-    },
-    // thành thái thành công
-    [updateUser.fulfilled]: (state, action) => {
-      state.isLoading = false;
-      state.users = action.payload;
-
-      sessionStorage.setItem("user", JSON.stringify(action.payload));
-      // reload lại trang
-      window.location.reload();
-    },
-    // trạng thái eror
-    [updateUser.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    [getUserById.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [getUserById.fulfilled]: (state, action) => {
-      state.isLoading = false;
-      state.users = action.payload;
-    },
-    [getUserById.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    [getUsers.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [getUsers.fulfilled]: (state, action) => {
-      state.isLoading = false;
-      state.users = action.payload;
-    },
-    [getUsers.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    [updateRoleUser.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [updateRoleUser.fulfilled]: (state, action) => {
-      state.isLoading = false;
-      console.log(action);
-      const { role, id } = action.meta.arg;
-      const index = state.users.findIndex((item) => item._id === id);
-      state.users[index].role = role;
-    },
-    [updateRoleUser.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.users = state.users.map((user) =>
+          user._id === action.payload._id ? action.payload : user
+        );
+        sessionStorage.setItem("user", JSON.stringify(action.payload));
+        window.location.reload();
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(getUserById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUserById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.users = state.users.map((user) =>
+          user._id === action.payload._id ? action.payload : user
+        );
+      })
+      .addCase(getUserById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(getUsers.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.users = action.payload;
+      })
+      .addCase(getUsers.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateRoleUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateRoleUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const { role, id } = action.meta.arg;
+        state.users = state.users.map((user) =>
+          user._id === id ? { ...user, role } : user
+        );
+      })
+      .addCase(updateRoleUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
   },
 });
 

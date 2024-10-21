@@ -4,20 +4,29 @@
 const bestSeller = async (req, res) => {
     try {
         const bestSellers = await OrderDetail.aggregate([
-            {
-                $group: {
-                    _id: "$Product_id",
-                    totalQuantity: { $sum: "$quantity" }
-                },
-                $sort: { totalQuantity: -1 },
-                $limit: 3,
-                $lookup: {
-                    from: "Product",
-                    localField: "Product_id",
-                    foreignField: "_id",
-                    as: "name"
-                }
-            }
+          {
+            $group: {
+              _id: "$Product_id",
+              totalQuantity: { $sum: "$quantity" },
+            },
+            $sort: { totalQuantity: -1 },
+            $limit: 3,
+            $lookup: {
+              from: "Product",
+              localField: "Product_id",
+              foreignField: "_id",
+              as: "name",
+            },
+          },
+          {
+            $unwind: "$productInfo", // Unwind to get product details
+          },
+          {
+            $project: {
+              productName: "$productInfo.name",
+              totalQuantity: 1,
+            },
+          },
         ]);
         res.status(200).json({ bestSellers });
     } catch (error) {

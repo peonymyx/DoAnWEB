@@ -4,6 +4,7 @@ import axios from "axios";
 
 const initialState = {
   other: [],
+  selectedOther: null,
   isLoading: false,
   error: null,
 };
@@ -105,7 +106,7 @@ const otherSlice = createSlice({
       })
       .addCase(getOther.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.other = action.payload;
+        state.other = Array.isArray(action.payload) ? action.payload : [];
       })
       .addCase(getOtherById.pending, (state) => {
         state.isLoading = true;
@@ -116,7 +117,7 @@ const otherSlice = createSlice({
       })
       .addCase(getOtherById.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.other = action.payload;
+        state.selectedOther = action.payload;
       })
       .addCase(updateStatusOder.pending, (state) => {
         state.isLoading = true;
@@ -140,3 +141,4 @@ export default otherSlice.reducer;
 
 export const selectOther = (state) => state.other.other;
 export const selectOtherLoading = (state) => state.other.isLoading;
+export const selectSelectedOther = (state) => state.other.selectedOther;

@@ -22,7 +22,7 @@ const statisticalSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchStatistical.pending]: (state, action) => {
+    [fetchStatistical.pending]: (state) => {
       state.isLoading = true;
     },
     [fetchStatistical.fulfilled]: (state, action) => {
