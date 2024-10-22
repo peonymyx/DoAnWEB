@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOther, updateStatusOder } from "../../../redux/otherSlice";
 import "../cruds/loading.css";
-import ReactHTMLTableToExcel from "react-html-table-to-excel";
+import { CSVLink } from "react-csv";
 
 const TABLE_HEAD = [
   "ID",
@@ -101,14 +101,14 @@ const OtherManagement = () => {
                 </span>
               </div>
             </div>
-            <ReactHTMLTableToExcel
+            <CSVLink
               id="test-table-xls-button"
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full"
-              table="otherTable"
-              filename="hoadon"
-              sheet="hoadon"
-              buttonText="Xuất Excel"
-            />
+              data={other}
+              filename="hoa-don.csv"
+              >
+              Xuất Excel
+            </CSVLink>
           </div>
         </CardHeader>
         <CardBody className="container-fluid px-0 ">
