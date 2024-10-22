@@ -30,16 +30,20 @@ const TABLE_HEAD = [
   "",
 ];
 
+const ITEMS_PER_PAGE = 5;
+
 const CategoryMain = () => {
   const category = useSelector((state) => state.category.category);
   const isLoading = useSelector((state) => state.category.isLoading);
   const dispatch = useDispatch();
   // State for search term
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1); // State for current page
 
   // Update search term on input change
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   useEffect(() => {
@@ -50,8 +54,23 @@ const CategoryMain = () => {
     dispatch(deleteCategory(id));
   };
 
+  // Filter and paginate categories
+  const filteredCategory = category.filter(
+    (item) =>
+      item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const totalPages = Math.ceil(filteredCategory.length / ITEMS_PER_PAGE);
+  const paginatedCategory = filteredCategory.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <div className="content-wrapper">
+    <div className="content-wrapper relative min-h-screen">
       {isLoading && (
         <div className="loading-overlay">
           <div className="loading-spinner"></div>
@@ -60,7 +79,7 @@ const CategoryMain = () => {
       <div className="flex">
         <Card className="w-full shadow-none">
           <CardHeader floated={false} shadow={false} className="rounded-none">
-            <div className="mb-8 mt-8 flex flex-col justify-between gap-8 md:flex-row md:items-center">
+            <div className="mb-3 mt-3 flex flex-col justify-between gap-8 md:flex-row md:items-center">
               <div className="font-bold text-3xl">
                 <h1>Quản Lý Danh Mục</h1>
               </div>
@@ -69,7 +88,7 @@ const CategoryMain = () => {
                   <input
                     type="text"
                     className="w-full outline-none bg-transparent text-xl"
-                    placeholder="Tìm kiếm..."
+                    placeholder="Nhập tên tìm kiếm..."
                     value={searchTerm}
                     onChange={handleSearch}
                   />
@@ -109,12 +128,12 @@ const CategoryMain = () => {
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
-                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-10 text-center"
+                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 text-center"
                     >
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal leading-none text-2xl"
+                        className="font-normal leading-none text-xl"
                       >
                         {head}
                       </Typography>
@@ -123,13 +142,10 @@ const CategoryMain = () => {
                 </tr>
               </thead>
               <tbody>
-                {category.length > 0 &&
-                  category
-                    .filter((item) =>
-                      item.name.toLowerCase().includes(searchTerm.toLowerCase())
-                    )
-                    .map(({ _id, name, slug, createdAt, updatedAt }, index) => {
-                      const isLast = index === category.length - 1;
+                {paginatedCategory.length > 0 &&
+                  paginatedCategory.map(
+                    ({ _id, name, slug, createdAt, updatedAt }, index) => {
+                      const isLast = index === paginatedCategory.length - 1;
                       const classes = isLast
                         ? "px-8 py-4 text-center"
                         : "px-8 py-4 border-b border-blue-gray-50 text-center";
@@ -234,10 +250,26 @@ const CategoryMain = () => {
                           </td>
                         </tr>
                       );
-                    })}
+                    }
+                  )}
               </tbody>
             </table>
           </CardBody>
+          <div className="sticky bottom-0 right-0 flex justify-end p-4 bg-white">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`mx-1 px-3 py-1 rounded ${
+                  currentPage === page
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
         </Card>
       </div>
     </div>

@@ -229,7 +229,7 @@ const OtherManagement = () => {
                           <Typography
                             variant="small"
                             color="blue-gray"
-                            className="font-normal text-xl"
+                            className="font-normal text-xl w-[160px]"
                           >
                             {note}
                           </Typography>

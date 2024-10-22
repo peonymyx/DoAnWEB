@@ -143,7 +143,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Hoang Giang
+                Group 2
               </a>
             </div>
           </div>

@@ -170,7 +170,7 @@ const CommentManagement = () => {
               </tbody>
             </table>
           </CardBody>
-          <div className="fixed bottom-10 right-10 flex justify-center items-center">
+          <div className="sticky bottom-0 right-0 flex justify-end p-4 bg-white">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}

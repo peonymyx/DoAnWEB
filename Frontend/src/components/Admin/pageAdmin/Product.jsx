@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { deleteProduct, getProduct } from "../../../redux/productSlice";
 import { Link } from "react-router-dom";
 import {
@@ -19,11 +18,13 @@ const TABLE_HEAD = [
   "Tên",
   "Giá",
   "Size",
-  "Mô Tả",
   "Ngày Tạo",
   "Ngày Sửa",
+  "Mô Tả",
   "",
 ];
+const ITEMS_PER_PAGE = 5;
+
 const formatPrice = (price) => {
   if (price === undefined || price === null) {
     return "";
@@ -37,10 +38,12 @@ const Product = () => {
   const loading = useSelector((state) => state.product.isLoading);
   const isLoading = useSelector((state) => state.product.isLoading);
   const [searchTerm, setSearchTerm] = useState(""); // State lưu trữ từ khóa tìm kiếm
+  const [currentPage, setCurrentPage] = useState(1); // State lưu trữ trang hiện tại
 
   // Function để cập nhật state khi người dùng nhập từ khóa tìm kiếm
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   useEffect(() => {
@@ -65,8 +68,21 @@ const Product = () => {
     }, 2000);
   };
 
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredProduct.length / ITEMS_PER_PAGE);
+
+  // Get items for current page
+  const paginatedProduct = filteredProduct.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <div className="content-wrapper">
+    <div className="content-wrapper relative min-h-screen">
       {isLoading && (
         <div className="loading-overlay">
           <div className="loading-spinner"></div>
@@ -80,7 +96,7 @@ const Product = () => {
             shadow={false}
             className="content-header rounded-none"
           >
-            <div className="mb-8 mt-8 flex flex-col justify-between gap-8 md:flex-row md:items-center">
+            <div className="mb-3 mt-3 flex flex-col justify-between gap-8 md:flex-row md:items-center">
               <div className="font-bold text-3xl">
                 <h1>Quản Lý Sản Phẩm</h1>
               </div>
@@ -121,27 +137,19 @@ const Product = () => {
               </div>
             </div>
           </CardHeader>
-          <CardBody className="px-4 container-fluid overflow-x-auto">
-            {/* {loading ? (
-              <div className="body">
-                <div className="spinner"></div>
-                <div className="message">
-                  <h1>Loading...</h1>
-                </div>
-              </div>
-            ) : ( */}
+          <CardBody className="px-2 container-fluid overflow-x-auto">
             <table className="w-full min-w-max table-auto text-left">
               <thead>
                 <tr className=" bg-blue-800 text-white">
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
-                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-10 text-center"
+                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 text-center"
                     >
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal leading-none text-2xl"
+                        className="font-normal leading-none text-xl"
                       >
                         {head}
                       </Typography>
@@ -151,13 +159,13 @@ const Product = () => {
               </thead>
               <tbody>
                 {!loading &&
-                  filteredProduct.length > 0 &&
-                  filteredProduct.map((row) => (
+                  paginatedProduct.length > 0 &&
+                  paginatedProduct.map((row) => (
                     <tr key={row._id}>
                       <td className="w-[100px] h-[90px] ">
                         <img src={row.image} alt={row.name} />
                       </td>
-                      <td className="border-dashed border-t border-blue-gray-200 p-4">
+                      <td className="border-dashed border-t font-semibold border-blue-gray-200 w-[240px] p-4">
                         <div className="flex items-center ">
                           <div>
                             <Typography color="blueGray" variant="body2">
@@ -178,11 +186,6 @@ const Product = () => {
                       </td>
                       <td className="border-dashed border-t border-blue-gray-200 px-10 py-4">
                         <Typography color="blueGray" variant="body2">
-                          {row.description}
-                        </Typography>
-                      </td>
-                      <td className="border-dashed border-t border-blue-gray-200 px-10 py-4">
-                        <Typography color="blueGray" variant="body2">
                           {new Date(row.createdAt).toLocaleDateString("en-GB")}
                         </Typography>
                       </td>
@@ -191,10 +194,15 @@ const Product = () => {
                           {new Date(row.updatedAt).toLocaleDateString("en-GB")}
                         </Typography>
                       </td>
+                      <td className="border-dashed border-t border-blue-gray-200 px-10 p-4 w-[1500px]">
+                        <Typography color="blueGray" variant="body2">
+                          {row.description}
+                        </Typography>
+                      </td>
                       <td className="border-dashed border-t border-blue-gray-200 px-10 py-4">
                         <div className="flex items-center gap-2">
                           <Link to={`/EditProduct/${row._id}`}>
-                            <Button className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-blue-500 rounded-lg h-[50px] w-[50px] mr-2">
+                            <Button className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-blue-500 rounded-lg h-[50px] w-[70px] mr-2">
                               <span>
                                 <PencilIcon className="h-4 w-4" />
                               </span>
@@ -202,7 +210,7 @@ const Product = () => {
                             </Button>
                           </Link>
                           <Button
-                            className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-red-500 rounded-lg  h-[50px] w-[50px]"
+                            className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-red-500 rounded-lg h-[50px] w-[70px]"
                             buttonType="link"
                             size="regular"
                             rounded={false}
@@ -222,8 +230,22 @@ const Product = () => {
                   ))}
               </tbody>
             </table>
-            {/* )} */}
           </CardBody>
+          <div className="sticky bottom-0 right-0 flex justify-end p-4 bg-white">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`mx-1 px-3 py-1 rounded ${
+                  currentPage === page
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
         </Card>
       </div>
     </div>
