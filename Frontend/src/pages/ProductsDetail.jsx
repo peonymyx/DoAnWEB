@@ -1,21 +1,17 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getProductById } from "../redux/productSlice";
-import {
-  addComment,
-  deleteCommentByAuthor,
-  getCommentByProductId,
-} from "../redux/commentSlice";
-import { addToCart } from "../redux/cartSlice";
-import axios from "axios";
-import { AlertCircle, Heart, ShoppingCart } from "lucide-react";
-import Cookies from "js-cookie";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductById } from '../redux/productSlice';
+import { addComment, deleteCommentByAuthor, getCommentByProductId } from '../redux/commentSlice';
+import { addToCart } from '../redux/cartSlice';
+import axios from 'axios';
+import { AlertCircle, Heart, ShoppingCart } from 'lucide-react';
+import Cookies from 'js-cookie';
 
 const ProductsDetail = () => {
-  const [comment, setComment] = useState("");
-  const [selectedSize, setSelectedSize] = useState("");
-  const [error, setError] = useState("");
+  const [comment, setComment] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [error, setError] = useState('');
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,33 +30,33 @@ const ProductsDetail = () => {
     e.preventDefault();
     const token = Cookies.get("token");
     if (!token || !auth.currentUser) {
-      setError("Vui lòng đăng nhập để bình luận");
-      navigate("/login");
+      setError('Vui lòng đăng nhập để bình luận');
+      navigate('/login');
       return;
     }
 
     const data = {
       user_id: auth.currentUser._id,
       product_id: id,
-      content: comment,
+      content: comment
     };
 
     try {
       await dispatch(addComment(data)).unwrap();
-      setComment("");
-      setError("");
+      setComment('');
+      setError('');
       dispatch(getCommentByProductId(id));
     } catch (error) {
-      console.error("Failed to add comment:", error);
-      setError("Có lỗi xảy ra khi gửi bình luận. Vui lòng thử lại.");
+      console.error('Failed to add comment:', error);
+      setError('Có lỗi xảy ra khi gửi bình luận. Vui lòng thử lại.');
     }
   };
 
   const handleDeleteComment = async (commentId) => {
     const token = Cookies.get("token");
     if (!token) {
-      setError("Vui lòng đăng nhập để xóa bình luận");
-      navigate("/login");
+      setError('Vui lòng đăng nhập để xóa bình luận');
+      navigate('/login');
       return;
     }
 
@@ -68,14 +64,14 @@ const ProductsDetail = () => {
       await dispatch(deleteCommentByAuthor(commentId)).unwrap();
       dispatch(getCommentByProductId(id));
     } catch (error) {
-      console.error("Failed to delete comment:", error);
-      setError("Có lỗi xảy ra khi xóa bình luận. Vui lòng thử lại.");
+      console.error('Failed to delete comment:', error);
+      setError('Có lỗi xảy ra khi xóa bình luận. Vui lòng thử lại.');
     }
   };
 
   const handleAddToCart = () => {
     if (!selectedSize) {
-      setError("Please select a size before adding to cart.");
+      setError('Please select a size before adding to cart.');
       return;
     }
     const data = {
@@ -88,7 +84,7 @@ const ProductsDetail = () => {
       size: selectedSize,
     };
     dispatch(addToCart(data));
-    navigate("/cart");
+    navigate('/cart');
   };
 
   const handleWishlist = async () => {
@@ -100,21 +96,22 @@ const ProductsDetail = () => {
         return;
       }
 
-      await axios.post("http://localhost:3000/api/v1/addProduct", {
+      await axios.post('http://localhost:3000/api/v1/addProduct', {
         id: userId,
         productId: id,
       });
 
       alert("Sản phẩm đã được thêm vào danh sách yêu thích!");
     } catch (error) {
-      console.error("Error adding to wishlist:", error);
+      console.error('Error adding to wishlist:', error);
       setError("Có lỗi xảy ra khi thêm vào danh sách yêu thích.");
     }
   };
 
+
   const formatPrice = (price) => {
-    if (price == null) return "";
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    if (price == null) return '';
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
 
   return (
@@ -130,9 +127,7 @@ const ProductsDetail = () => {
           </div>
         </div>
         <div className="lg:w-1/2 flex flex-col">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-4">
-            {product.name}
-          </h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4">{product.name}</h1>
           <h2 className="text-xl sm:text-2xl text-red-600 font-semibold mb-4">
             {formatPrice(product.price)} VNĐ
           </h2>
@@ -147,11 +142,10 @@ const ProductsDetail = () => {
                 <button
                   key={size}
                   onClick={() => setSelectedSize(size)}
-                  className={`px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded ${
-                    selectedSize === size
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-800"
-                  }`}
+                  className={`px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded ${selectedSize === size
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-200 text-gray-800'
+                    }`}
                 >
                   {size}
                 </button>
@@ -159,10 +153,7 @@ const ProductsDetail = () => {
             </div>
           </div>
           {error && (
-            <div
-              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-              role="alert"
-            >
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
               <span className="flex items-center text-sm">
                 <AlertCircle className="h-4 w-4 mr-2" />
                 {error}
@@ -192,10 +183,7 @@ const ProductsDetail = () => {
       <div className="mt-12">
         <h3 className="text-xl sm:text-2xl font-bold mb-4">Comments</h3>
         {error && (
-          <div
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-            role="alert"
-          >
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
             <span className="block sm:inline">{error}</span>
           </div>
         )}
@@ -223,16 +211,12 @@ const ProductsDetail = () => {
               <div key={item._id} className="bg-gray-100 p-4 rounded">
                 <div className="flex items-center mb-2">
                   <img
-                    src={
-                      item.user_id?.avatar || "https://via.placeholder.com/40"
-                    }
+                    src={item.user_id?.avatar || "https://via.placeholder.com/40"}
                     alt="User Avatar"
                     className="w-8 h-8 sm:w-10 sm:h-10 rounded-full mr-3"
                   />
                   <div>
-                    <h5 className="font-semibold text-sm sm:text-base">
-                      {item.user_id?.username}
-                    </h5>
+                    <h5 className="font-semibold text-sm sm:text-base">{item.user_id?.username}</h5>
                     <small className="text-gray-500 text-xs sm:text-sm">
                       {new Date(item.createdAt).toLocaleString()}
                     </small>
@@ -250,9 +234,7 @@ const ProductsDetail = () => {
               </div>
             ))
           ) : (
-            <p className="text-sm sm:text-base">
-              No comments yet. Be the first to comment!
-            </p>
+            <p className="text-sm sm:text-base">No comments yet. Be the first to comment!</p>
           )}
         </div>
       </div>

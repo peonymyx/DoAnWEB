@@ -111,8 +111,8 @@ app.use("/api/v1/getComment", require("./router/commentRouter"));
 app.use("/api/v1/otherProduct", require("./router/oderProduct"));
 app.use("/", require("./router/payment"));
 app.use("/api/v1/statistical", require("./router/statistical"));
+app.use("/api/v1", require("./router/bestSeller"));
 app.use("/api/v1", require("./router/userRouter"));
-app.use("/api/v1/bestSeller", require("./router/bestSeller"));
 app.use("/api/v1/filter", require("./router/filterRouter"));
 server.listen(port, () => {
   console.log(`listening on port ${port}`);

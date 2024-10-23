@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { Heart, Star, ShoppingCart } from "lucide-react";
-import { motion } from "framer-motion";
-import PropTypes from "prop-types";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Heart, Star, ShoppingCart } from 'lucide-react';
+import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
 
 const ProductCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -26,9 +26,9 @@ const ProductCard = ({ product }) => {
       >
         <Heart
           className={`h-4 w-4 sm:h-6 sm:w-6 transition-colors duration-300 ${
-            isFavorited ? "text-red-500" : "text-white stroke-black"
+            isFavorited ? 'text-red-500' : 'text-white stroke-black'
           }`}
-          fill={isFavorited ? "red" : "none"}
+          fill={isFavorited ? 'red' : 'none'}
         />
       </div>
 
@@ -47,21 +47,17 @@ const ProductCard = ({ product }) => {
             </div>
           )}
         </div>
-        <h2 className="text-sm sm:text-lg font-bold mt-2 truncate">
-          {product.name}
-        </h2>
+        <h2 className="text-sm sm:text-lg font-bold mt-2 truncate">{product.name}</h2>
         <div className="flex items-center mt-1">
           {[...Array(5)].map((_, index) => (
             <Star
               key={index}
               className={`h-3 w-3 sm:h-4 sm:w-4 ${
-                index < product.rating ? "text-yellow-500" : "text-gray-300"
+                index < product.rating ? 'text-yellow-500' : 'text-gray-300'
               }`}
             />
           ))}
-          <span className="ml-1 text-xs sm:text-sm text-gray-600">
-            ({product.rating})
-          </span>
+          <span className="ml-1 text-xs sm:text-sm text-gray-600">({product.rating})</span>
         </div>
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
@@ -95,14 +91,12 @@ const BestSellingProducts = () => {
     const fetchBestSellers = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(
-          "http://localhost:3000/api/v1/best-sellers"
-        );
+        const response = await axios.get("http://localhost:3000/api/v1/best-sellers");
         setBestSellers(response.data.products.slice(0, 4));
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching best sellers:", err);
-        setError("An error occurred while fetching best-selling products.");
+        setError('An error occurred while fetching best-selling products.');
         setIsLoading(false);
       }
     };
@@ -120,13 +114,11 @@ const BestSellingProducts = () => {
 
   return (
     <div className="mt-12 mb-12">
-      <h2 className="text-2xl sm:text-4xl font-bold text-center mb-2 sm:mb-4">
-        Sản phẩm bán chạy
-      </h2>
+      <h2 className="text-2xl sm:text-4xl font-bold text-center mb-2 sm:mb-4">Sản phẩm bán chạy</h2>
       <p className="text-center mb-4 sm:mb-8 text-sm sm:text-base text-gray-600">
         Khám phá những sản phẩm được yêu thích nhất của chúng tôi
       </p>
-
+      
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
         {bestSellers.map((product) => (
           <ProductCard key={product._id} product={product} />

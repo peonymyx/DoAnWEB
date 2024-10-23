@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { Heart, Star, Search, ShoppingCart } from "lucide-react";
-import { motion } from "framer-motion";
-import PropTypes from "prop-types";
-import { getProduct } from "../redux/productSlice";
-import BestSellingProducts from "./BestSellingProducts";
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Heart, Star, Search, ShoppingCart } from 'lucide-react';
+import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
+import { getProduct } from '../redux/productSlice';
+import BestSellingProducts from './BestSellingProducts';
 
 const ProductCard = ({ product }) => {
   // State để theo dõi trạng thái hover và yêu thích
@@ -31,10 +31,9 @@ const ProductCard = ({ product }) => {
         onClick={handleFavoriteClick}
       >
         <Heart
-          className={`h-4 w-4 sm:h-6 sm:w-6 transition-colors duration-300 ${
-            isFavorited ? "text-red-500" : "text-white stroke-black"
-          }`}
-          fill={isFavorited ? "red" : "none"}
+          className={`h-4 w-4 sm:h-6 sm:w-6 transition-colors duration-300 ${isFavorited ? 'text-red-500' : 'text-white stroke-black'
+            }`}
+          fill={isFavorited ? 'red' : 'none'}
         />
       </div>
 
@@ -53,21 +52,16 @@ const ProductCard = ({ product }) => {
             </div>
           )}
         </div>
-        <h2 className="text-sm sm:text-lg font-bold mt-2 truncate">
-          {product.name}
-        </h2>
+        <h2 className="text-sm sm:text-lg font-bold mt-2 truncate">{product.name}</h2>
         <div className="flex items-center mt-1">
           {[...Array(5)].map((_, index) => (
             <Star
               key={index}
-              className={`h-3 w-3 sm:h-4 sm:w-4 ${
-                index < product.rating ? "text-yellow-500" : "text-gray-300"
-              }`}
+              className={`h-3 w-3 sm:h-4 sm:w-4 ${index < product.rating ? 'text-yellow-500' : 'text-gray-300'
+                }`}
             />
           ))}
-          <span className="ml-1 text-xs sm:text-sm text-gray-600">
-            ({product.rating})
-          </span>
+          <span className="ml-1 text-xs sm:text-sm text-gray-600">({product.rating})</span>
         </div>
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
@@ -96,8 +90,8 @@ const ListProducts = () => {
   const products = useSelector((state) => state.product.products);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -109,7 +103,7 @@ const ListProducts = () => {
         await getCategoryList();
         setIsLoading(false);
       } catch (err) {
-        setError("An error occurred while fetching data.");
+        setError('An error occurred while fetching data.');
         setIsLoading(false);
       }
     };
@@ -122,7 +116,7 @@ const ListProducts = () => {
       setCategories(res.data.category);
     } catch (error) {
       console.error("Error fetching categories:", error);
-      setError("An error occurred while fetching categories.");
+      setError('An error occurred while fetching categories.');
     }
   };
 
@@ -132,26 +126,24 @@ const ListProducts = () => {
 
   const filteredProducts = Array.isArray(products)
     ? products
-        .filter(
-          (product) =>
-            (selectedCategory === "All" ||
-              product.category === selectedCategory) &&
-            product.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .sort((a, b) => {
-          switch (sortBy) {
-            case "name-asc":
-              return a.name.localeCompare(b.name);
-            case "name-desc":
-              return b.name.localeCompare(a.name);
-            case "price-asc":
-              return a.price - b.price;
-            case "price-desc":
-              return b.price - a.price;
-            default:
-              return 0;
-          }
-        })
+      .filter((product) =>
+        (selectedCategory === "All" || product.category === selectedCategory) &&
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .sort((a, b) => {
+        switch (sortBy) {
+          case 'name-asc':
+            return a.name.localeCompare(b.name);
+          case 'name-desc':
+            return b.name.localeCompare(a.name);
+          case 'price-asc':
+            return a.price - b.price;
+          case 'price-desc':
+            return b.price - a.price;
+          default:
+            return 0;
+        }
+      })
     : [];
 
   if (isLoading) {
@@ -164,12 +156,8 @@ const ListProducts = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-      <h1 className="text-2xl sm:text-4xl font-bold text-center mb-2 sm:mb-4">
-        Sản phẩm của chúng tôi
-      </h1>
-      <p className="text-center mb-4 sm:mb-8 text-sm sm:text-base text-gray-600">
-        Khám phá bộ sưu tập quần áo chất lượng cao mới nhất của chúng tôi
-      </p>
+      <h1 className="text-2xl sm:text-4xl font-bold text-center mb-2 sm:mb-4">Sản phẩm của chúng tôi</h1>
+      <p className="text-center mb-4 sm:mb-8 text-sm sm:text-base text-gray-600">Khám phá bộ sưu tập quần áo chất lượng cao mới nhất của chúng tôi</p>
 
       <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
         <div className="relative w-full sm:w-64">
@@ -220,9 +208,7 @@ const ListProducts = () => {
       </div>
 
       {filteredProducts.length === 0 && (
-        <p className="text-center text-gray-500 my-4 sm:my-8 text-sm sm:text-base">
-          Không tìm thấy sản phẩm phù hợp với tiêu chí của bạn.
-        </p>
+        <p className="text-center text-gray-500 my-4 sm:my-8 text-sm sm:text-base">Không tìm thấy sản phẩm phù hợp với tiêu chí của bạn.</p>
       )}
       <BestSellingProducts />
     </div>
