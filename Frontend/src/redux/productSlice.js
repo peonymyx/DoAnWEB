@@ -1,12 +1,28 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import API from "./api";
 import Swal from "sweetalert2";
+import axios from "../utils/axios";
 
 const initialState = {
   products: [],
   isLoading: false,
   error: null,
 };
+
+export const addComment = createAsyncThunk(
+  "comment/addComment",
+  async (commentData, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/comment",
+        commentData
+      );
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const getProduct = createAsyncThunk(
   "product/getProduct",
@@ -148,18 +164,18 @@ const productSlice = createSlice({
       // state.products.splice(index, 1);
       state.isLoading = false;
 
-      console.log('Action payload:', action.payload); // Kiểm tra giá trị của action.payload
-      
+      console.log("Action payload:", action.payload); // Kiểm tra giá trị của action.payload
+
       if (!action.payload || !action.payload.product) {
-        console.error('Invalid payload:', action.payload);
+        console.error("Invalid payload:", action.payload);
         return;
       }
-    
+
       const index = state.products.findIndex(
         (product) => product._id === action.payload.product._id
       );
-      console.log('Index to delete:', index);
-    
+      console.log("Index to delete:", index);
+
       if (index !== -1) {
         state.products.splice(index, 1); // Xóa sản phẩm chỉ khi index hợp lệ
       }

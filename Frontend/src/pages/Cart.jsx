@@ -7,7 +7,6 @@ import {
 } from "../redux/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/post/Footer";
 
 function Cart() {
   const navigate = useNavigate();
@@ -35,13 +34,12 @@ function Cart() {
   if (!auth) {
     navigate("/login");
     return (
-      <div className="w-screen h-screen flex justify-center items-center">
+      <div className="flex justify-center items-center h-screen">
         <p>
           Vui Lòng{" "}
-          <a href="/login" className="text-cyan-500">
-            {" "}
-            đăng nhập{" "}
-          </a>{" "}
+          <Link to="/login" className="text-cyan-500 hover:underline">
+            đăng nhập
+          </Link>{" "}
           để tiếp tục...
         </p>
       </div>
@@ -49,82 +47,84 @@ function Cart() {
   }
 
   return (
-    <div>
-      <div className="pt-28">
-        <div className="container mx-auto p-8">
-          <h1 className="text-2xl font-bold mb-4">DANH SÁCH VẮC-XIN ĐÃ CHỌN</h1>
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            {cart.length > 0 &&
+    <div className="min-h-screen bg-gray-100">
+      <div className="pt-28 pb-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold mb-6 text-gray-800">DANH SÁCH SẢN PHẨM ĐÃ CHỌN</h1>
+          <div className="bg-white shadow-md rounded-lg overflow-hidden">
+            {cart.length > 0 ? (
               cart.map((item) => (
-                <div key={`${item.product_id}-${item.size}`} className="flex items-center justify-between mb-4">
-                  <div className="flex items-center">
+                <div key={`${item.product_id}-${item.size}`} className="flex flex-col sm:flex-row items-center justify-between p-4 border-b border-gray-200 last:border-b-0">
+                  <div className="flex flex-col sm:flex-row items-center mb-4 sm:mb-0">
                     <img
                       src={item.image}
-                      alt="Sản phẩm"
-                      className="w-16 h-16 object-cover rounded"
+                      alt={item.name}
+                      className="w-24 h-24 object-cover rounded-md"
                     />
-                    <div className="ml-4">
-                      <h2 className="text-lg font-semibold">
+                    <div className="ml-0 sm:ml-4 mt-4 sm:mt-0 text-center sm:text-left">
+                      <h2 className="text-lg font-semibold text-gray-800">
                         {item.name} - {item.size}
                       </h2>
-                      <p className="text-gray-600"> Giá: {formatPrice(item.price)}</p>
-
-                      <div className=" flex">
-                        <p className="mt-1">Số Lượng:</p>
+                      <p className="text-gray-600 mt-1">Giá: {formatPrice(item.price)}</p>
+                      <div className="flex items-center justify-center sm:justify-start mt-2">
+                        <p className="mr-2">Số Lượng:</p>
                         <button
-                          onClick={() =>
-                            dispatch(incrementQuantity(item.product_id))
-                          }
-                          className=" text-xl mx-3 w-5 h-5 bg-slate-200 mt-1 inline-flex items-center justify-center"
+                          onClick={() => {
+                            if (item.quantity > 1) {
+                              dispatch(decrementQuantity(item.product_id));
+                            }
+                          }}
+                          className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
                         >
-                          +
+                          -
                         </button>
+
                         <input
                           type="number"
                           value={item.quantity}
-                          className="w-20"
+                          className="w-12 mx-2 text-center border-gray-300 rounded"
+                          readOnly
                         />
                         <button
-                          onClick={() =>
-                            dispatch(decrementQuantity(item.product_id))
-                          }
-                          className=" text-xl mx-3 mx-3 w-5 h-5 bg-slate-200 mt-1 inline-flex items-center justify-center"
+                          onClick={() => dispatch(incrementQuantity(item.product_id))}
+                          className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
                         >
-                          -
+                          +
                         </button>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center">
-                    <button
-                      onClick={() => dispatch(removeCart(item.product_id))}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      Xóa
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => dispatch(removeCart(item.product_id))}
+                    className="text-red-500 hover:text-red-700 transition-colors"
+                  >
+                    Xóa
+                  </button>
                 </div>
-              ))}
+              ))
+            ) : (
+              <p className="p-4 text-center text-gray-500">Giỏ hàng của bạn đang trống.</p>
+            )}
           </div>
 
-          Tính tổng giá trị giỏ hàng
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8">
-            <h2 className="text-lg font-semibold mb-4">TỔNG TIỀN</h2>
-            <div className="flex justify-between mb-2">
+          <div className="mt-8 bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">TỔNG TIỀN</h2>
+            <div className="flex justify-between items-center">
               <p className="text-gray-600">Tổng cộng:</p>
-              <p className="font-semibold">{formatPrice(getTotal().totalPrice)}</p>
+              <p className="text-xl font-bold text-gray-800">{formatPrice(getTotal().totalPrice)}</p>
             </div>
           </div>
 
-          {/* Nút tiếp tục thanh toán */}
-          <div className="mt-8">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600">
-              <Link to="/payproducts">Tiếp tục thanh toán</Link>
-            </button>
+          <div className="mt-8 flex justify-center">
+            <Link
+              to="/payproducts"
+              className="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition-colors text-lg font-semibold"
+            >
+              Tiếp tục thanh toán
+            </Link>
           </div>
         </div>
       </div>
-      <Footer></Footer>
     </div>
   );
 }

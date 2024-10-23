@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
-import axios from "axios";
+import axios from "../utils/axios";
 import Cookies from "js-cookie";
 
 const initialState = {
@@ -13,30 +13,14 @@ const token = Cookies.get("token");
 
 export const addComment = createAsyncThunk(
   "comment/addComment",
-  async (payload, { rejectWithValue }) => {
+  async (commentData, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/comment/addComment",
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${token}`,
-          },
-        }
+        "http://localhost:3000/api/v1/comment",
+        commentData
       );
-      Swal.fire({
-        icon: "success",
-        text: "Thêm bình luận thành công",
-      });
-      return res.data.comment;
+      return res.data;
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Lỗi",
-        text: "Vui lòng đăng nhập để bình luận",
-        confirmButtonText: ` <a href="/login">Đăng Nhập</a> `,
-      });
       return rejectWithValue(error.response.data);
     }
   }
