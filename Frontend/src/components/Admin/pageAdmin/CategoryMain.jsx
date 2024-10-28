@@ -126,7 +126,7 @@ const CategoryMain = () => {
                 {category.length > 0 &&
                   category
                     .filter((item) =>
-                      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+                      item.name?.toLowerCase().includes(searchTerm.toLowerCase())
                     )
                     .map(({ _id, name, slug, createdAt, updatedAt }, index) => {
                       const isLast = index === category.length - 1;

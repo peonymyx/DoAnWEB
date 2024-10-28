@@ -104,6 +104,10 @@ const Sidebar = () => {
                 text="Tin Nhắn"
               />
               <NavItem
+              to="/CouponManage"
+              icon = {HomeIcon}
+              text= "Coupon"/>
+              <NavItem
                 to="/commentManagement"
                 icon={HomeIcon}
                 text="Bình Luận"

@@ -4,8 +4,6 @@ const Schema = mongoose.Schema;
 const CouponSchema = new Schema({
     code: {
         type: String,
-        required: true,
-        unique: true,
     },
     discount: {
         type: Number,
