@@ -2,6 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { bestSeller } = require("../controller/bestSellerController");
 
-router.get("/bestSeller", bestSeller);
+router.get("/best-sellers", bestSeller);
 
 module.exports = router;
