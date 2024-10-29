@@ -20,45 +20,47 @@ const ProductCard = ({ product }) => {
 
   return (
     <motion.div
-      className="border rounded-lg p-2 sm:p-4 hover:shadow-lg transition-shadow bg-white relative"
+      className="border rounded-lg p-2 mb-4 hover:shadow-lg transition-shadow bg-white relative"
       whileHover={{ scale: 1.05 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Trái tim yêu thích ở góc trên bên trái */}
       <div
-        className="absolute top-2 left-2 cursor-pointer"
+        className="absolute top-4 right-4 cursor-pointer z-10"
         onClick={handleFavoriteClick}
       >
         <Heart
-          className={`h-4 w-4 sm:h-6 sm:w-6 transition-colors duration-300 ${isFavorited ? 'text-red-500' : 'text-white stroke-black'
-            }`}
-          fill={isFavorited ? 'red' : 'none'}
+          className={`h-6 w-6 transition-colors duration-300 ${
+            isFavorited ? "text-red-500" : "text-white stroke-black"
+          }`}
+          fill={isFavorited ? "red" : "none"}
         />
       </div>
-
       <Link to={`/productdetail/${product._id}`}>
         <div className="relative overflow-hidden rounded-lg">
           <img
             src={product.image}
             alt={product.name}
-            className="h-36 sm:h-48 w-full object-cover transition-transform duration-300 transform hover:scale-110"
+            className="h-36 sm:h-[400px] w-full object-cover object-center transition-transform duration-300 transform hover:scale-110"
           />
           {isHovered && (
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
-              <button className="bg-red-500 text-blue-500 py-1 px-2 sm:py-2 sm:px-4 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-300 hover:bg-blue-500 hover:text-white">
+              <button className="bg-blue-700 text-blue-300 py-1 px-4 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-300 hover:bg-blue-500 hover:text-white">
                 Xem nhanh
               </button>
             </div>
           )}
         </div>
-        <h2 className="text-sm sm:text-lg font-bold mt-2 truncate">{product.name}</h2>
+        <h2 className="text-sm sm:text-lg mt-3 font-bold truncate">
+          {product.name}
+        </h2>
         <div className="flex items-center mt-1">
           {[...Array(5)].map((_, index) => (
             <Star
               key={index}
-              className={`h-3 w-3 sm:h-4 sm:w-4 ${index < product.rating ? 'text-yellow-500' : 'text-gray-300'
-                }`}
+              className={`h-4 w-4 ${
+                index < product.rating ? "text-yellow-500" : "text-gray-300"
+              }`}
             />
           ))}
           <span className="ml-1 text-xs sm:text-sm text-gray-600">({product.rating})</span>
@@ -66,8 +68,8 @@ const ProductCard = ({ product }) => {
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
         </p>
-        <button className="mt-2 w-full bg-blue-500 text-white py-1 px-2 sm:py-2 sm:px-4 rounded-full text-xs sm:text-sm transition-colors duration-300 hover:bg-blue-600 flex items-center justify-center">
-          <ShoppingCart className="mr-1 sm:mr-2 h-3 w-3 sm:h-5 sm:w-5" />
+        <button className="mt-2 w-full text-lg bg-blue-500 text-white py-1 px-4 rounded-full transition-colors duration-300 hover:bg-blue-600 flex items-center justify-center">
+          <ShoppingCart className="mr-2 h-4 w-4" />
           Thêm giỏ hàng
         </button>
       </Link>
@@ -109,6 +111,10 @@ const ListProducts = () => {
     };
     fetchData();
   }, [dispatch]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Cuộn lên đầu trang
+  }, []);
 
   const getCategoryList = async () => {
     try {
@@ -155,9 +161,13 @@ const ListProducts = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-      <h1 className="text-2xl sm:text-4xl font-bold text-center mb-2 sm:mb-4">Sản phẩm của chúng tôi</h1>
-      <p className="text-center mb-4 sm:mb-8 text-sm sm:text-base text-gray-600">Khám phá bộ sưu tập quần áo chất lượng cao mới nhất của chúng tôi</p>
+    <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <h1 className="text-2xl sm:text-4xl font-bold text-center m-4 sm:mb-4">
+        Sản phẩm của chúng tôi
+      </h1>
+      <p className="text-center mb-4 sm:mb-8 text-xl text-gray-600">
+        Khám phá bộ sưu tập quần áo chất lượng cao mới nhất của chúng tôi
+      </p>
 
       <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
         <div className="relative w-full sm:w-64">
@@ -166,16 +176,16 @@ const ListProducts = () => {
             placeholder="Tìm kiếm sản phẩm..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-8 sm:pl-10 pr-4 py-1 sm:py-2 text-sm border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-8 text-xl sm:pl-10 pr-4 py-1 sm:py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <Search className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 sm:h-5 sm:w-5" />
         </div>
         <div className="flex items-center space-x-2 sm:space-x-4 text-sm">
-          <span className="text-gray-600">Danh mục:</span>
+          <span className="text-gray-600 text-xl">Danh mục:</span>
           <select
             value={selectedCategory}
             onChange={handleCategoryChange}
-            className="border rounded-md px-1 sm:px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border rounded-md px-1 text-xl sm:px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="All">Tất cả</option>
             {categories.map((category) => (
@@ -186,11 +196,11 @@ const ListProducts = () => {
           </select>
         </div>
         <div className="flex items-center space-x-2 sm:space-x-4 text-sm">
-          <span className="text-gray-600">Sắp xếp theo:</span>
+          <span className="text-gray-600 text-xl">Sắp xếp theo:</span>
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="border rounded-md px-1 sm:px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border rounded-md px-1 text-xl sm:px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Mặc định</option>
             <option value="name-asc">Tên A-Z</option>
