@@ -149,12 +149,12 @@ const Header = () => {
               <button className="font-semibold text-[15px] border-none outline-none">
                 <Link
                   to="/register"
-                  className="text-[#007bff] hover:underline mr-4 text-xl px-3 py-2"
+                  className="text-[#007bff] hover:underline mr-4 text-xl px-2 py-2"
                 >
                   Đăng Ký
                 </Link>
               </button>
-              <button className="mr-2 px-3 py-2 text-xl rounded-sm font-bold  text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-500 hover:bg-transparent hover:text-[#007bff]">
+              <button className="mr-2 px-2 py-2 text-xl rounded-sm font-bold  text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-500 hover:bg-transparent hover:text-[#007bff]">
                 <Link to="/login">Đăng nhập</Link>
               </button>
             </div>
@@ -224,9 +224,9 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {menuVisible && (
-        <div className="lg:hidden mt-4">
+        <div className="lg:hidden mt-2 ml-6">
           <ul className="flex flex-col space-y-3">
-            <li className="border-b py-3">
+            <li className="border-b py-4">
               <Link
                 to={"/listproducts"}
                 className="hover:text-[#007bff] text-[#333] block font-semibold text-xl"

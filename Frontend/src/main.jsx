@@ -28,7 +28,6 @@ import OtherSuccess from "./pages/OtherSuccess.jsx";
 import Dashboard from "./components/Admin/pageAdmin/Dashboard.jsx";
 import LayoutAdmin from "./components/LayoutAdmin.jsx";
 import CategoryMain from "./components/Admin/pageAdmin/CategoryMain.jsx";
-import Productlist from "./components/post/ProductList.jsx";
 import ListProducts from "./pages/ListProducts.jsx";
 import MyOrder from "./pages/MyOrder.jsx";
 import MyOrderDetail from "./pages/MyOrderDetail.jsx";
@@ -73,10 +72,6 @@ const router = createBrowserRouter([
       {
         path: "/UpdateMain/:id",
         element: <UpdateMain></UpdateMain>,
-      },
-      {
-        path: "/productlist",
-        element: <Productlist></Productlist>,
       },
       {
         path: "/listProducts",

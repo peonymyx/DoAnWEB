@@ -1,65 +1,53 @@
+import {
+  PhoneIcon,
+  RefreshCwIcon,
+  ShieldCheckIcon,
+  TruckIcon,
+} from "lucide-react";
+
 const About = () => {
   return (
-    <div className="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-      <div className="container">
-        <div className="row g-5">
-          <div className="col-lg-7">
-            <div className="section-title mb-4">
-              <h5 className="position-relative d-inline-block text-primary text-uppercase">
-                
-              </h5>
-              <h1 className="display-5 mb-0">
-                Shop bán quần áo thể thao mà bạn có thể yên tâm tin tưởng
-              </h1>
-            </div>
-            <h4 className="text-body fst-italic mb-4">
-              Với đội ngũ tư vấn chuyên nghiệp, hết lòng vì khách hàng.
-            </h4>
-            <p className="mb-4">
-              Bạn có thể hoàn toàn yên tâm về chúng tôi, tinh thần trách nhiệm đối với khách hàng luôn được đặt lên đầu tiên.
-            </p>
-            <div className="row g-3">
-              <div className="col-sm-6 wow zoomIn" data-wow-delay="0.3s">
-                <h5 className="mb-3">
-                  <i className="fa fa-check-circle text-primary me-3"></i>
-                  Tận Tâm
-                </h5>
-                <h5 className="mb-3">
-                  <i className="fa fa-check-circle text-primary me-3"></i>
-                  Sản phẩm chất lượng
-                </h5>
-              </div>
-              <div className="col-sm-6 wow zoomIn" data-wow-delay="0.6s">
-                <h5 className="mb-3">
-                  <i className="fa fa-check-circle text-primary me-3"></i>
-                  Mở cửa 24/7
-                </h5>
-                <h5 className="mb-3">
-                  <i className="fa fa-check-circle text-primary me-3"></i>
-                  Giá cả phù hợp
-                </h5>
-              </div>
-            </div>
-            <a
-              href="/RegisterVaccination"
-              className="btn btn-primary py-3 px-5 mt-4 wow zoomIn"
-              data-wow-delay="0.6s"
-            >
-              Đăng ký Ngay
-            </a>
-          </div>
-          <div className="col-lg-5" style={{ minHeight: "500px" }}>
-            <div className="position-relative h-100">
-              <img
-                className="position-absolute w-100 h-100 rounded wow zoomIn"
-                data-wow-delay="0.9s"
-                src="/template/dentcare-1.0.0/img/about.jpg"
-                style={{ objectFit: "cover" }}
-                alt="About Us"
-              />
-            </div>
-          </div>
-        </div>
+    <div className="flex flex-col md:flex-row justify-center md:gap-28 items-center bg-gray-50 py-8 px-10 space-y-4 md:space-y-2">
+      {/* Free Shipping */}
+      <div className="flex flex-col items-center text-center space-y-2 transform transition-transform duration-200 hover:scale-110">
+        <TruckIcon className="md:h-20 md:w-20 w-14 h-14 text-gray-700" />
+        <p className="text-lg font-semibold text-gray-800 mt-3">
+          MIỄN PHÍ GIAO HÀNG ĐƠN TỪ 199K
+        </p>
+        <p className="text-gray-500 text-lg m-2">Giao hàng nhanh chóng</p>
+      </div>
+
+      {/* Product Warranty */}
+      <div className="flex flex-col items-center text-center space-y-2 transform transition-transform duration-200 hover:scale-110">
+        <ShieldCheckIcon className="md:h-20 md:w-20 w-14 h-14 text-gray-700" />
+        <p className="text-lg font-semibold text-gray-800 mt-3">
+          BẢO HÀNH SẢN PHẨM
+        </p>
+        <p className="text-gray-500 text-lg m-2">
+          Trong vòng 6 tháng kể từ ngày mua
+        </p>
+      </div>
+
+      {/* Flexible Return */}
+      <div className="flex flex-col items-center text-center space-y-2 transform transition-transform duration-200 hover:scale-110">
+        <RefreshCwIcon className="md:h-20 md:w-20 w-14 h-14 text-gray-700" />
+        <p className="text-lg font-semibold text-gray-800 mt-3">
+          ĐỔI HÀNG LINH HOẠT
+        </p>
+        <p className="text-gray-500  text-lg m-2">
+          Trong vòng 15 ngày kể từ ngày mua
+        </p>
+      </div>
+
+      {/* Quick Support */}
+      <div className="flex flex-col items-center text-center space-y-2 transform transition-transform duration-200 hover:scale-110">
+        <PhoneIcon className="md:h-20 md:w-20 w-14 h-14 text-gray-700" />
+        <p className="text-lg font-semibold text-gray-800 mt-3">
+          TƯ VẤN NHANH CHÓNG
+        </p>
+        <p className="text-gray-500  text-lg m-2">
+          Hỗ trợ từ 7h30-23h mỗi ngày
+        </p>
       </div>
     </div>
   );

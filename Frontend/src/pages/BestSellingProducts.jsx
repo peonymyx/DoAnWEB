@@ -15,17 +15,17 @@ const ProductCard = ({ product }) => {
 
   return (
     <motion.div
-      className="border rounded-lg p-2 sm:p-4 hover:shadow-lg transition-shadow bg-white relative"
+      className="border rounded-lg p-2 hover:shadow-lg transition-shadow bg-white relative"
       whileHover={{ scale: 1.05 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className="absolute top-2 left-2 cursor-pointer"
+        className="absolute top-4 right-4 cursor-pointer z-10"
         onClick={handleFavoriteClick}
       >
         <Heart
-          className={`h-4 w-4 sm:h-6 sm:w-6 transition-colors duration-300 ${
+          className={`h-6 w-6 transition-colors duration-300 ${
             isFavorited ? "text-red-500" : "text-white stroke-black"
           }`}
           fill={isFavorited ? "red" : "none"}
@@ -37,17 +37,17 @@ const ProductCard = ({ product }) => {
           <img
             src={product.image}
             alt={product.name}
-            className="h-36 sm:h-48 w-full object-cover transition-transform duration-300 transform hover:scale-110"
+            className="h-36 sm:h-[400px] w-full object-cover object-center transition-transform duration-300 transform hover:scale-110"
           />
           {isHovered && (
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
-              <button className="bg-red-500 text-blue-500 py-1 px-2 sm:py-2 sm:px-4 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-300 hover:bg-blue-500 hover:text-white">
+              <button className="bg-blue-700 text-blue-300 py-1 sm:py-2 sm:px-4 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-300 hover:bg-blue-500 hover:text-white">
                 Xem nhanh
               </button>
             </div>
           )}
         </div>
-        <h2 className="text-sm sm:text-lg font-bold mt-2 truncate">
+        <h2 className="text-sm sm:text-lg font-bold mt-3 truncate">
           {product.name}
         </h2>
         <div className="flex items-center mt-1">
@@ -66,9 +66,9 @@ const ProductCard = ({ product }) => {
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
         </p>
-        <button className="mt-2 w-full bg-blue-500 text-white py-1 px-2 sm:py-2 sm:px-4 rounded-full text-xs sm:text-sm transition-colors duration-300 hover:bg-blue-600 flex items-center justify-center">
+        <button className="mt-2 w-full text-lg bg-blue-500 text-white py-1 px-2 sm:py-2 sm:px-4 rounded-full sm:text-sm transition-colors duration-300 hover:bg-blue-600 flex items-center justify-center">
           <ShoppingCart className="mr-1 sm:mr-2 h-3 w-3 sm:h-5 sm:w-5" />
-          Thêm giỏ hàng
+          <span className="text-lg flex items-center">Thêm giỏ hàng</span>
         </button>
       </Link>
     </motion.div>
@@ -119,15 +119,11 @@ const BestSellingProducts = () => {
   }
 
   return (
-    <div className="mt-12 mb-12">
-      <h2 className="text-2xl sm:text-4xl font-bold text-center mb-2 sm:mb-4">
+    <div className="max-w-[1300px] mx-auto mt-12 mb-12">
+      <p className="text-4xl font-bold text-center my-4 text-black">
         Sản phẩm bán chạy
-      </h2>
-      <p className="text-center mb-4 sm:mb-8 text-sm sm:text-base text-gray-600">
-        Khám phá những sản phẩm được yêu thích nhất của chúng tôi
       </p>
-
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {bestSellers.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
