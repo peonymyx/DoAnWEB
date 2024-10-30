@@ -10,14 +10,13 @@ const Footer = () => {
               ASIN
             </h2>
             <h4 className="text-lg mt-0 mb-2 text-blueGray-600">
-              CÔNG TY CỔ PHẦN THỜI TRANG KOWIL VIỆT NAM
+              CÔNG TY CỔ PHẦN THỜI TRANG ASIN VIỆT NAM
             </h4>
             <h6 className="text-lg mt-0 mb-2 text-blueGray-600">
               Hotline: 1900 8079
             </h6>
             <h6 className="text-lg mt-0 mb-2 text-blueGray-600">
-              <b>Địa chỉ</b>: Tầng 17 tòa nhà Viwaseen, 48 Phố Tố Hữu, Trung
-              Văn, Nam Từ Liêm, Hà Nội
+              <b>Địa chỉ</b>: 279 Nguyễn Tri Phương, phường 5, quận 10
             </h6>
             <div className="mt-6 lg:mb-0 mb-6">
               <button
@@ -134,7 +133,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                OWEN
+                ASIN
               </a>{" "}
               by{" "}
               <a
