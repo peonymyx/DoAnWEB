@@ -33,6 +33,7 @@ import MyOrder from "./pages/MyOrder.jsx";
 import MyOrderDetail from "./pages/MyOrderDetail.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import Favatie from "./pages/favatie.jsx";
+import CouponAdmin from "./components/Admin/pageAdmin/Coupon.jsx";
 const router = createBrowserRouter([
   {
     element: <Layoutmain></Layoutmain>,
@@ -114,7 +115,10 @@ const router = createBrowserRouter([
         path: "/Editproduct/:id",
         element: <EditProduct></EditProduct>,
       },
-
+      {
+        path: "/CouponManage",
+        element: <CouponAdmin></CouponAdmin>
+      },
       {
         path: "/AccountManagement",
         element: <AccountManagement></AccountManagement>,

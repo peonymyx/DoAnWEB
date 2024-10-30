@@ -57,7 +57,10 @@ const authSlice = createSlice({
       state.currentUser = action.payload.others;
       Cookies.set("token", action.payload.token);
       sessionStorage.setItem("user", JSON.stringify(action.payload.others));
-      if (action.payload.others.role === "admin" || action.payload.others.role === "nhanvien"  ) {
+      if (
+        action.payload.others.role === "admin" ||
+        action.payload.others.role === "nhanvien"
+      ) {
         window.location.href = "/dashBoard";
       } else {
         window.location.href = "/";
@@ -65,7 +68,9 @@ const authSlice = createSlice({
     },
     [login.rejected]: (state, action) => {
       state.isLoading = false;
-      state.error = action.payload;
+      const errorMessage = action.payload?.message || "Có lỗi xảy ra"; // Lưu thông báo lỗi
+      alert(errorMessage); // Hiển thị thông báo lỗi
+      state.error = errorMessage; 
     },
   },
 });

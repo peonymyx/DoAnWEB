@@ -1,11 +1,27 @@
-// routes/CouponRouter.js
+// routes/couponRoutes.js
 const express = require('express');
-const { createCoupon, applyCoupon } = require("../controller/couponController");
-
 const router = express.Router();
+const {
+    createCoupon,
+    getAllCoupons,
+    updateCoupon,
+    deleteCoupon,
+    applyCoupon
+} = require('../controller/couponController');
 
-// Định nghĩa các route cho coupon
-router.post('/', createCoupon); // Tạo coupon mới
-router.post('/apply', applyCoupon); // Áp dụng coupon
+// Tạo coupon mới
+router.post('/', createCoupon);
+
+// Lấy danh sách tất cả coupon
+router.get('/', getAllCoupons);
+
+// Cập nhật coupon theo ID
+router.put('/:id', updateCoupon);
+
+// Xóa coupon theo ID
+router.delete('/:id', deleteCoupon);
+
+// Áp dụng coupon
+router.post('/apply', applyCoupon);
 
 module.exports = router;

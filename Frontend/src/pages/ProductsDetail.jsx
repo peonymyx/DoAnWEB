@@ -11,11 +11,13 @@ import { addToCart } from "../redux/cartSlice";
 import axios from "axios";
 import { AlertCircle, Heart, ShoppingCart } from "lucide-react";
 import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 const ProductsDetail = () => {
   const [comment, setComment] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [error, setError] = useState("");
+  const [isInWishlist, setIsInWishlist] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,7 +30,91 @@ const ProductsDetail = () => {
   useEffect(() => {
     dispatch(getProductById(id));
     dispatch(getCommentByProductId(id));
+    // if (userId) {
+    //   checkIfInWishlist();
+    // }
   }, [id, dispatch]);
+
+  // const checkIfInWishlist = async () => {
+  //   try {
+  //     const token = Cookies.get("token");
+  //     if (!token || !userId) return;
+
+  //     const response = await axios.get(
+  //       `http://localhost:3000/api/v1/wishlist/${userId}`
+  //     );
+  //     const wishlist = response.data.wishlist;
+  //     const isProductInWishlist = wishlist.some(
+  //       (item) => item.productId === id
+  //     );
+  //     setIsInWishlist(isProductInWishlist);
+  //   } catch (error) {
+  //     console.error("Error checking wishlist:", error);
+  //   }
+  // };
+
+  const handleWishlist = async () => {
+    try {
+      await axios.post("http://localhost:3000/api/v1/wishListProduct", {
+        id: userId,
+        productId: id,
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Thêm vào yêu thích thành công!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // const handleWishlist = async () => {
+  //   try {
+  //     const token = Cookies.get("token");
+  //     if (!token || !userId) {
+  //       setError("Vui lòng đăng nhập để thêm vào danh sách yêu thích.");
+  //       navigate("/login");
+  //       return;
+  //     }
+
+  //     if (isInWishlist) {
+  //       // Remove from wishlist
+  //       await axios.delete(
+  //         `http://localhost:3000/api/v1/wishlist/${userId}/${id}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+  //       setIsInWishlist(false);
+  //       alert("Sản phẩm đã được xóa khỏi danh sách yêu thích!");
+  //     } else {
+  //       // Add to wishlist
+  //       await axios.post(
+  //         "http://localhost:3000/api/v1/addProduct",
+  //         {
+  //           id: userId,
+  //           productId: id,
+  //         },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+  //       setIsInWishlist(true);
+  //       alert("Sản phẩm đã được thêm vào danh sách yêu thích!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error toggling wishlist:", error);
+  //     setError(
+  //       "Có lỗi xảy ra khi thay đổi trạng thái yêu thích. Vui lòng thử lại."
+  //     );
+  //   }
+  // };
 
   const handleAddComment = async (e) => {
     e.preventDefault();
@@ -91,26 +177,34 @@ const ProductsDetail = () => {
     navigate("/cart");
   };
 
-  const handleWishlist = async () => {
-    try {
-      const token = Cookies.get("token");
-      if (!token || !userId) {
-        setError("Vui lòng đăng nhập để thêm vào danh sách yêu thích.");
-        navigate("/login");
-        return;
-      }
+  // const handleWishlist = async () => {
+  //   try {
+  //     const token = Cookies.get("token");
+  //     if (!token || !userId) {
+  //       setError("Vui lòng đăng nhập để thêm vào danh sách yêu thích.");
+  //       navigate("/login");
+  //       return;
+  //     }
 
-      await axios.post("http://localhost:3000/api/v1/addProduct", {
-        id: userId,
-        productId: id,
-      });
-
-      alert("Sản phẩm đã được thêm vào danh sách yêu thích!");
-    } catch (error) {
-      console.error("Error adding to wishlist:", error);
-      setError("Có lỗi xảy ra khi thêm vào danh sách yêu thích.");
-    }
-  };
+  //     if (isInWishlist) {
+  //       await axios.delete(
+  //         `http://localhost:3000/api/v1/wishlist/${userId}/${id}`
+  //       );
+  //       setIsInWishlist(false);
+  //       alert("Sản phẩm đã được xóa khỏi danh sách yêu thích!");
+  //     } else {
+  //       await axios.post("http://localhost:3000/api/v1/addProduct", {
+  //         id: userId,
+  //         productId: id,
+  //       });
+  //       setIsInWishlist(true);
+  //       alert("Sản phẩm đã được thêm vào danh sách yêu thích!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error toggling wishlist:", error);
+  //     setError("Có lỗi xảy ra khi thêm vào danh sách yêu thích.");
+  //   }
+  // };
 
   const formatPrice = (price) => {
     if (price == null) return "";
@@ -180,17 +274,25 @@ const ProductsDetail = () => {
             </button>
             <button
               onClick={handleWishlist}
-              className="flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-gray-100 transition duration-300 flex items-center justify-center text-sm sm:text-base"
+              className={`flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-gray-100 transition duration-300 flex items-center justify-center text-sm sm:text-base ${
+                isInWishlist ? "text-red-600" : ""
+              }`}
             >
-              <Heart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              Thêm vào danh sách yêu thích
+              <Heart
+                className={`mr-2 h-4 w-4 sm:h-5 sm:w-5 ${
+                  isInWishlist ? "fill-current text-red-600" : ""
+                }`}
+              />
+              {isInWishlist ? "Xóa khỏi yêu thích" : "Thêm vào yêu thích"}
             </button>
           </div>
         </div>
       </div>
-
-      <div className="mt-12">
-        <h3 className="text-xl sm:text-2xl font-bold mb-4">Comments</h3>
+      <div className="w-full h-px bg-gray-400 my-16"></div>
+      <div className="mt-2">
+        <p className="text-xl sm:text-3xl font-bold mb-4 text-black text-left">
+          Bình luận
+        </p>
         {error && (
           <div
             className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
@@ -211,7 +313,7 @@ const ProductsDetail = () => {
           ></textarea>
           <button
             type="submit"
-            className="mt-2 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 text-sm sm:text-base"
+            className="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 text-sm sm:text-base"
           >
             Submit
           </button>

@@ -35,7 +35,7 @@ const Message = () => {
   };
 
   return (
-    <div className="content-wrapper flex h-[680px] sm:h-[570px]">
+    <div className="content-wrapper flex h-[620px] sm:h-[680px]">
       <Card className="w-full">
         <CardHeader className="content-header shadow-none mb-4 rounded-md">
           <div className="p-4 bg-white">
@@ -45,17 +45,15 @@ const Message = () => {
           </div>
         </CardHeader>
         <div className="chat flex flex-col md:flex-row">
-          <div className="list-user w-full md:w-64 bg-slate-400 rounded-r-lg p-4 mb-4 md:mb-0">
-            <h2 className="text-white text-2xl font-semibold mb-4">
-              Người Dùng
-            </h2>
-            <h1 className="ml-3 text-[18px]">
+          <div className="list-user w-full md:w-64 bg-slate-400 rounded-r-lg p-4 mb-5 md:mb-0">
+            <p className="text-white text-2xl font-semibold">Người Dùng</p>
+            <p className="text-lg">
               {localStorage.getItem("messages")
                 ? JSON.parse(localStorage.getItem("messages"))[0]?.username
                 : ""}
-            </h1>
+            </p>
           </div>
-          <div className="message-box flex-grow ml-0 md:ml-4 p-4">
+          <div className="message-box flex-grow ml-0 md:ml-4">
             <div className="chat-window h-96 max-h-96 overflow-y-auto bg-white rounded-lg shadow-lg p-4">
               {messages.map((item, index) => {
                 const formattedTime = new Date(item.timestamp).toLocaleString();

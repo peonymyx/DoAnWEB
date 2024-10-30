@@ -315,16 +315,13 @@ const MyOrder = () => {
                     className="print-btn bg-sky-700"
                     onClick={() => window.print()}
                   >
-                    Bạn hãy chụp lại và xác nhận với nhân viên giao hàng
-                    tiêm!!
+                    Bạn hãy chụp lại và xác nhận với nhân viên giao hàng tiêm!!
                   </Button>
                 </div>
               </div>
             </div>
           </>
         ))}
-
-      <Footer></Footer>
     </div>
   );
 };

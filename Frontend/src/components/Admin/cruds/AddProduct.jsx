@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { getCategory } from "../../../redux/categorySlice";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import Sidebar from "../../Nav/Sidebar";
 import { handleUploadToImgBB } from "../../../config/apiConfig";
 
 const schema = yup.object().shape({
@@ -20,8 +19,7 @@ const schema = yup.object().shape({
 const AddProduct = () => {
   const [imageUpload, setImageUpload] = useState("");
   const [description, setDescription] = useState("");
-  // const availableSizes = ["S", "M", "L", "XL"];
-  const [selectedSize, setSelectedSize] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState("");
   const isLoading = useSelector((state) => state.product.isLoading);
   const {
     register,
@@ -34,6 +32,7 @@ const AddProduct = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
   const category = useSelector((state) => state.category.category);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (user.role !== "admin") {
       navigate("/login");
@@ -48,32 +47,39 @@ const AddProduct = () => {
     setImageUpload(e.target.files[0]);
   };
 
-  // const handleSizeSelect = (size) => {
-  //   setSelectedSize(size);
-  // };
-  const handleAddSize = (size) => {
-    setSelectedSize([...selectedSize, size]);
+  const handleSizeClick = (size) => {
+    setSelectedSizes((prevSelectedSizes) => {
+      const sizesArray = prevSelectedSizes.split(",").filter(Boolean);
+      if (sizesArray.includes(size)) {
+        return sizesArray.filter((s) => s !== size).join(",");
+      } else {
+        return [...sizesArray, size].join(",");
+      }
+    });
   };
 
   const handleAddProduct = async (data) => {
-    const { name, address, category, price } = data;
+    const { name, category, price } = data;
     const imageUrl = await handleUploadToImgBB(imageUpload);
 
     if (!imageUrl) {
       console.error("Failed to upload image");
       return;
     }
-    await dispatch(
-      addProduct({
-        name,
-        size: selectedSize,
-        address,
-        category,
-        description: description,
-        price,
-        image: imageUrl,
-      })
-    );
+
+    const productData = {
+      name,
+      size: selectedSizes,
+      category,
+      description,
+      price,
+      image: imageUrl,
+    };
+
+    console.log("Product Data:", productData);
+
+    await dispatch(addProduct(productData));
+    navigate("/ProductManagement");
   };
 
   return (
@@ -110,7 +116,7 @@ const AddProduct = () => {
             </div>
             <div className="mb-4">
               <label
-                htmlFor="name"
+                htmlFor="price"
                 className="mb-3 block font-bold text-[#07074D] text-xl"
               >
                 Giá sản phẩm:
@@ -125,69 +131,30 @@ const AddProduct = () => {
               />
               <p className="text-red-500 mt-1">{errors.price?.message}</p>
             </div>
-
-            {/* <div className="flex gap-2 items-center">
-              {availableSizes.map((size) => (
-                <div
-                  key={size}
-                  onClick={() => handleSizeSelect(size)}
-                  className={`border p-2 cursor-pointer size-item ${
-                    selectedSize === size ? "active border-primary" : ""
-                  }`}
-                >
-                  {size}
-                </div>
-              ))}
-            </div> */}
             <div className="flex gap-2 items-center mt-2 mb-4">
               <label
-                htmlFor="name"
+                htmlFor="size"
                 className="block font-bold text-[#07074D] text-xl"
               >
                 Chọn Size:
               </label>
-              {selectedSize.map((size) => (
+              {["S", "M", "L", "XL"].map((size) => (
                 <div
                   key={size}
-                  className="border px-4 py-2 cursor-pointer size-item active border-primary"
+                  className={`border px-4 py-2 cursor-pointer size-item ${
+                    selectedSizes.split(",").includes(size)
+                      ? "border-blue-500"
+                      : "border-primary"
+                  }`}
+                  onClick={() => handleSizeClick(size)}
                 >
                   {size}
                 </div>
               ))}
             </div>
-            <div className="flex gap-2 items-center mt-2 text-xl">
-              <button
-                type="button"
-                onClick={() => handleAddSize("S")}
-                className="border px-4 py-2 cursor-pointer size-item"
-              >
-                S
-              </button>
-              <button
-                type="button"
-                onClick={() => handleAddSize("M")}
-                className="border px-4 py-2 cursor-pointer size-item"
-              >
-                M
-              </button>
-              <button
-                type="button"
-                onClick={() => handleAddSize("L")}
-                className="border px-4 py-2 cursor-pointer size-item"
-              >
-                L
-              </button>
-              <button
-                type="button"
-                onClick={() => handleAddSize("XL")}
-                className="border px-4 py-2 cursor-pointer size-item"
-              >
-                XL
-              </button>
-            </div>
             <div className="my-4">
               <label
-                htmlFor="origin"
+                htmlFor="category"
                 className="mb-3 block font-bold text-[#07074D] text-xl"
               >
                 Danh mục
@@ -226,13 +193,6 @@ const AddProduct = () => {
               >
                 Mô tả:
               </label>
-              {/* <textarea
-              name="description"
-              id="description"
-              className="w-full h-32 border border-gray-300 rounded-lg py-2 px-3 outline-none bg-transparent resize-none  focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              placeholder="Enter description"
-              {...register("description")}
-            /> */}
               <ReactQuill
                 theme="snow"
                 value={description}

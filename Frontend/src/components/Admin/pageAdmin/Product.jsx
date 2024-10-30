@@ -20,8 +20,8 @@ const TABLE_HEAD = [
   "Size",
   "Ngày Tạo",
   "Ngày Sửa",
+  "Hành Động",
   "Mô Tả",
-  "",
 ];
 const ITEMS_PER_PAGE = 5;
 
@@ -53,9 +53,11 @@ const Product = () => {
   console.log("Product từ Redux:", product);
 
   // Bước 2: Filter dữ liệu dựa trên từ khóa tìm kiếm
-  const filteredProduct = product.filter((v) =>
-    v.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProduct = Array.isArray(product)
+    ? product.filter((v) =>
+        v.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   console.log("filtered", filteredProduct);
 
@@ -165,7 +167,7 @@ const Product = () => {
                       <td className="w-[100px] h-[90px] ">
                         <img src={row.image} alt={row.name} />
                       </td>
-                      <td className="border-dashed border-t font-semibold border-blue-gray-200 w-[240px] p-4">
+                      <td className="border-dashed border-t font-semibold border-blue-gray-200 w-[350px] p-4">
                         <div className="flex items-center ">
                           <div>
                             <Typography color="blueGray" variant="body2">
@@ -194,15 +196,10 @@ const Product = () => {
                           {new Date(row.updatedAt).toLocaleDateString("en-GB")}
                         </Typography>
                       </td>
-                      <td className="border-dashed border-t border-blue-gray-200 px-10 p-4 w-[1500px]">
-                        <Typography color="blueGray" variant="body2">
-                          {row.description}
-                        </Typography>
-                      </td>
-                      <td className="border-dashed border-t border-blue-gray-200 px-10 py-4">
+                      <td className="border-dashed border-t border-blue-gray-200 px-10">
                         <div className="flex items-center gap-2">
                           <Link to={`/EditProduct/${row._id}`}>
-                            <Button className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-blue-500 rounded-lg h-[50px] w-[70px] mr-2">
+                            <Button className="inline-flex items-center gap-2 justify-center px-8 text-white bg-blue-500 rounded-lg h-[50px] w-[70px] mr-2">
                               <span>
                                 <PencilIcon className="h-4 w-4" />
                               </span>
@@ -210,7 +207,7 @@ const Product = () => {
                             </Button>
                           </Link>
                           <Button
-                            className="inline-flex items-center gap-2 justify-center px-8 py-4 text-white bg-red-500 rounded-lg h-[50px] w-[70px]"
+                            className="inline-flex items-center gap-2 justify-center px-8 text-white bg-red-500 rounded-lg h-[50px] w-[70px]"
                             buttonType="link"
                             size="regular"
                             rounded={false}
@@ -225,6 +222,11 @@ const Product = () => {
                             <span>Xóa</span>
                           </Button>
                         </div>
+                      </td>
+                      <td className="border-dashed border-t border-blue-gray-200 px-10 p-4 w-[1500px]">
+                        <Typography color="blueGray" variant="body2">
+                          {row.description}
+                        </Typography>
                       </td>
                     </tr>
                   ))}

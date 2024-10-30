@@ -323,7 +323,7 @@ const SignIn = () => {
                   id="email"
                   name="email"
                   className="mt-1 p-2 text-lg w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-                  placeholder="Hãy nhập email.."
+                  placeholder="Hãy nhập email..."
                   {...register("email")}
                 />
                 <p className="text-red-500 mt-2">{errors.email?.message}</p>
@@ -341,7 +341,7 @@ const SignIn = () => {
                     id="password"
                     name="password"
                     className="mt-1 p-2 text-lg w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-                    placeholder="Hãy nhập mật khẩu.."
+                    placeholder="Hãy nhập mật khẩu..."
                     {...register("password")}
                   ></input>
                   <p className="text-red-500 mt-2">
