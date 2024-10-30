@@ -179,7 +179,7 @@ const Activities = () => {
           <img
             src="./BTSThuDong.webp"
             alt="Banner"
-            className="w-full h-full object-cover object-center transition-transform duration-300 transform hover:scale-110"
+            className="w-full h-full object-cover object-center transition-transform duration-300 transform hover:scale-105"
           />
         </Link>
       </div>
@@ -191,7 +191,7 @@ const Activities = () => {
           <img
             src="./AnhShowRoom.webp"
             alt="Banner"
-            className="w-full h-full object-cover object-center transition-transform duration-300 transform hover:scale-110"
+            className="w-full h-full object-cover object-center transition-transform duration-300 transform hover:scale-105"
           />
         </Link>
       </div>
