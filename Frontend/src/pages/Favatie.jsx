@@ -105,15 +105,9 @@ Pagination.propTypes = {
 };
 
 const Favatie = () => {
-  //     const [currentPage, setCurrentPage] = useState(1);
-  //     const [sortBy, setSortBy] = useState('');
-  //     const [searchTerm, setSearchTerm] = useState('');
-  //     const [filters] = useState({ prices: [], types: [] });
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  // const [filteredProducts, setFilteredProducts] = useState([]);
-  // const productsPerPage = 8;
   const auth = useSelector((state) => state.auth.currentUser);
 
   useEffect(() => {
@@ -123,10 +117,17 @@ const Favatie = () => {
         setError(null);
         try {
           const response = await axios.get(
-            `http://localhost:3000/api/v1/addProduct`
-          );
+            `http://localhost:3000/api/v1/wishListProduct`
+          ); // API endpoint to fetch wishlist
 
-          console.log("Wishlist response:", response.data); // Debug log
+          console.log("Wishlist response 1:", response.data); // Debug log
+          // Debugging logs
+          console.log("response.data.success:", response.data.success);
+          console.log("response.data.user:", response.data.user);
+          console.log(
+            "response.data.user?.wishList:",
+            response.data.user?.wishList
+          );
 
           if (response.data.success && response.data.user?.wishList) {
             // Make sure each item has required properties for ProductCard
@@ -141,11 +142,13 @@ const Favatie = () => {
               })
             );
             setWishlist(formattedWishlist);
+            console.log("Wishlist:", formattedWishlist); // Debug log
           } else {
+            console.log("Wishlist rỗng");
             setWishlist([]);
           }
         } catch (error) {
-          console.error("Error fetching wishlist:", error);
+          console.log("Error fetching wishlist:", error);
           setError(error.response?.data?.message || "Failed to fetch wishlist");
         } finally {
           setLoading(false);

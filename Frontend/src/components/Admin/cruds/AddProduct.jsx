@@ -17,9 +17,9 @@ const schema = yup.object().shape({
 });
 
 const AddProduct = () => {
-  const [imageUpload, setImageUpload] = useState("");
+  const [imageUpload, setImageUpload] = useState(null);
   const [description, setDescription] = useState("");
-  const [selectedSizes, setSelectedSizes] = useState("");
+  const [selectedSize, setSelectedSize] = useState([]);
   const isLoading = useSelector((state) => state.product.isLoading);
   const {
     register,
@@ -44,22 +44,29 @@ const AddProduct = () => {
   }, [dispatch]);
 
   const handleUploadImage = async (e) => {
-    setImageUpload(e.target.files[0]);
+    const file = e.target.files[0];
+    console.log("Selected file:", file);
+    setImageUpload(file);
   };
 
-  const handleSizeClick = (size) => {
-    setSelectedSizes((prevSelectedSizes) => {
-      const sizesArray = prevSelectedSizes.split(",").filter(Boolean);
-      if (sizesArray.includes(size)) {
-        return sizesArray.filter((s) => s !== size).join(",");
-      } else {
-        return [...sizesArray, size].join(",");
-      }
-    });
+  const handleAddSize = (size) => {
+    setSelectedSize((prevSelectedSize) =>
+      prevSelectedSize.includes(size)
+        ? prevSelectedSize.filter((s) => s !== size)
+        : [...prevSelectedSize, size]
+    );
   };
 
   const handleAddProduct = async (data) => {
     const { name, category, price } = data;
+    console.log("Form data:", data);
+    console.log("Image file:", imageUpload);
+
+    if (!imageUpload) {
+      console.error("No image file selected");
+      return;
+    }
+
     const imageUrl = await handleUploadToImgBB(imageUpload);
 
     if (!imageUrl) {
@@ -67,18 +74,17 @@ const AddProduct = () => {
       return;
     }
 
-    const productData = {
-      name,
-      size: selectedSizes,
-      category,
-      description,
-      price,
-      image: imageUrl,
-    };
+    await dispatch(
+      addProduct({
+        name,
+        size: selectedSize.join(","),
+        category,
+        description,
+        price,
+        image: imageUrl,
+      })
+    );
 
-    console.log("Product Data:", productData);
-
-    await dispatch(addProduct(productData));
     navigate("/ProductManagement");
   };
 
@@ -138,19 +144,52 @@ const AddProduct = () => {
               >
                 Chọn Size:
               </label>
-              {["S", "M", "L", "XL"].map((size) => (
+              {selectedSize.map((size) => (
                 <div
                   key={size}
-                  className={`border px-4 py-2 cursor-pointer size-item ${
-                    selectedSizes.split(",").includes(size)
-                      ? "border-blue-500"
-                      : "border-primary"
-                  }`}
-                  onClick={() => handleSizeClick(size)}
+                  className="border px-4 py-2 cursor-pointer size-item active border-primary"
                 >
                   {size}
                 </div>
               ))}
+            </div>
+            <div className="flex gap-2 items-center mt-2 text-xl">
+              <button
+                type="button"
+                onClick={() => handleAddSize("S")}
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("S") ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                S
+              </button>
+              <button
+                type="button"
+                onClick={() => handleAddSize("M")}
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("M") ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                M
+              </button>
+              <button
+                type="button"
+                onClick={() => handleAddSize("L")}
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("L") ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                L
+              </button>
+              <button
+                type="button"
+                onClick={() => handleAddSize("XL")}
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("XL") ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                XL
+              </button>
             </div>
             <div className="my-4">
               <label

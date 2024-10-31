@@ -1,365 +1,214 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getProductById } from "../redux/productSlice";
-import {
-  addComment,
-  deleteCommentByAuthor,
-  getCommentByProductId,
-} from "../redux/commentSlice";
-import { addToCart } from "../redux/cartSlice";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
-import { AlertCircle, Heart, ShoppingCart } from "lucide-react";
-import Cookies from "js-cookie";
-import Swal from "sweetalert2";
+import { Star, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { motion } from "framer-motion";
+import PropTypes from "prop-types";
 
-const ProductsDetail = () => {
-  const [comment, setComment] = useState("");
-  const [selectedSize, setSelectedSize] = useState("");
-  const [error, setError] = useState("");
-  const [isInWishlist, setIsInWishlist] = useState(false);
-  const { id } = useParams();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const product = useSelector((state) => state.product.products);
-  const auth = useSelector((state) => state.auth);
-  const userId = auth.currentUser?._id;
-  const commentList = useSelector((state) => state.comment.comment);
-
-  useEffect(() => {
-    dispatch(getProductById(id));
-    dispatch(getCommentByProductId(id));
-    // if (userId) {
-    //   checkIfInWishlist();
-    // }
-  }, [id, dispatch]);
-
-  // const checkIfInWishlist = async () => {
-  //   try {
-  //     const token = Cookies.get("token");
-  //     if (!token || !userId) return;
-
-  //     const response = await axios.get(
-  //       `http://localhost:3000/api/v1/wishlist/${userId}`
-  //     );
-  //     const wishlist = response.data.wishlist;
-  //     const isProductInWishlist = wishlist.some(
-  //       (item) => item.productId === id
-  //     );
-  //     setIsInWishlist(isProductInWishlist);
-  //   } catch (error) {
-  //     console.error("Error checking wishlist:", error);
-  //   }
-  // };
-
-  const handleWishlist = async () => {
-    try {
-      await axios.post("http://localhost:3000/api/v1/wishListProduct", {
-        id: userId,
-        productId: id,
-      });
-      Swal.fire({
-        icon: "success",
-        title: "Thêm vào yêu thích thành công!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // const handleWishlist = async () => {
-  //   try {
-  //     const token = Cookies.get("token");
-  //     if (!token || !userId) {
-  //       setError("Vui lòng đăng nhập để thêm vào danh sách yêu thích.");
-  //       navigate("/login");
-  //       return;
-  //     }
-
-  //     if (isInWishlist) {
-  //       // Remove from wishlist
-  //       await axios.delete(
-  //         `http://localhost:3000/api/v1/wishlist/${userId}/${id}`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-  //       setIsInWishlist(false);
-  //       alert("Sản phẩm đã được xóa khỏi danh sách yêu thích!");
-  //     } else {
-  //       // Add to wishlist
-  //       await axios.post(
-  //         "http://localhost:3000/api/v1/addProduct",
-  //         {
-  //           id: userId,
-  //           productId: id,
-  //         },
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-  //       setIsInWishlist(true);
-  //       alert("Sản phẩm đã được thêm vào danh sách yêu thích!");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error toggling wishlist:", error);
-  //     setError(
-  //       "Có lỗi xảy ra khi thay đổi trạng thái yêu thích. Vui lòng thử lại."
-  //     );
-  //   }
-  // };
-
-  const handleAddComment = async (e) => {
-    e.preventDefault();
-    const token = Cookies.get("token");
-    if (!token || !auth.currentUser) {
-      setError("Vui lòng đăng nhập để bình luận");
-      navigate("/login");
-      return;
-    }
-
-    const data = {
-      user_id: auth.currentUser._id,
-      product_id: id,
-      content: comment,
-    };
-
-    try {
-      await dispatch(addComment(data)).unwrap();
-      setComment("");
-      setError("");
-      dispatch(getCommentByProductId(id));
-    } catch (error) {
-      console.error("Failed to add comment:", error);
-      setError("Có lỗi xảy ra khi gửi bình luận. Vui lòng thử lại.");
-    }
-  };
-
-  const handleDeleteComment = async (commentId) => {
-    const token = Cookies.get("token");
-    if (!token) {
-      setError("Vui lòng đăng nhập để xóa bình luận");
-      navigate("/login");
-      return;
-    }
-
-    try {
-      await dispatch(deleteCommentByAuthor(commentId)).unwrap();
-      dispatch(getCommentByProductId(id));
-    } catch (error) {
-      console.error("Failed to delete comment:", error);
-      setError("Có lỗi xảy ra khi xóa bình luận. Vui lòng thử lại.");
-    }
-  };
-
-  const handleAddToCart = () => {
-    if (!selectedSize) {
-      setError("Please select a size before adding to cart.");
-      return;
-    }
-    const data = {
-      user_id: userId,
-      product_id: id,
-      image: product.image,
-      name: product.name,
-      price: product.price,
-      description: product.description,
-      size: selectedSize,
-    };
-    dispatch(addToCart(data));
-    navigate("/cart");
-  };
-
-  // const handleWishlist = async () => {
-  //   try {
-  //     const token = Cookies.get("token");
-  //     if (!token || !userId) {
-  //       setError("Vui lòng đăng nhập để thêm vào danh sách yêu thích.");
-  //       navigate("/login");
-  //       return;
-  //     }
-
-  //     if (isInWishlist) {
-  //       await axios.delete(
-  //         `http://localhost:3000/api/v1/wishlist/${userId}/${id}`
-  //       );
-  //       setIsInWishlist(false);
-  //       alert("Sản phẩm đã được xóa khỏi danh sách yêu thích!");
-  //     } else {
-  //       await axios.post("http://localhost:3000/api/v1/addProduct", {
-  //         id: userId,
-  //         productId: id,
-  //       });
-  //       setIsInWishlist(true);
-  //       alert("Sản phẩm đã được thêm vào danh sách yêu thích!");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error toggling wishlist:", error);
-  //     setError("Có lỗi xảy ra khi thêm vào danh sách yêu thích.");
-  //   }
-  // };
-
-  const formatPrice = (price) => {
-    if (price == null) return "";
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
-
+const ProductCard = ({ product }) => {
+  const [isHovered, setIsHovered] = useState(false);
   return (
-    <div className="container mx-auto px-4 py-8 mt-16 sm:mt-24">
-      <div className="flex flex-col lg:flex-row lg:space-x-8">
-        <div className="lg:w-1/2 mb-8 lg:mb-0">
-          <div className="w-full h-64 sm:h-96 lg:h-[calc(100vh-300px)] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-full object-contain"
-            />
-          </div>
-        </div>
-        <div className="lg:w-1/2 flex flex-col">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-4">
-            {product.name}
-          </h1>
-          <h2 className="text-xl sm:text-2xl text-red-600 font-semibold mb-4">
-            {formatPrice(product.price)} VNĐ
-          </h2>
-          <div
-            className="prose prose-sm sm:prose mb-6 flex-grow overflow-auto max-h-48 sm:max-h-64 lg:max-h-96"
-            dangerouslySetInnerHTML={{ __html: product.description }}
-          ></div>
-          <div className="mb-6">
-            <strong className="block mb-2">Size:</strong>
-            <div className="flex flex-wrap gap-2">
-              {product?.size?.map((size) => (
-                <button
-                  key={size}
-                  onClick={() => setSelectedSize(size)}
-                  className={`px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded ${
-                    selectedSize === size
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-800"
-                  }`}
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
-          </div>
-          {error && (
-            <div
-              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-              role="alert"
-            >
-              <span className="flex items-center text-sm">
-                <AlertCircle className="h-4 w-4 mr-2" />
-                {error}
-              </span>
-            </div>
-          )}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={handleAddToCart}
-              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 flex items-center justify-center text-sm sm:text-base"
-              disabled={!selectedSize}
-            >
-              <ShoppingCart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              Thêm giỏ hàng
+    <motion.div
+      className="border rounded-lg p-2 sm:p-4 hover:shadow-lg transition-shadow bg-white"
+      whileHover={{ scale: 1.05 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="relative overflow-hidden rounded-lg">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="h-32 sm:h-48 w-full object-cover transition-transform duration-300 transform hover:scale-110"
+        />
+        {isHovered && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
+            <button className="bg-white text-blue-500 py-1 px-2 sm:py-2 sm:px-4 text-xs sm:text-sm rounded-full font-semibold transition-colors duration-300 hover:bg-blue-500 hover:text-white">
+              Xem nhanh
             </button>
-            <button
-              onClick={handleWishlist}
-              className={`flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-gray-100 transition duration-300 flex items-center justify-center text-sm sm:text-base ${
-                isInWishlist ? "text-red-600" : ""
-              }`}
-            >
-              <Heart
-                className={`mr-2 h-4 w-4 sm:h-5 sm:w-5 ${
-                  isInWishlist ? "fill-current text-red-600" : ""
-                }`}
-              />
-              {isInWishlist ? "Xóa khỏi yêu thích" : "Thêm vào yêu thích"}
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="w-full h-px bg-gray-400 my-16"></div>
-      <div className="mt-2">
-        <p className="text-xl sm:text-3xl font-bold mb-4 text-black text-left">
-          Bình luận
-        </p>
-        {error && (
-          <div
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-            role="alert"
-          >
-            <span className="block sm:inline">{error}</span>
           </div>
         )}
-        <form onSubmit={handleAddComment} className="mb-8">
-          <textarea
-            id="message"
-            rows="4"
-            className="w-full p-2 border rounded text-sm sm:text-base"
-            placeholder="Enter your comment..."
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            required
-          ></textarea>
-          <button
-            type="submit"
-            className="mt-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 text-sm sm:text-base"
-          >
-            Submit
-          </button>
-        </form>
+      </div>
+      <h2 className="text-sm sm:text-lg font-bold mt-2 truncate">
+        {product.name}
+      </h2>
+      <div className="flex items-center mt-1">
+        {[...Array(5)].map((_, index) => (
+          <Star
+            key={index}
+            className={`h-3 w-3 sm:h-4 sm:w-4 ${
+              index < product.rating ? "text-yellow-500" : "text-gray-300"
+            }`}
+          />
+        ))}
+        <span className="ml-1 text-xs sm:text-sm text-gray-600">
+          ({product.rating})
+        </span>
+      </div>
+      <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
+        {product.price.toLocaleString()}₫
+      </p>
+      <button className="mt-2 w-full bg-blue-500 text-white py-1 px-2 sm:py-2 sm:px-4 text-xs sm:text-sm rounded-full transition-colors duration-300 hover:bg-blue-600 flex items-center justify-center">
+        <ShoppingCart className="mr-1 sm:mr-2 h-3 w-3 sm:h-5 sm:w-5" />
+        Thêm giỏ hàng
+      </button>
+    </motion.div>
+  );
+};
 
-        <div className="space-y-6">
-          {commentList.length > 0 ? (
-            commentList.map((item) => (
-              <div key={item._id} className="bg-gray-100 p-4 rounded">
-                <div className="flex items-center mb-2">
-                  <img
-                    src={
-                      item.user_id?.avatar || "https://via.placeholder.com/40"
-                    }
-                    alt="User Avatar"
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full mr-3"
-                  />
-                  <div>
-                    <h5 className="font-semibold text-sm sm:text-base">
-                      {item.user_id?.username}
-                    </h5>
-                    <small className="text-gray-500 text-xs sm:text-sm">
-                      {new Date(item.createdAt).toLocaleString()}
-                    </small>
-                  </div>
-                </div>
-                <p className="mb-2 text-sm sm:text-base">{item.content}</p>
-                {userId === item?.user_id?._id && (
-                  <button
-                    onClick={() => handleDeleteComment(item._id)}
-                    className="text-red-600 hover:text-red-800 transition duration-300 text-sm sm:text-base"
-                  >
-                    Delete
-                  </button>
-                )}
-              </div>
-            ))
-          ) : (
-            <p className="text-sm sm:text-base">
-              No comments yet. Be the first to comment!
+ProductCard.propTypes = {
+  product: PropTypes.shape({
+    image: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    rating: PropTypes.number.isRequired,
+    price: PropTypes.number.isRequired,
+  }).isRequired,
+};
+
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  return (
+    <div className="flex justify-center items-center space-x-1 sm:space-x-2 mt-4 sm:mt-6">
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="p-1 sm:p-2 rounded-full hover:bg-gray-200 disabled:opacity-50"
+      >
+        <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+      </button>
+      {[...Array(totalPages)].map((_, index) => (
+        <button
+          key={index}
+          onClick={() => onPageChange(index + 1)}
+          className={`px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm rounded-full ${
+            currentPage === index + 1
+              ? "bg-blue-500 text-white"
+              : "hover:bg-gray-200"
+          }`}
+        >
+          {index + 1}
+        </button>
+      ))}
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="p-1 sm:p-2 rounded-full hover:bg-gray-200 disabled:opacity-50"
+      >
+        <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+      </button>
+    </div>
+  );
+};
+
+Pagination.propTypes = {
+  currentPage: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+};
+
+const Favatie = () => {
+  const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const auth = useSelector((state) => state.auth.currentUser);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      if (auth?._id) {
+        setLoading(true);
+        setError(null);
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/v1/wishListProduct`
+          ); // API endpoint to fetch wishlist
+
+          console.log("Wishlist response:", response.data); // Debug log
+
+          // Debugging logs
+          console.log("response.data:", response.data);
+
+          if (response.data.success && response.data.user?.wishList) {
+            // Make sure each item has required properties for ProductCard
+            const formattedWishlist = response.data.user.wishList.map(
+              (item) => ({
+                _id: item._id,
+                name: item.name || "Unnamed Product",
+                price: item.price || 0,
+                image: item.image || "",
+                rating: item.rating || 0,
+                description: item.description || "",
+              })
+            );
+            setWishlist(formattedWishlist);
+            console.log("Wishlist:", formattedWishlist); // Debug log
+          } else {
+            console.log("Wishlist rỗng");
+            setWishlist([]);
+          }
+        } catch (error) {
+          console.log("Error fetching wishlist:", error);
+          setError(error.response?.data?.message || "Failed to fetch wishlist");
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchWishlist();
+  }, [auth?._id]);
+
+  if (!auth) {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <p className="text-sm sm:text-base">
+          Vui Lòng{" "}
+          <a href="/login" className="text-cyan-500">
+            {" "}
+            đăng nhập{" "}
+          </a>{" "}
+          để tiếp tục...
+        </p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <p>Đang tải...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <p className="text-red-500">Error: {error}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-gray-100 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-4">
+          Sản phẩm yêu thích ({wishlist.length})
+        </h1>
+
+        {wishlist.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500">
+              Chưa có sản phẩm nào trong danh sách yêu thích
             </p>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6">
+            {wishlist.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default ProductsDetail;
+export default Favatie;
