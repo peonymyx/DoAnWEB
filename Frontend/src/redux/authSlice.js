@@ -55,6 +55,7 @@ const authSlice = createSlice({
     [login.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.currentUser = action.payload.others;
+      console.log("User data:", action.payload.others);
       Cookies.set("token", action.payload.token);
       sessionStorage.setItem("user", JSON.stringify(action.payload.others));
       if (
@@ -70,7 +71,7 @@ const authSlice = createSlice({
       state.isLoading = false;
       const errorMessage = action.payload?.message || "Có lỗi xảy ra"; // Lưu thông báo lỗi
       alert(errorMessage); // Hiển thị thông báo lỗi
-      state.error = errorMessage; 
+      state.error = errorMessage;
     },
   },
 });

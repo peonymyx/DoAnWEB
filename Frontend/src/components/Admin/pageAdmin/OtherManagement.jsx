@@ -27,7 +27,25 @@ const TABLE_HEAD = [
 const OtherManagement = () => {
   const dispatch = useDispatch();
   const other = useSelector((state) => state.other.other);
-
+  console.log("other", other);
+  
+  const csvData = other.map(item => ({
+    _id: item._id,
+    username: item.username,
+    phone_number: item.phone_number,
+    address: item.address,
+    note: item.note,
+    status: item.status,
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+    cart: JSON.stringify(
+      item.cart.map(cartItem => ({
+        name: cartItem.name,
+        quantity: cartItem.quantity,
+        price: cartItem.price
+      }))
+    )
+  }));
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -104,7 +122,7 @@ const OtherManagement = () => {
             <CSVLink
               id="test-table-xls-button"
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full"
-              data={other}
+              data={csvData}
               filename="hoa-don.csv"
               >
               Xuất Excel
@@ -132,7 +150,7 @@ const OtherManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {other.filter(
+              {other?.filter(
                   (item) =>
                     item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     item.phone_number.includes(searchTerm)
@@ -142,7 +160,7 @@ const OtherManagement = () => {
                     { _id, createdAt, username, phone_number, address, note, status },
                     index
                   ) => {
-                    const isLast = index === other.length - 1;
+                    const isLast = index === other?.length - 1;
                     const classes = isLast
                       ? "p-4"
                       : "p-4 border-b border-blue-gray-50";
