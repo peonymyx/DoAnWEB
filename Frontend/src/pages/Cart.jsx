@@ -6,6 +6,7 @@ import {
   removeCart,
   selectCart,
 } from "../redux/cartSlice";
+import { updateUser, getUserById } from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/post/Footer";
@@ -19,14 +20,13 @@ function Cart() {
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
   const [discountedTotal, setDiscountedTotal] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCoupon, setSelectedCoupon] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCoupon, setSelectedCoupon] = useState("");
   const [filteredCoupons, setFilteredCoupons] = useState(coupons);
 
   console.log("auth", auth.CouponList);
-  
+
   useEffect(() => {
     const fetchCoupons = async () => {
       if (auth) {
@@ -46,11 +46,10 @@ function Cart() {
     fetchCoupons();
   }, [auth]);
 
-
   useEffect(() => {
     // Cập nhật danh sách mã giảm giá được lọc khi coupons hoặc searchTerm thay đổi
     setFilteredCoupons(
-      coupons.filter(coupon =>
+      coupons.filter((coupon) =>
         coupon.code.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
@@ -66,7 +65,6 @@ function Cart() {
       return;
     }
 
-
     // Find the selected coupon
     const coupon = coupons.find((c) => c.code === selectedCoupon);
     if (!coupon) {
@@ -78,7 +76,7 @@ function Cart() {
     const discount = coupon.discount / 100;
     const { totalPrice } = getTotal(); // Get the original total price
     const discountedPrice = totalPrice * (1 - discount);
-    setDiscountedTotal(discountedPrice);    
+    setDiscountedTotal(discountedPrice);
     alert(`Mã giảm giá ${selectedCoupon} đã được áp dụng!`);
   };
 
@@ -89,7 +87,11 @@ function Cart() {
       totalQuantity += item.quantity;
       totalPrice += item.quantity * item.price;
     });
-    return { totalQuantity, totalPrice , discountedTotal: discountedTotal || totalPrice, };
+    return {
+      totalQuantity,
+      totalPrice,
+      discountedTotal: discountedTotal || totalPrice,
+    };
   };
 
   const formatPrice = (price) => {
@@ -186,18 +188,24 @@ function Cart() {
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <h2 className="text-lg font-semibold mb-4">MÃ GIẢM GIÁ</h2>
             {filteredCoupons.length === 0 ? (
-                <p>Không có mã giảm giá nào.</p>
+              <p>Không có mã giảm giá nào.</p>
             ) : (
-                <ul className="bg-white shadow-md rounded p-4">
-                    {filteredCoupons.map((coupon) => (
-                        <li key={coupon._id} className="flex justify-between items-center border-b py-2" onClick={()=>{
-                          handleCouponSelect(coupon.code);
-                        }}>
-                            <span className="text-lg">{coupon.code}</span>
-                            <span className="text-lg text-green-600">{coupon.discount}%</span>
-                        </li>
-                    ))}
-                </ul>
+              <ul className="bg-white shadow-md rounded p-4">
+                {filteredCoupons.map((coupon) => (
+                  <li
+                    key={coupon._id}
+                    className="flex justify-between items-center border-b py-2"
+                    onClick={() => {
+                      handleCouponSelect(coupon.code);
+                    }}
+                  >
+                    <span className="text-lg">{coupon.code}</span>
+                    <span className="text-lg text-green-600">
+                      {coupon.discount}%
+                    </span>
+                  </li>
+                ))}
+              </ul>
             )}
             <input
               type="text"
@@ -207,7 +215,9 @@ function Cart() {
               className="w-full p-2 border border-gray-300 rounded mb-2"
             />
             <button
-            onClick={() => {applyCoupon()}}
+              onClick={() => {
+                applyCoupon();
+              }}
               className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
             >
               Áp dụng
@@ -225,8 +235,21 @@ function Cart() {
           </div>
           {/* Nút tiếp tục thanh toán */}
           <div className="mt-8">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600">
-              <Link to="/payproducts"  state={{ discountedTotal: getTotal().discountedTotal }}>Tiếp tục thanh toán</Link>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600"
+              onClick={() => {
+                const CouponList = coupons.filter(
+                  (c) => c.code !== selectedCoupon
+                );
+                dispatch(updateUser({ CouponList: CouponList }));
+              }}
+            >
+              <Link
+                to="/payproducts"
+                state={{ discountedTotal: getTotal().discountedTotal }}
+              >
+                Tiếp tục thanh toán
+              </Link>
             </button>
           </div>
         </div>

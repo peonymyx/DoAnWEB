@@ -42,7 +42,7 @@ const Header = () => {
               <Link
                 href="javascript:void(0)"
                 className="text-[#333] hover:text-[#007bff] block font-semibold text-2xl ml-14"
-                to={"/calendar"}
+                to={"/fava"}
               >
                 Sản Phẩm Yêu Thích
               </Link>

@@ -74,7 +74,7 @@ function ProductsDetail() {
 
   const handleWishlist = async () => {
     try {
-      await axios.post("http://localhost:3000/api/v1/wishListProduct", {
+      await axios.post("http://localhost:3000/api/v1/users/wishListProduct", {
         id: userId,
         productId: id,
       });
