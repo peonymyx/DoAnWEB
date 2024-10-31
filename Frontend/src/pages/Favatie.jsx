@@ -86,107 +86,114 @@ Pagination.propTypes = {
 };
 
 const Favatie = () => {
-//     const [currentPage, setCurrentPage] = useState(1);
-//     const [sortBy, setSortBy] = useState('');
-//     const [searchTerm, setSearchTerm] = useState('');
-//     const [filters] = useState({ prices: [], types: [] });
-    const [wishlist, setWishlist] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    // const [filteredProducts, setFilteredProducts] = useState([]);
-    // const productsPerPage = 8;
-    const auth = useSelector((state) => state.auth.currentUser);
+  const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const auth = useSelector((state) => state.auth.currentUser);
 
-    useEffect(() => {
-        const fetchWishlist = async () => {
-          if (auth?._id) {
-            setLoading(true);
-            setError(null);
-            try {
-              const response = await axios.get(
-                `http://localhost:3000/api/v1/addProduct`
-              );
-              
-              console.log('Wishlist response:', response.data); // Debug log
-              
-              if (response.data.success && response.data.user?.wishList) {
-                // Make sure each item has required properties for ProductCard
-                const formattedWishlist = response.data.user.wishList.map(item => ({
-                  _id: item._id,
-                  name: item.name || 'Unnamed Product',
-                  price: item.price || 0,
-                  image: item.image || '',
-                  rating: item.rating || 0,
-                  description: item.description || ''
-                }));
-                setWishlist(formattedWishlist);
-              } else {
-                setWishlist([]);
-              }
-            } catch (error) {
-              console.error('Error fetching wishlist:', error);
-              setError(error.response?.data?.message || 'Failed to fetch wishlist');
-            } finally {
-              setLoading(false);
-            }
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      if (auth?._id) {
+        setLoading(true);
+        setError(null);
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/v1/wishListProduct`
+          ); // API endpoint to fetch wishlist
+
+          console.log("Wishlist response 1:", response.data); // Debug log
+          // Debugging logs
+          console.log("response.data.success:", response.data.success);
+          console.log("response.data.user:", response.data.user);
+          console.log(
+            "response.data.user?.wishList:",
+            response.data.user?.wishList
+          );
+
+          if (response.data.success && response.data.user?.wishList) {
+            // Make sure each item has required properties for ProductCard
+            const formattedWishlist = response.data.user.wishList.map(
+              (item) => ({
+                _id: item._id,
+                name: item.name || "Unnamed Product",
+                price: item.price || 0,
+                image: item.image || "",
+                rating: item.rating || 0,
+                description: item.description || "",
+              })
+            );
+            setWishlist(formattedWishlist);
+            console.log("Wishlist:", formattedWishlist); // Debug log
+          } else {
+            console.log("Wishlist rỗng");
+            setWishlist([]);
           }
-        };
-    
-        fetchWishlist();
-      }, [auth?._id]);
-    
-      if (!auth) {
-        return (
-          <div className="w-screen h-screen flex justify-center items-center">
-            <p className="text-sm sm:text-base">
-              Vui Lòng{" "}
-              <a href="/login" className="text-cyan-500">
-                {" "}
-                đăng nhập{" "}
-              </a>{" "}
-              để tiếp tục...
+        } catch (error) {
+          console.log("Error fetching wishlist:", error);
+          setError(error.response?.data?.message || "Failed to fetch wishlist");
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchWishlist();
+  }, [auth?._id]);
+
+  if (!auth) {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <p className="text-sm sm:text-base">
+          Vui Lòng{" "}
+          <a href="/login" className="text-cyan-500">
+            {" "}
+            đăng nhập{" "}
+          </a>{" "}
+          để tiếp tục...
+        </p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <p>Đang tải...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <p className="text-red-500">Error: {error}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-gray-100 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-4">
+          Sản phẩm yêu thích ({wishlist.length})
+        </h1>
+
+        {wishlist.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500">
+              Chưa có sản phẩm nào trong danh sách yêu thích
             </p>
           </div>
-        );
-      }
-    
-      if (loading) {
-        return (
-          <div className="w-screen h-screen flex justify-center items-center">
-            <p>Đang tải...</p>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6">
+            {wishlist.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
           </div>
-        );
-      }
-    
-      if (error) {
-        return (
-          <div className="w-screen h-screen flex justify-center items-center">
-            <p className="text-red-500">Error: {error}</p>
-          </div>
-        );
-      }
-    
-      return (
-        <div className="bg-gray-100 min-h-screen">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-            <h1 className="text-2xl sm:text-4xl font-bold text-center mb-4">
-              Sản phẩm yêu thích ({wishlist.length})
-            </h1>
-    
-            {wishlist.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-gray-500">Chưa có sản phẩm nào trong danh sách yêu thích</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6">
-                {wishlist.map((product) => (
-                  <ProductCard key={product._id} product={product} />
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    };
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default Favatie;

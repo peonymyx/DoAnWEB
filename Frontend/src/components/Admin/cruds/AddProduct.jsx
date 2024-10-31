@@ -18,9 +18,8 @@ const schema = yup.object().shape({
 });
 
 const AddProduct = () => {
-  const [imageUpload, setImageUpload] = useState("");
+  const [imageUpload, setImageUpload] = useState(null);
   const [description, setDescription] = useState("");
-  // const availableSizes = ["S", "M", "L", "XL"];
   const [selectedSize, setSelectedSize] = useState([]);
   const isLoading = useSelector((state) => state.product.isLoading);
   const {
@@ -45,35 +44,48 @@ const AddProduct = () => {
   }, [dispatch]);
 
   const handleUploadImage = async (e) => {
-    setImageUpload(e.target.files[0]);
+    const file = e.target.files[0];
+    console.log("Selected file:", file);
+    setImageUpload(file);
   };
 
-  // const handleSizeSelect = (size) => {
-  //   setSelectedSize(size);
-  // };
   const handleAddSize = (size) => {
-    setSelectedSize([...selectedSize, size]);
+    setSelectedSize((prevSelectedSize) =>
+      prevSelectedSize.includes(size)
+        ? prevSelectedSize.filter((s) => s !== size)
+        : [...prevSelectedSize, size]
+    );
   };
 
   const handleAddProduct = async (data) => {
-    const { name, address, category, price } = data;
+    const { name, category, price } = data;
+    console.log("Form data:", data);
+    console.log("Image file:", imageUpload);
+
+    if (!imageUpload) {
+      console.error("No image file selected");
+      return;
+    }
+
     const imageUrl = await handleUploadToImgBB(imageUpload);
 
     if (!imageUrl) {
       console.error("Failed to upload image");
       return;
     }
+
     await dispatch(
       addProduct({
         name,
-        size: selectedSize,
-        address,
+        size: selectedSize.join(","),
         category,
-        description: description,
+        description,
         price,
         image: imageUrl,
       })
     );
+
+    navigate("/ProductManagement");
   };
 
   return (
@@ -159,28 +171,36 @@ const AddProduct = () => {
               <button
                 type="button"
                 onClick={() => handleAddSize("S")}
-                className="border px-4 py-2 cursor-pointer size-item"
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("S") ? "bg-blue-500 text-white" : ""
+                }`}
               >
                 S
               </button>
               <button
                 type="button"
                 onClick={() => handleAddSize("M")}
-                className="border px-4 py-2 cursor-pointer size-item"
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("M") ? "bg-blue-500 text-white" : ""
+                }`}
               >
                 M
               </button>
               <button
                 type="button"
                 onClick={() => handleAddSize("L")}
-                className="border px-4 py-2 cursor-pointer size-item"
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("L") ? "bg-blue-500 text-white" : ""
+                }`}
               >
                 L
               </button>
               <button
                 type="button"
                 onClick={() => handleAddSize("XL")}
-                className="border px-4 py-2 cursor-pointer size-item"
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("XL") ? "bg-blue-500 text-white" : ""
+                }`}
               >
                 XL
               </button>
