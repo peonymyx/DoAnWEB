@@ -101,8 +101,7 @@ function Activities() {
                       style={{ objectFit: "cover", height: "200px" }}
                     />
                     <div
-                      style={{ marginLeft: "-160px" }}
-                      className="card-body d-flex flex-column justify-content-center align-items-center text-center"
+                      className="card-body flex-column align-items-center text-center"
                     >
                       <h5 className="card-title text-gray-700 dark:text-white">
                         {item.name}

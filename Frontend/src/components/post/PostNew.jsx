@@ -10,9 +10,9 @@ const PostNew = () => {
                     <div className="offer-text text-center rounded p-5">
                         <h1 className="display-5 text-white">Tiết kiệm 30% cho lần đầu tiên</h1>
                         <p className="text-white mb-4">
-                          Đừng bao giờ xem thường sức khỏe của bạn, hãy chuẩn bi ngay từ lúc đầu
+                          Trang phục thể thao chất lượng cao với giá phải chăng, mua ngay
                         </p>
-                        <a className="btn btn-dark py-3 px-5 me-3">Đăng Ký Ngay</a>
+                        <a href="/register" className="btn btn-dark py-3 px-5 me-3">Đăng Ký Ngay</a>
                         <a href="" className="btn btn-light py-3 px-5">Xem Thêm</a>
                     </div>
                 </div>
