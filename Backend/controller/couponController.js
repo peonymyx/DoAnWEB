@@ -23,6 +23,23 @@ const createCoupon = async (req, res) => {
   }
 };
 
+const getCouponById = async (req,res)=>{
+  const couponId = req.params.id; // Lấy ID từ params
+
+  try {
+    const coupon = await DiscountCode.findById(couponId); // Tìm coupon trong database
+
+    if (!coupon) {
+      return res.status(404).json({ message: "Coupon không tồn tại." }); // Nếu không tìm thấy
+    }
+
+    return res.status(200).json(coupon); // Trả về coupon nếu tìm thấy
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Có lỗi xảy ra." }); // Xử lý lỗi
+  }
+};
+
 // Lấy danh sách tất cả coupon
 const getAllCoupons = async (req, res) => {
   try {
@@ -114,4 +131,5 @@ module.exports = {
   updateCoupon,
   deleteCoupon,
   applyCoupon,
+  getCouponById
 };

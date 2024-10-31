@@ -2,22 +2,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { addOther } from "../redux/otherSlice";
 import Paypal from "../components/Paypal";
+import { useLocation } from "react-router-dom";
 
 function PayProducts() {
+  const location = useLocation();
+  const discountedTotal = location.state?.discountedTotal;
   const auth = useSelector((state) => state.auth.currentUser);
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
 
   const getTotal = () => {
-    let totalQuantity = 0;
-    let totalPrice = 0;
-    let totalPriceUsd = 0;
-    cart.forEach((item) => {
-      totalQuantity += item.quantity;
-      totalPrice += item.quantity * item.price;
-      totalPriceUsd = Math.round((totalPrice / 23000) * 100) / 100;
-    });
-    return { totalQuantity, totalPrice, totalPriceUsd };
+    const totalPriceUsd = Math.round((discountedTotal / 23000) * 100) / 100;
+
+    return { discountedTotal, totalPriceUsd };
   };
 
   const [username, setUsername] = useState(auth?.username || "");
@@ -74,7 +71,7 @@ function PayProducts() {
               </td>
               <td>
                 <span className="font-semibold pl-9">
-                  {formatPrice(getTotal().totalPrice)}
+                  {formatPrice(getTotal().discountedTotal)}
                 </span>
               </td>
             </tr>

@@ -157,7 +157,7 @@ const ListProducts = () => {
     : [];
 
   if (isLoading) {
-    return <div className="text-center mt-8">Loading...</div>;
+    return <div className="text-center mt-8">Đang tải......</div>;
   }
 
   if (error) {

@@ -6,7 +6,8 @@ const {
     getAllCoupons,
     updateCoupon,
     deleteCoupon,
-    applyCoupon
+    applyCoupon,
+    getCouponById
 } = require('../controller/couponController');
 
 // Tạo coupon mới
@@ -14,7 +15,7 @@ router.post('/', createCoupon);
 
 // Lấy danh sách tất cả coupon
 router.get('/', getAllCoupons);
-
+router.get("/:id", getCouponById);
 // Cập nhật coupon theo ID
 router.put('/:id', updateCoupon);
 

@@ -17,10 +17,8 @@ router.post("/", async (req, res) => {
     console.log(user);
     if (!user) {
       res.status(400).json({ message: "Email không tồn tại" });
-      console.log("Email không tồn tại");
     } else if (!(await user.isValidPassword(password))) {
       res.status(400).json({ message: "Tài khoản hoặc Mật khẩu không đúng" });
-      console.log("Mật khẩu không đúng");
     } else {
       const token = generateAccessToken({
         role: user.role,

@@ -29,7 +29,25 @@ const ITEMS_PER_PAGE = 5;
 const OtherManagement = () => {
   const dispatch = useDispatch();
   const other = useSelector((state) => state.other.other);
+  console.log("other", other);
 
+  const csvData = other.map((item) => ({
+    _id: item._id,
+    username: item.username,
+    phone_number: item.phone_number,
+    address: item.address,
+    note: item.note,
+    status: item.status,
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+    cart: JSON.stringify(
+      item.cart.map((cartItem) => ({
+        name: cartItem.name,
+        quantity: cartItem.quantity,
+        price: cartItem.price,
+      }))
+    ),
+  }));
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   // const isLoading = useSelector((state) => state.user.isLoading);
@@ -76,10 +94,10 @@ const OtherManagement = () => {
     : [];
 
   const totalPages = Math.ceil(filteredOther.length / ITEMS_PER_PAGE);
-  const paginatedOther = filteredOther.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+  // const paginatedOther = filteredOther.slice(
+  //   (currentPage - 1) * ITEMS_PER_PAGE,
+  //   currentPage * ITEMS_PER_PAGE
+  // );
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -122,8 +140,8 @@ const OtherManagement = () => {
             </div>
             <CSVLink
               id="test-table-xls-button"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full text-center"
-              data={other}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full"
+              data={csvData}
               filename="hoa-don.csv"
             >
               Xuất Excel
@@ -155,7 +173,7 @@ const OtherManagement = () => {
             </thead>
             <tbody>
               {other
-                .filter(
+                ?.filter(
                   (item) =>
                     item.username
                       .toLowerCase()
@@ -175,7 +193,7 @@ const OtherManagement = () => {
                     },
                     index
                   ) => {
-                    const isLast = index === paginatedOther.length - 1;
+                    const isLast = index === other?.length - 1;
                     const classes = isLast
                       ? "px-8 py-4 text-center"
                       : "px-8 py-4 border-b border-blue-gray-50 text-center";
