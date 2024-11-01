@@ -236,7 +236,7 @@ const Header = () => {
             </li>
             <li className="border-b py-3">
               <Link
-                to="/calendar"
+                to="/fava"
                 className="hover:text-[#007bff] text-[#333] block font-semibold text-xl"
               >
                 Sản phẩm yêu thích

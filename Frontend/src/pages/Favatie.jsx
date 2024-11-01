@@ -89,68 +89,104 @@ const Favatie = () => {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productWish, setProductWish] = useState([]);
   const auth = useSelector((state) => state.auth.currentUser);
+  const productsPerPage = 4;
+
+  const fetchProducts = async (productIds) => {
+    try {
+      // Remove duplicates and maintain order
+      const uniqueProductIds = [...new Set(productIds)];
+
+      const productsResponse = await Promise.all(
+        uniqueProductIds.map((id) =>
+          axios.get(`http://localhost:3000/api/v1/getProductById/${id}`)
+        )
+      );
+      setProductWish(productsResponse.map((res) => res.data.Product));
+    } catch (error) {
+      console.error("There was an error fetching the products!", error);
+      setError("Không thể tải danh sách sản phẩm");
+    }
+  };
+
+  const removeFromWishlist = async (productId) => {
+    try {
+      await axios.delete(
+        `http://localhost:3000/api/v1/users/removeFromWishList/${auth._id}/${productId}`
+      );
+
+      // Update local state
+      setWishlist((prevWishlist) =>
+        prevWishlist.filter((id) => id !== productId)
+      );
+      setProductWish((prevProducts) =>
+        prevProducts.filter((product) => product._id !== productId)
+      );
+    } catch (error) {
+      console.error("There was an error removing from wishlist!", error);
+      setError("Không thể xóa sản phẩm khỏi danh sách yêu thích");
+    }
+  };
 
   useEffect(() => {
     const fetchWishlist = async () => {
-      if (auth?._id) {
-        setLoading(true);
-        setError(null);
-        try {
-          const response = await axios.get(
-            `http://localhost:3000/api/v1/wishListProduct`
-          ); // API endpoint to fetch wishlist
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/v1/users/wishListProduct/${auth._id}`
+        );
 
-          console.log("Wishlist response 1:", response.data); // Debug log
-          // Debugging logs
-          console.log("response.data.success:", response.data.success);
-          console.log("response.data.user:", response.data.user);
-          console.log(
-            "response.data.user?.wishList:",
-            response.data.user?.wishList
-          );
-
-          if (response.data.success && response.data.user?.wishList) {
-            // Make sure each item has required properties for ProductCard
-            const formattedWishlist = response.data.user.wishList.map(
-              (item) => ({
-                _id: item._id,
-                name: item.name || "Unnamed Product",
-                price: item.price || 0,
-                image: item.image || "",
-                rating: item.rating || 0,
-                description: item.description || "",
-              })
-            );
-            setWishlist(formattedWishlist);
-            console.log("Wishlist:", formattedWishlist); // Debug log
-          } else {
-            console.log("Wishlist rỗng");
-            setWishlist([]);
-          }
-        } catch (error) {
-          console.log("Error fetching wishlist:", error);
-          setError(error.response?.data?.message || "Failed to fetch wishlist");
-        } finally {
-          setLoading(false);
-        }
+        setWishlist(response.data.wishList);
+        setLoading(false);
+      } catch (error) {
+        console.error("There was an error fetching the wishlist!", error);
+        setError("Không thể tải danh sách yêu thích");
+        setLoading(false);
       }
     };
 
-    fetchWishlist();
-  }, [auth?._id]);
+    if (auth) {
+      fetchWishlist();
+    }
+  }, [auth]);
+
+  useEffect(() => {
+    if (wishlist.length > 0) {
+      fetchProducts(wishlist);
+    }
+  }, [wishlist]);
+
+  // Pagination logic
+  const totalPages = Math.ceil(productWish.length / productsPerPage);
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const currentProducts = productWish.slice(startIndex, endIndex);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   if (!auth) {
     return (
-      <div className="w-screen h-screen flex justify-center items-center">
-        <p className="text-sm sm:text-base">
-          Vui Lòng{" "}
-          <a href="/login" className="text-cyan-500">
-            {" "}
-            đăng nhập{" "}
-          </a>{" "}
-          để tiếp tục...
-        </p>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: -50, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white p-6 rounded-lg shadow-lg text-center"
+        >
+          <p className="text-lg font-semibold mb-4">
+            Đăng nhập để xem danh sách yêu thích
+          </p>
+          <a
+            href="/login"
+            className="inline-block bg-blue-500 text-white py-2 px-4 rounded-full transition-colors duration-300 hover:bg-blue-600"
+          >
+            Đăng nhập
+          </a>
+        </motion.div>
       </div>
     );
   }
@@ -172,24 +208,35 @@ const Favatie = () => {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-4">
-          Sản phẩm yêu thích ({wishlist.length})
-        </h1>
-
-        {wishlist.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-500">
-              Chưa có sản phẩm nào trong danh sách yêu thích
-            </p>
-          </div>
+    <div className="max-w-[1300px] mx-auto px-4 py-8">
+      <p className="text-4xl font-bold text-center mt-4 mb-10 text-black">
+        Danh sách yêu thích
+      </p>
+      <div>
+        {productWish.length === 0 ? (
+          <p className="text-center text-gray-500 my-4 sm:my-8 text-sm sm:text-base">
+            Không tìm thấy danh sách sản phẩm yêu thích
+          </p>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6">
-            {wishlist.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+              {currentProducts.map((product) => (
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                  onRemoveFromWishlist={removeFromWishlist}
+                />
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </>
         )}
       </div>
     </div>
