@@ -16,7 +16,6 @@ const TABLE_HEAD = [
   "Số Điện Thoại",
   "Giới Tính",
   "Ngày Sinh",
-  "Ngày Tạo",
   "Ngày Sửa",
   "Vai Trò",
   "",
@@ -151,16 +150,7 @@ const AccountManagement = () => {
               <tbody>
                 {paginatedUsers.map(
                   (
-                    {
-                      _id,
-                      username,
-                      phone,
-                      gender,
-                      age,
-                      createAt,
-                      updatedAt,
-                      role,
-                    },
+                    { _id, username, phone, gender, age, updatedAt, role },
                     index
                   ) => {
                     const isLast = index === paginatedUsers.length - 1;
@@ -205,7 +195,7 @@ const AccountManagement = () => {
                             {new Date(age).toLocaleDateString("en-GB")}
                           </Typography>
                         </td>
-                        <td className={classes}>
+                        {/* <td className={classes}>
                           <Typography
                             variant="small"
                             color="blue-gray"
@@ -213,7 +203,7 @@ const AccountManagement = () => {
                           >
                             {new Date(createAt).toLocaleDateString("en-GB")}
                           </Typography>
-                        </td>
+                        </td> */}
                         <td className={classes}>
                           <Typography
                             variant="small"

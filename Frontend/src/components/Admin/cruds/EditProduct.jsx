@@ -4,9 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductById, updateProduct } from "../../../redux/productSlice";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Cookies from "js-cookie";
-import Sidebar from "../../Nav/Sidebar";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getCategory } from "../../../redux/categorySlice";
 import "./loading.css";
 import Swal from "sweetalert2";
@@ -17,12 +15,15 @@ const schema = yup.object().shape({
 
 const EditProduct = () => {
   const category = useSelector((state) => state.category.category);
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(schema),
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const token = Cookies.get("token");
   const product = useSelector((state) => state.product.products);
   const isLoading = useSelector((state) => state.product.isLoading);
   const [selectedSize, setSelectedSize] = useState([]);
@@ -54,34 +55,36 @@ const EditProduct = () => {
 
   const handleEditProduct = (data) => {
     const { name, description, category, price } = data;
-    dispatch(
-      updateProduct({
-        id,
-        name: name !== undefined ? name : product.name, // Giữ nguyên nếu không có thay đổi
-        description: description !== undefined ? description : product.description, // Giữ nguyên nếu không có thay đổi
-        size: selectedSize.length > 0 ? selectedSize.join(",") : product.size, // Giữ nguyên nếu không có thay đổi
-        category: category !== undefined ? category : product.category, // Giữ nguyên nếu không có thay đổi
-        price: price !== undefined ? price : product.price, // Giữ nguyên nếu không có thay đổi
-        image: imageUpload ? imageUpload : product.image, 
-      })
-    ).then(() => {
+    const updatedProduct = {
+      id,
+      name: name !== undefined ? name : product.name,
+      description:
+        description !== undefined ? description : product.description,
+      size: selectedSize.length > 0 ? selectedSize.join(",") : product.size,
+      category: category !== undefined ? category : product.category,
+      price: price !== undefined ? price : product.price,
+      image: imageUpload ? imageUpload : product.image,
+    };
+
+    console.log("Updated Product Data:", updatedProduct);
+
+    dispatch(updateProduct(updatedProduct)).then(() => {
       Swal.fire({
         title: "Success",
         text: "Product updated successfully",
         icon: "success",
-        confirmButtonText: "OK"
+        confirmButtonText: "OK",
       }).then(() => {
-        navigate("/admin/products");
+        navigate("/ProductManagement");
       });
     });
   };
 
   return (
     <div className="flex h-[100vh]">
-      <Sidebar />
       <div className="container flex justify-center overflow-y-scroll p-4">
         <div className="h-max w-full max-w-[60rem] p-4 shadow-xl shadow-blue-gray-900/5">
-          <h1 className="font-bold text-2xl text-center mb-9">
+          <h1 className="font-bold text-3xl text-center mb-9">
             Cập nhật Sản Phẩm
           </h1>
           {isLoading && (
@@ -95,8 +98,11 @@ const EditProduct = () => {
             encType="multipart/form-data"
           >
             <div className="mb-4">
-              <label htmlFor="name" className="text-lg text-gray-600">
-                Tên sản phẩm: 
+              <label
+                htmlFor="name"
+                className="text-lg text-gray-600 font-semibold mb-3"
+              >
+                Tên sản phẩm:
               </label>
               <input
                 name="name"
@@ -109,7 +115,10 @@ const EditProduct = () => {
               <p className="text-red-500 mt-1">{errors.name?.message}</p>
             </div>
             <div className="mb-4">
-              <label htmlFor="price" className="text-lg text-gray-600">
+              <label
+                htmlFor="price"
+                className="text-lg text-gray-600 font-semibold mb-3"
+              >
                 Giá
               </label>
               <input
@@ -123,14 +132,19 @@ const EditProduct = () => {
               <p className="text-red-500 mt-1">{errors.price?.message}</p>
             </div>
             <div className="mb-4">
-              <label htmlFor="size" className="text-lg text-gray-600">
+              <label
+                htmlFor="size"
+                className="text-lg text-gray-60 mb-30 font-semibold mb-3"
+              >
                 Chọn Size:
               </label>
               <div className="flex flex-wrap gap-2 mt-2">
                 {["S", "M", "L", "XL"].map((size) => (
                   <div
                     key={size}
-                    className={`border p-2 cursor-pointer size-item ${selectedSize.includes(size) ? 'border-primary' : ''}`}
+                    className={`border p-3 cursor-pointer size-item ${
+                      selectedSize.includes(size) ? "border-primary" : ""
+                    }`}
                     onClick={() => handleToggleSize(size)}
                   >
                     {size}
@@ -139,7 +153,10 @@ const EditProduct = () => {
               </div>
             </div>
             <div className="mb-4">
-              <label htmlFor="category" className="text-sm text-gray-600">
+              <label
+                htmlFor="category"
+                className="text-lg text-gray-600 font-semibold mb-3"
+              >
                 Danh mục
               </label>
               <select
@@ -156,25 +173,32 @@ const EditProduct = () => {
               </select>
             </div>
             <div className="mb-4">
-              <label htmlFor="image" className="text-lg text-gray-600">
+              <label
+                htmlFor="image"
+                className="text-lg text-gray-600 font-semibold mb-4"
+              >
                 Hình ảnh:
               </label>
               {product?.image && (
                 <img
                   src={product.image}
                   alt="Product"
-                  className="w-[200px] h-[100px] p-2"
+                  className="w-[200px] h-[200px] p-2 mt-4"
                 />
               )}
               <input
                 type="file"
                 {...register("image")}
                 onChange={handleSelectImage}
+                className="mt-4"
               />
               <p className="text-red-500 mt-1">{errors.image?.message}</p>
             </div>
             <div className="mb-4">
-              <label htmlFor="description" className="text-lg text-gray-600">
+              <label
+                htmlFor="description"
+                className="text-lg text-gray-600 font-semibold mb-3"
+              >
                 Mô tả
               </label>
               <textarea
@@ -186,12 +210,17 @@ const EditProduct = () => {
               />
               <p className="text-red-500 mt-1">{errors.description?.message}</p>
             </div>
-            <button
-              className="h-10 w-20 rounded-sm bg-slate-200"
-              type="submit"
-            >
-              Cập nhật
-            </button>
+            <div className="flex justify-between">
+              <Link to="/ProductManagement" className="mt-3 text-lg py-3 px-6">
+                Quay Lại
+              </Link>
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-lg text-white font-bold py-3 px-6 mt-3 rounded focus:outline-none focus:shadow-outline"
+              >
+                Cập nhật
+              </button>
+            </div>
           </form>
         </div>
       </div>

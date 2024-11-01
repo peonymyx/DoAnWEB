@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { getCategory } from "../../../redux/categorySlice";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import Sidebar from "../../Nav/Sidebar";
 import { handleUploadToImgBB } from "../../../config/apiConfig";
 
 const schema = yup.object().shape({
@@ -33,6 +32,7 @@ const AddProduct = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
   const category = useSelector((state) => state.category.category);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (user.role !== "admin") {
       navigate("/login");
@@ -122,7 +122,7 @@ const AddProduct = () => {
             </div>
             <div className="mb-4">
               <label
-                htmlFor="name"
+                htmlFor="price"
                 className="mb-3 block font-bold text-[#07074D] text-xl"
               >
                 Giá sản phẩm:
@@ -137,23 +137,9 @@ const AddProduct = () => {
               />
               <p className="text-red-500 mt-1">{errors.price?.message}</p>
             </div>
-
-            {/* <div className="flex gap-2 items-center">
-              {availableSizes.map((size) => (
-                <div
-                  key={size}
-                  onClick={() => handleSizeSelect(size)}
-                  className={`border p-2 cursor-pointer size-item ${
-                    selectedSize === size ? "active border-primary" : ""
-                  }`}
-                >
-                  {size}
-                </div>
-              ))}
-            </div> */}
             <div className="flex gap-2 items-center mt-2 mb-4">
               <label
-                htmlFor="name"
+                htmlFor="size"
                 className="block font-bold text-[#07074D] text-xl"
               >
                 Chọn Size:
@@ -207,7 +193,7 @@ const AddProduct = () => {
             </div>
             <div className="my-4">
               <label
-                htmlFor="origin"
+                htmlFor="category"
                 className="mb-3 block font-bold text-[#07074D] text-xl"
               >
                 Danh mục
@@ -246,13 +232,6 @@ const AddProduct = () => {
               >
                 Mô tả:
               </label>
-              {/* <textarea
-              name="description"
-              id="description"
-              className="w-full h-32 border border-gray-300 rounded-lg py-2 px-3 outline-none bg-transparent resize-none  focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              placeholder="Enter description"
-              {...register("description")}
-            /> */}
               <ReactQuill
                 theme="snow"
                 value={description}

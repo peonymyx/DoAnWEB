@@ -6,14 +6,12 @@ import {
   removeCart,
   selectCart,
 } from "../redux/cartSlice";
-import { updateUser, getUserById } from "../redux/userSlice";
+import { updateUser } from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import Footer from "../components/post/Footer";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 function Cart() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth.currentUser);
   const cart = useSelector(selectCart);
@@ -25,11 +23,9 @@ function Cart() {
   const [selectedCoupon, setSelectedCoupon] = useState("");
   const [filteredCoupons, setFilteredCoupons] = useState(coupons);
 
-  console.log("auth", auth.CouponList);
-
   useEffect(() => {
-    const fetchCoupons = async () => {
-      if (auth) {
+    if (auth) {
+      const fetchCoupons = async () => {
         try {
           const response = await axios.get(
             `http://localhost:3000/api/v1/users/${auth._id}/coupons`
@@ -40,10 +36,10 @@ function Cart() {
         } finally {
           setLoading(false);
         }
-      }
-    };
+      };
 
-    fetchCoupons();
+      fetchCoupons();
+    }
   }, [auth]);
 
   useEffect(() => {
@@ -102,24 +98,31 @@ function Cart() {
   };
 
   if (!auth) {
-    navigate("/login");
     return (
-      <div className="w-screen h-screen flex justify-center items-center">
-        <p>
-          Vui Lòng{" "}
-          <a href="/login" className="text-cyan-500">
-            {" "}
-            đăng nhập{" "}
-          </a>{" "}
-          để tiếp tục...
-        </p>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: -50, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white p-6 rounded-lg shadow-lg text-center"
+        >
+          <p className="text-lg font-semibold mb-4">
+            Đăng nhập để xem giỏ hàng
+          </p>
+          <a
+            href="/login"
+            className="inline-block bg-blue-500 text-white py-2 px-4 rounded-full transition-colors duration-300 hover:bg-blue-600"
+          >
+            Đăng nhập
+          </a>
+        </motion.div>
       </div>
     );
   }
 
   return (
     <div>
-      <div className="pt-28">
+      <div className="pt-10">
         <div className="container mx-auto p-8">
           <h1 className="text-2xl font-bold mb-4">
             DANH SÁCH SẢN PHẨM ĐÃ CHỌN
@@ -127,8 +130,11 @@ function Cart() {
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             {cart.length > 0 &&
               cart.map((item) => (
-                <div
+                <motion.div
                   key={`${item.product_id}-${item.size}`}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
                   className="flex items-center justify-between mb-4"
                 >
                   <div className="flex items-center">
@@ -141,52 +147,61 @@ function Cart() {
                       <h2 className="text-lg font-semibold">
                         {item.name} - {item.size}
                       </h2>
-                      <p className="text-gray-600">
-                        {" "}
+                      <p className="text-gray-600 text-lg">
                         Giá: {formatPrice(item.price)}
                       </p>
-
-                      <div className=" flex">
-                        <p className="mt-1">Số Lượng:</p>
+                      <div className="flex items-center mt-1">
+                        <p className="mr-2">Số Lượng:</p>
                         <button
                           onClick={() =>
-                            dispatch(incrementQuantity(item.product_id))
+                            dispatch(
+                              decrementQuantity(
+                                `${item.product_id}-${item.size}`
+                              )
+                            )
                           }
-                          className=" text-xl mx-3 w-5 h-5 bg-slate-200 mt-1 inline-flex items-center justify-center"
+                          className="text-xl mx-3 w-5 h-5 bg-slate-200 inline-flex items-center justify-center"
                         >
-                          +
+                          -
                         </button>
                         <input
                           type="number"
                           value={item.quantity}
-                          className="w-20"
+                          className="w-20 sm:pl-4 text-center border border-gray-300 rounded"
+                          readOnly
                         />
                         <button
                           onClick={() =>
-                            dispatch(decrementQuantity(item.product_id))
+                            dispatch(
+                              incrementQuantity(
+                                `${item.product_id}-${item.size}`
+                              )
+                            )
                           }
-                          className=" text-xl mx-3 mx-3 w-5 h-5 bg-slate-200 mt-1 inline-flex items-center justify-center"
+                          className="text-xl mx-3 w-5 h-5 bg-slate-200 inline-flex items-center justify-center"
                         >
-                          -
+                          +
                         </button>
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center">
                     <button
-                      onClick={() => dispatch(removeCart(item.product_id))}
+                      onClick={() =>
+                        dispatch(removeCart(`${item.product_id}-${item.size}`))
+                      }
                       className="text-red-500 hover:text-red-700"
                     >
                       Xóa
                     </button>
                   </div>
-                </div>
+                </motion.div>
               ))}
           </div>
 
           {/* Nhập mã giảm giá */}
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <h2 className="text-lg font-semibold mb-4">MÃ GIẢM GIÁ</h2>
+            <h2 className="text-xl font-semibold mb-4">MÃ GIẢM GIÁ</h2>
             {filteredCoupons.length === 0 ? (
               <p>Không có mã giảm giá nào.</p>
             ) : (
@@ -194,10 +209,8 @@ function Cart() {
                 {filteredCoupons.map((coupon) => (
                   <li
                     key={coupon._id}
-                    className="flex justify-between items-center border-b py-2"
-                    onClick={() => {
-                      handleCouponSelect(coupon.code);
-                    }}
+                    className="flex justify-between items-center border-b py-2 cursor-pointer"
+                    onClick={() => handleCouponSelect(coupon.code)}
                   >
                     <span className="text-lg">{coupon.code}</span>
                     <span className="text-lg text-green-600">
@@ -209,26 +222,25 @@ function Cart() {
             )}
             <input
               type="text"
+              disabled
               value={selectedCoupon}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Nhập mã giảm giá..."
-              className="w-full p-2 border border-gray-300 rounded mb-2"
+              className="w-full py-3 pl-6 border text-blue-500 border-gray-300 rounded mb-2 font-bold text-xl"
             />
             <button
-              onClick={() => {
-                applyCoupon();
-              }}
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              onClick={applyCoupon}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 text-lg font-bold mt-4"
             >
               Áp dụng
             </button>
           </div>
 
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8">
-            <h2 className="text-lg font-semibold mb-4">TỔNG TIỀN</h2>
+            <h2 className="text-xl font-semibold mb-4">TỔNG TIỀN</h2>
             <div className="flex justify-between mb-2">
-              <p className="text-gray-600">Tổng cộng:</p>
-              <p className="font-semibold">
+              <p className="text-gray-600 text-lg">Tổng cộng:</p>
+              <p className="font-semibold text-lg">
                 {formatPrice(getTotal().discountedTotal)}
               </p>
             </div>
@@ -236,16 +248,19 @@ function Cart() {
           {/* Nút tiếp tục thanh toán */}
           <div className="mt-8">
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600"
+              className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 hover:text-white"
               onClick={() => {
-                const CouponList = coupons.filter(
-                  (c) => c.code !== selectedCoupon
-                );
-                dispatch(updateUser({ CouponList: CouponList }));
+                if (auth) {
+                  const CouponList = coupons.filter(
+                    (c) => c.code !== selectedCoupon
+                  );
+                  dispatch(updateUser({ CouponList: CouponList }));
+                }
               }}
             >
               <Link
                 to="/payproducts"
+                className="text-lg font-bold"
                 state={{ discountedTotal: getTotal().discountedTotal }}
               >
                 Tiếp tục thanh toán
@@ -254,7 +269,6 @@ function Cart() {
           </div>
         </div>
       </div>
-      <Footer></Footer>
     </div>
   );
 }

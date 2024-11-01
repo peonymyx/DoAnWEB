@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductById } from "../redux/productSlice";
 import {
@@ -9,8 +9,7 @@ import {
 } from "../redux/commentSlice";
 import { addToCart } from "../redux/cartSlice";
 import axios from "axios";
-import { AlertCircle, Heart, ShoppingCart } from "lucide-react";
-import Cookies from "js-cookie";
+import { AlertCircle, ShoppingCart } from "lucide-react";
 import Swal from "sweetalert2";
 
 const ProductsDetail = () => {
@@ -20,26 +19,42 @@ const ProductsDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const product = useSelector((state) => state.product.products);
-  const auth = useSelector((state) => state.auth);
-  const userId = auth.currentUser?._id;
+  const auth = useSelector((state) => state.auth.currentUser);
+  const userId = auth?._id;
   const commentList = useSelector((state) => state.comment.comment);
+  const { pathname } = useLocation();
 
-  const handleAddComment = (comment) => {
-    if (!auth.currentUser) {
-      navigate("/login");
-      return null;
-    } else {
+  const handleAddComment = async (comment) => {
+    if (!auth) {
+      // Kiểm tra userId thay vì auth
+      // navigate("/login");
+      // return;
+    }
+
+    try {
       const data = {
         user_id: userId,
         product_id: id,
         content: comment,
       };
-      dispatch(addComment(data));
+      console.log("data", data);
+      await dispatch(addComment(data));
+      setComment(""); // Clear comment input after successful submission
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+      // Có thể hiển thị thông báo lỗi cho người dùng
+      setError("Có lỗi xảy ra khi thêm bình luận. Vui lòng thử lại.");
     }
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   const handleDeleteComment = (id) => {
     dispatch(deleteCommentByAuthor(id));
   };
+
   useEffect(() => {
     dispatch(getProductById(id));
     dispatch(getCommentByProductId(id));
@@ -96,6 +111,7 @@ const ProductsDetail = () => {
       description: product.description,
       size: selectedSize,
     };
+    console.log("datacar", data);
     dispatch(addToCart(data));
     navigate("/cart");
   };
@@ -155,25 +171,86 @@ const ProductsDetail = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleAddToCart}
-              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 flex items-center justify-center text-sm sm:text-base"
+              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 flex items-center justify-center text-md sm:text-xl"
               disabled={!selectedSize}
             >
-              <ShoppingCart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              <ShoppingCart className="mr-2 h-4 w-4 sm:h-6 sm:w-6" />
               Thêm giỏ hàng
             </button>
             <button
               onClick={handleWishlist}
-              className="flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-gray-100 transition duration-300 flex items-center justify-center text-sm sm:text-base"
+              className="flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-gray-100 transition duration-300 flex items-center justify-center text-md sm:text-xl"
             >
-              <Heart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               Thêm vào danh sách yêu thích
             </button>
           </div>
         </div>
       </div>
 
-      <div className="mt-12">
-        <h3 className="text-xl sm:text-2xl font-bold mb-4">Comments</h3>
+      {/* COMMENT */}
+      <div className="row mt-5">
+        <div className="col">
+          <h3>Bình Luận</h3>
+          <form>
+            <div className="form-group">
+              <label htmlFor="message">Bình Luận:</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="4"
+                className="form-control"
+                placeholder="Nhập bình luận của bạn..."
+                onChange={(e) => setComment(e.target.value)}
+              ></textarea>
+            </div>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleAddComment(comment);
+              }}
+              className="btn btn-primary mt-3"
+            >
+              Gửi
+            </button>
+          </form>
+        </div>
+      </div>
+      <div className="row mt-4">
+        <div className="col">
+          {commentList.length > 0 ? (
+            commentList.map((item) => (
+              <div key={item._id} className="media mb-4">
+                <img
+                  src="https://via.placeholder.com/40"
+                  alt="User Avatar"
+                  className="mr-3 rounded-circle"
+                />
+                <div className="media-body">
+                  <h5 className="mt-0">{item.user_id?.username}</h5>
+                  <p>{item.content}</p>
+                  <small className="text-muted">
+                    {new Date(item.createdAt).toLocaleDateString()}
+                  </small>
+                  {userId === item?.user_id?._id && (
+                    <button
+                      onClick={() => handleDeleteComment(item._id)}
+                      className="btn btn-danger btn-sm ml-3"
+                    >
+                      Xóa
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>Không có bình luận nào.</p>
+          )}
+        </div>
+      </div>
+      {/* <div className="mt-12">
+        <h3 className="text-xl sm:text-2xl font-bold mb-4 text-black text-left">
+          Bình luận
+        </h3>
         {error && (
           <div
             className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
@@ -238,7 +315,7 @@ const ProductsDetail = () => {
             </p>
           )}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

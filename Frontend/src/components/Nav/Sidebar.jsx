@@ -11,8 +11,9 @@ import {
   XMarkIcon,
   ChartBarIcon,
   TagIcon,
+  CogIcon,
+  Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
-import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false); // Manage sidebar open/close state
@@ -79,7 +80,7 @@ const Sidebar = () => {
               <NavItem to="/category" icon={TagIcon} text="Danh Mục Sản Phẩm" />
               <NavItem
                 to="/ProductManagement"
-                icon={MedicalInformationIcon}
+                icon={CogIcon}
                 text="Quản Lý Sản Phẩm"
               />
               <NavItem
@@ -92,10 +93,7 @@ const Sidebar = () => {
                 icon={ChatBubbleOvalLeftIcon}
                 text="Tin Nhắn"
               />
-              <NavItem
-              to="/CouponManage"
-              icon = {HomeIcon}
-              text= "Coupon"/>
+              <NavItem to="/CouponManage" icon={Cog6ToothIcon} text="Coupon" />
               <NavItem
                 to="/commentManagement"
                 icon={HomeIcon}

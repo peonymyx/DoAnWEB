@@ -15,9 +15,15 @@ export const addComment = createAsyncThunk(
   "comment/addComment",
   async (commentData, { rejectWithValue }) => {
     try {
+      const token = Cookies.get("token");
       const res = await axios.post(
-        "http://localhost:3000/api/v1/comment",
-        commentData
+        "http://localhost:3000/api/v1/comment/addComment",
+        commentData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Thêm token vào header
+          },
+        }
       );
       return res.data;
     } catch (error) {

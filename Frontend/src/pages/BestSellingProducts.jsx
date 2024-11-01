@@ -1,17 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { Heart, Star, ShoppingCart } from 'lucide-react';
-import { motion } from 'framer-motion';
-import PropTypes from 'prop-types';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { ShoppingCart } from "lucide-react";
+import { motion } from "framer-motion";
+import PropTypes from "prop-types";
 
 const ProductCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
-
-  const handleFavoriteClick = () => {
-    setIsFavorited(!isFavorited);
-  };
 
   return (
     <motion.div
@@ -20,7 +15,7 @@ const ProductCard = ({ product }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div
+      {/* <div
         className="absolute top-4 right-4 cursor-pointer z-10"
         onClick={handleFavoriteClick}
       >
@@ -28,9 +23,9 @@ const ProductCard = ({ product }) => {
           className={`h-6 w-6 transition-colors duration-300 ${
             isFavorited ? "text-red-500" : "text-white stroke-black"
           }`}
-          fill={isFavorited ? 'red' : 'none'}
+          fill={isFavorited ? "red" : "none"}
         />
-      </div>
+      </div> */}
 
       <Link to={`/productdetail/${product._id}`}>
         <div className="relative overflow-hidden rounded-lg">
@@ -50,17 +45,19 @@ const ProductCard = ({ product }) => {
         <h2 className="text-sm sm:text-lg font-bold mt-3 truncate">
           {product.name}
         </h2>
-        <div className="flex items-center mt-1">
+        {/* <div className="flex items-center mt-1">
           {[...Array(5)].map((_, index) => (
             <Star
               key={index}
               className={`h-3 w-3 sm:h-4 sm:w-4 ${
-                index < product.rating ? 'text-yellow-500' : 'text-gray-300'
+                index < product.rating ? "text-yellow-500" : "text-gray-300"
               }`}
             />
           ))}
-          <span className="ml-1 text-xs sm:text-sm text-gray-600">({product.rating})</span>
-        </div>
+          <span className="ml-1 text-xs sm:text-sm text-gray-600">
+            ({product.rating})
+          </span>
+        </div> */}
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
         </p>
@@ -93,12 +90,14 @@ const BestSellingProducts = () => {
     const fetchBestSellers = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get("http://localhost:3000/api/v1/best-sellers");
+        const response = await axios.get(
+          "http://localhost:3000/api/v1/best-sellers"
+        );
         setBestSellers(response.data.products.slice(0, 4));
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching best sellers:", err);
-        setError('An error occurred while fetching best-selling products.');
+        setError("An error occurred while fetching best-selling products.");
         setIsLoading(false);
       }
     };

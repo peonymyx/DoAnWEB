@@ -1,8 +1,28 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Footer = () => {
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <footer className="bg-blueGray-200 pt-8 pb-6 border-t-2 shadow-md mt-auto">
+    <footer className="bg-blueGray-200 pt-8 pb-6 border-t-2 shadow-md mt-auto relative">
       <div className="mx-auto px-16">
         <div className="flex flex-wrap text-left lg:text-left">
           <div className="w-full lg:w-6/12 px-4">
@@ -148,6 +168,14 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      {showButton && (
+        <button
+          onClick={scrollToTop}
+          className="flex items-center justify-center text-2xl fixed right-2 w-12 h-12 sm:w-16 sm:h-16 sm:bottom-24 bottom-16 bg-blue-400 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300 focus:outline-none"
+        >
+          ↑
+        </button>
+      )}
     </footer>
   );
 };

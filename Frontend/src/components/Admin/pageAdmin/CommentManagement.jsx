@@ -68,7 +68,7 @@ const CommentManagement = () => {
       <div className="flex">
         <Card className="w-full shadow-none">
           <CardHeader floated={false} shadow={false} className="rounded-none">
-            <div className="mb-3 mt-3 flex flex-col justify-between gap-8 md:flex-row md:items-center">
+            <div className="mb-3 mt-3 flex flex-col justify-center gap-8 md:flex-row md:items-center">
               <div className="font-bold text-3xl">
                 <h1>Quản Lý Bình Luận</h1>
               </div>
