@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Heart, Star, Search, ShoppingCart } from "lucide-react";
+import { Search, ShoppingCart } from "lucide-react";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import { getProduct } from "../redux/productSlice";
@@ -11,12 +11,6 @@ import BestSellingProducts from "./BestSellingProducts";
 const ProductCard = ({ product }) => {
   // State để theo dõi trạng thái hover và yêu thích
   const [isHovered, setIsHovered] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
-
-  // Hàm xử lý khi người dùng click vào trái tim yêu thích
-  const handleFavoriteClick = () => {
-    setIsFavorited(!isFavorited);
-  };
 
   return (
     <motion.div
@@ -25,17 +19,6 @@ const ProductCard = ({ product }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div
-        className="absolute top-4 right-4 cursor-pointer z-10"
-        onClick={handleFavoriteClick}
-      >
-        <Heart
-          className={`h-6 w-6 transition-colors duration-300 ${
-            isFavorited ? "text-red-500" : "text-white stroke-black"
-          }`}
-          fill={isFavorited ? "red" : "none"}
-        />
-      </div>
       <Link to={`/productdetail/${product._id}`}>
         <div className="relative overflow-hidden rounded-lg">
           <img
@@ -54,7 +37,7 @@ const ProductCard = ({ product }) => {
         <h2 className="text-sm sm:text-lg mt-3 font-bold truncate">
           {product.name}
         </h2>
-        <div className="flex items-center mt-1">
+        {/* <div className="flex items-center mt-1">
           {[...Array(5)].map((_, index) => (
             <Star
               key={index}
@@ -66,7 +49,7 @@ const ProductCard = ({ product }) => {
           <span className="ml-1 text-xs sm:text-sm text-gray-600">
             ({product.rating})
           </span>
-        </div>
+        </div> */}
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
         </p>
@@ -189,7 +172,7 @@ const ListProducts = () => {
           <select
             value={selectedCategory}
             onChange={handleCategoryChange}
-            className="border rounded-md px-1 text-xl sm:px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-52 border rounded-md px-1 text-xl sm:px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="All">Tất cả</option>
             {categories.map((category) => (
@@ -204,7 +187,7 @@ const ListProducts = () => {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="border rounded-md px-1 text-xl sm:px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-52 border rounded-md px-1 text-xl sm:px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Mặc định</option>
             <option value="name-asc">Tên A-Z</option>

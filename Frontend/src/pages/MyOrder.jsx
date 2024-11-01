@@ -1,327 +1,149 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from "react-bootstrap";
-import "./Hoadon.css"; // Import file CSS để style
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import Footer from "../components/post/Footer";
+import { useNavigate } from "react-router-dom";
 
 const MyOrder = () => {
-  const [invoices, setInvoices] = useState([]);
-  const [selectedDate, setSelectedDate] = useState("");
   const [myOrder, setMyOrder] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
   const navigate = useNavigate();
 
   const auth = useSelector((state) => state.auth.currentUser);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/v1/otherProduct?userId=${auth?._id}`)
-      .then((res) => {
-        setMyOrder(res.data.otherProduct);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/v1/otherProduct?userId=${auth?._id}`
+        );
+        setMyOrder(response.data.otherProduct);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
 
-  console.log(myOrder);
+    if (auth) {
+      fetchOrders();
+    }
+  }, [auth]);
 
-  if (!auth) {
-    navigate("/login");
-    return null;
-  }
+  useEffect(() => {
+    if (!auth) {
+      navigate("/login");
+    }
+  }, [auth, navigate]);
+
+  const calculateTotal = (cart) => {
+    return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("vi-VN");
+  };
 
   return (
-    <div className="pt-36">
-      <div className="date-selector container p-9">
-        <label htmlFor="datePicker">Chọn ngày:</label>
-        <input type="date" id="datePicker" value={selectedDate} />
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="mb-6">
+        <label
+          htmlFor="datePicker"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Chọn ngày:
+        </label>
+        <input
+          type="date"
+          id="datePicker"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
       </div>
 
-      {myOrder.length > 0 &&
+      {myOrder.length === 0 ? (
+        <div className="text-center text-gray-500">Không có đơn hàng</div>
+      ) : (
         myOrder.map((order) => (
-          <>
-            <div className="invoice-container container-xxl mb-5 ">
-              <div className="invoice-wrap">
-                <div className="invoice-inner">
-                  <table
-                    border="0"
-                    cellPadding="0"
-                    cellSpacing="0"
-                    width="100%"
-                    className="mb-4"
-                  >
-                    <tbody>
-                      <tr>
-                        <td align="right" valign="top">
-                          <div className="business_info">
-                            <table
-                              border="0"
-                              cellPadding="0"
-                              cellSpacing="0"
-                              width="100%"
-                            >
-                              <tbody>
-                                <tr>
-                                  <td>
-                                    <div
-                                      className="mce-content-body"
-                                      id="business_info_editor"
-                                      style={{
-                                        width: "255px",
-                                        minHeight: "80px",
-                                        position: "relative",
-                                      }}
-                                      spellCheck="false"
-                                    >
-                                      <p
-                                        style={{ fontSize: "20pt" }}
-                                        data-mce-style="font-size: 20pt;"
-                                      >
-                                        Products
-                                      </p>
-                                      <p className="text-lg">
-                                        137 Nguyễn Thị Thập
-                                        <br /> Hòa Minh, Liên Chiểu, Đà Nẵng
-                                        <br /> <br /> 0123 456 789
-                                        <br /> polyvacxin@fpt.edu.vn
-                                      </p>
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </td>
-                        <td align="right" className="is_logo" valign="top">
-                          <div id="logoDiv">
-                            <img
-                              className="logo"
-                              id="logo"
-                              src="https://polyvac.com.vn/wp-content/uploads/2023/04/logo.png"
-                              style={{ width: "25%" }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <div
-                    className="invoice-address pt-8"
-                    style={{ borderTop: "3px double #000000" }}
-                  >
-                    <table
-                      border="0"
-                      cellPadding="0"
-                      cellSpacing="0"
-                      width="100%"
-                    >
-                      <tbody>
-                        <tr>
-                          <td align="right" colSpan="2" valign="top">
-                            <div
-                              className="mce-content-body"
-                              style={{
-                                textAlign: "center",
-                              }}
-                              spellCheck="false"
-                            >
-                              <p>
-                                <span
-                                  style={{ fontSize: "20pt" }}
-                                  data-mce-style="font-size: 20pt;"
-                                >
-                                  Hóa Đơn
-                                </span>
-                              </p>
-                            </div>
-                            <br />
-                            &nbsp;
-                          </td>
-                        </tr>
-                        <tr>
-                          <td align="left" valign="top" width="60%">
-                            <table border="0" cellPadding="0" cellSpacing="0">
-                              <tbody>
-                                <tr>
-                                  <td
-                                    style={{ float: "left", fontSize: "14pt" }}
-                                    valign="top"
-                                  >
-                                    <strong>
-                                      <span style={{ fontWeight: "bold" }}>
-                                        Hóa đơn tới:
-                                      </span>
-                                    </strong>
-                                  </td>
-                                  <td valign="top">
-                                    <div className="client_info">
-                                      <table
-                                        border="0"
-                                        cellPadding="0"
-                                        cellSpacing="0"
-                                      >
-                                        <tbody>
-                                          <tr>
-                                            <td style={{ paddingLeft: "20px" }}>
-                                              <div
-                                                className="mce-content-body"
-                                                id="client_info"
-                                                style={{
-                                                  width: "200px",
-                                                  minHeight: "80px",
-                                                  position: "relative",
-                                                }}
-                                              >
-                                                <p style={{ fontSize: "14pt" }}>
-                                                  {order.username}
-                                                  <br />
-                                                  {order.address}
-                                                  <br />
-                                                  {order.phone_number}
-                                                </p>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
-                          <td align="right" valign="top" width="40%">
-                            <table border="0" cellPadding="0" cellSpacing="0">
-                              <tbody style={{ fontSize: "14pt" }}>
-                                <tr>
-                                  <td align="right">
-                                    <strong>
-                                      <span
-                                        style={{
-                                          textAlign: "right",
-                                          fontWeight: "bold",
-                                        }}
-                                      >
-                                        Hóa đơn số:
-                                      </span>
-                                    </strong>
-                                  </td>
-                                  <td
-                                    align="left"
-                                    id="no"
-                                    style={{ paddingLeft: "20px" }}
-                                  >
-                                    <span>{order?._id}</span>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td align="right">
-                                    <strong>
-                                      <span
-                                        style={{
-                                          textAlign: "right",
-                                          fontWeight: "bold",
-                                        }}
-                                      >
-                                        Ngày:
-                                      </span>
-                                    </strong>
-                                  </td>
-                                  <td
-                                    align="right"
-                                    style={{ paddingLeft: "20px" }}
-                                  >
-                                    <span
-                                      id="date"
-                                      style={{ textAlign: "right" }}
-                                    >
-                                      {order.createdAt}
-                                    </span>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div id="items-list">
-                    <table className="table table-condensed table-bordered items-table">
-                      <thead>
-                        <tr>
-                          <th>
-                            <span>Tên Vắc-xin</span>
-                          </th>
-                          <th className="mount-header">
-                            <span>Số Lượng</span>
-                          </th>
-                          <th className="mount-header">
-                            <span>Đơn Giá</span>
-                          </th>
-                          <th className="subtotal-header">
-                            <span>Thành Tiền</span>
-                          </th>
-                        </tr>
-                      </thead>
-
-                      <tbody id="ItemsTable">
-                        {order.cart.map((item, index) => (
-                          <tr key={index}>
-                            <td>
-                              <span>{item.name}</span>
-                            </td>
-                            <td>
-                              <span>{item.quantity}</span>
-                            </td>
-                            <td>
-                              <span>{item.price}</span>
-                            </td>
-                            <td>
-                              <span>{item.price * item.quantity}đ</span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-
-                      <tfoot id="TotalsSection">
-                        <tr className="totals-row" id="TotalRow">
-                          <td className="wide-cell" colSpan="2"></td>
-                          <td>
-                            <strong>
-                              <span>Tổng Tiền</span>
-                            </strong>
-                          </td>
-                          <td colSpan="2">
-                            <span>
-                              {order.cart.reduce(
-                                (acc, item) => acc + item.price * item.quantity,
-                                0
-                              )}
-                              đ
-                            </span>
-                          </td>
-                        </tr>
-                      </tfoot>
-                    </table>
-                  </div>
-
-                  <Button
-                    variant="primary"
-                    className="print-btn bg-sky-700"
-                    onClick={() => window.print()}
-                  >
-                    Bạn hãy chụp lại và xác nhận với nhân viên giao hàng tiêm!!
-                  </Button>
-                </div>
+          <div
+            key={order._id}
+            className="bg-white rounded-lg overflow-hidden mb-6 shadow-md"
+          >
+            {/* Header */}
+            <div className="flex justify-between items-center p-4 border-b">
+              <div>
+                <img
+                  src="https://polyvac.com.vn/wp-content/uploads/2023/04/logo.png"
+                  alt="Logo"
+                  className="h-12 w-auto"
+                />
+              </div>
+              <div className="text-right">
+                <h2 className="text-xl font-bold text-gray-800">Hóa Đơn</h2>
+                <p className="text-sm text-gray-600">Số: {order._id}</p>
               </div>
             </div>
-          </>
-        ))}
+
+            {/* Customer Info */}
+            <div className="p-4 grid md:grid-cols-2 gap-4">
+              <div>
+                <h3 className="font-semibold text-gray-700 mb-2">
+                  Hóa đơn tới:
+                </h3>
+                <p className="text-gray-600">
+                  {order.username}
+                  <br />
+                  {order.address}
+                  <br />
+                  {order.phone_number}
+                </p>
+              </div>
+              <div className="md:text-right">
+                <p className="text-gray-600">
+                  <span className="font-semibold">Ngày:</span>{" "}
+                  {formatDate(order.createdAt)}
+                </p>
+              </div>
+            </div>
+
+            {/* Order Items */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="p-3 text-left">Tên sản phẩm</th>
+                    <th className="p-3 text-center">Số Lượng</th>
+                    <th className="p-3 text-center">Đơn Giá</th>
+                    <th className="p-3 text-right">Thành Tiền</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {order.cart.map((item, index) => (
+                    <tr key={index} className="border-b">
+                      <td className="p-3">{item.name}</td>
+                      <td className="p-3 text-center">{item.quantity}</td>
+                      <td className="p-3 text-center">
+                        {item.price.toLocaleString()}đ
+                      </td>
+                      <td className="p-3 text-right">
+                        {(item.price * item.quantity).toLocaleString()}đ
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="bg-gray-100 font-bold">
+                    <td colSpan="3" className="p-3 text-right">
+                      Tổng Tiền
+                    </td>
+                    <td className="p-3 text-right">
+                      {calculateTotal(order.cart).toLocaleString()}đ
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 };

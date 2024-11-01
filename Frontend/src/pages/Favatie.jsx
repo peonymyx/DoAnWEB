@@ -6,7 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ShoppingCart,
-  Trash2,
+  Trash,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
@@ -14,7 +14,6 @@ import { Link } from "react-router-dom";
 
 const ProductCard = ({ product, onRemoveFromWishlist }) => {
   const [isHovered, setIsHovered] = useState(false);
-
   return (
     <motion.div
       className="border rounded-lg p-2 hover:shadow-lg transition-shadow bg-white relative"
@@ -40,7 +39,7 @@ const ProductCard = ({ product, onRemoveFromWishlist }) => {
         <h2 className="text-sm sm:text-lg mt-3 font-bold truncate">
           {product.name}
         </h2>
-        <div className="flex items-center mt-1">
+        {/* <div className="flex items-center mt-1">
           {[...Array(5)].map((_, index) => (
             <Star
               key={index}
@@ -52,24 +51,27 @@ const ProductCard = ({ product, onRemoveFromWishlist }) => {
           <span className="ml-1 text-xs sm:text-sm text-gray-600">
             ({product.rating})
           </span>
-        </div>
+        </div> */}
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
         </p>
       </Link>
-      <div className="flex mt-2 space-x-2">
-        <button className="flex-1 text-md sm:text-lg bg-blue-500 text-white py-1 px-4 rounded-full transition-colors duration-300 hover:bg-blue-600 flex items-center justify-center">
-          <ShoppingCart className="mr-2 h-4 w-4" />
-          Thêm giỏ hàng
-        </button>
+      <div className="flex gap-2 mt-2">
+        <Link to={`/productdetail/${product._id}`} className="flex-1">
+          <button className="w-full text-sm sm:text-md py-2 px-2 bg-blue-500 text-white sm:px-4 rounded-full transition-colors duration-300 hover:bg-blue-600 flex items-center justify-center">
+            <ShoppingCart className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+            Thêm giỏ hàng
+          </button>
+        </Link>
         <button
           onClick={(e) => {
             e.preventDefault();
             onRemoveFromWishlist(product._id);
           }}
-          className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors duration-300"
+          className="flex-1 w-full text-sm sm:text-md bg-red-500 text-white py-2 px-2 sm:px-4 rounded-full hover:bg-red-600 transition-colors duration-300 flex items-center justify-center"
         >
-          <Trash2 className="h-4 w-4" />
+          <Trash className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+          Xóa yêu thích
         </button>
       </div>
     </motion.div>
@@ -89,19 +91,19 @@ ProductCard.propTypes = {
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   return (
-    <div className="flex justify-center items-center space-x-1 sm:space-x-2 mt-6 sm:mt-10">
+    <div className="flex justify-center items-center space-x-1 sm:space-x-2 mt-4 sm:mt-6">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 sm:p-4 rounded-full hover:bg-gray-200 disabled:opacity-50"
+        className="p-1 sm:p-2 rounded-full hover:bg-gray-200 disabled:opacity-50"
       >
-        <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6" />
+        <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
       </button>
       {[...Array(totalPages)].map((_, index) => (
         <button
           key={index}
           onClick={() => onPageChange(index + 1)}
-          className={`px-2 py-1 sm:px-3 sm:py-1 text-md sm:text-lg rounded-full h-8 w-8 flex items-center justify-center ${
+          className={`px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm rounded-full ${
             currentPage === index + 1
               ? "bg-blue-500 text-white"
               : "hover:bg-gray-200"
@@ -115,7 +117,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         disabled={currentPage === totalPages}
         className="p-1 sm:p-2 rounded-full hover:bg-gray-200 disabled:opacity-50"
       >
-        <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6" />
+        <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
       </button>
     </div>
   );
@@ -127,7 +129,7 @@ Pagination.propTypes = {
   onPageChange: PropTypes.func.isRequired,
 };
 
-const Wishlist = () => {
+const Favatie = () => {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -285,4 +287,4 @@ const Wishlist = () => {
   );
 };
 
-export default Wishlist;
+export default Favatie;

@@ -28,7 +28,7 @@ const userSchema = new Schema(
     wishList: [
       {
         type: Schema.Types.ObjectId,
-        ref: "product",
+        ref: "Product",
       },
     ],
     phone: {

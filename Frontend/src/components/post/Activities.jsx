@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  Heart,
-  Star,
-  ShoppingCart,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import { getProduct } from "../../redux/productSlice";
@@ -15,11 +9,6 @@ import BestSellingProducts from "../../pages/BestSellingProducts";
 
 const ProductCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
-
-  const handleFavoriteClick = () => {
-    setIsFavorited(!isFavorited);
-  };
 
   return (
     <motion.div
@@ -28,17 +17,6 @@ const ProductCard = ({ product }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div
-        className="absolute top-4 right-4 cursor-pointer z-10"
-        onClick={handleFavoriteClick}
-      >
-        <Heart
-          className={`h-6 w-6 transition-colors duration-300 ${
-            isFavorited ? "text-red-500" : "text-white stroke-black"
-          }`}
-          fill={isFavorited ? "red" : "none"}
-        />
-      </div>
       <Link to={`/productdetail/${product._id}`}>
         <div className="relative overflow-hidden rounded-lg">
           <img
@@ -57,7 +35,7 @@ const ProductCard = ({ product }) => {
         <h2 className="text-sm sm:text-lg mt-3 font-bold truncate">
           {product.name}
         </h2>
-        <div className="flex items-center mt-1">
+        {/* <div className="flex items-center mt-1">
           {[...Array(5)].map((_, index) => (
             <Star
               key={index}
@@ -69,7 +47,7 @@ const ProductCard = ({ product }) => {
           <span className="ml-1 text-xs sm:text-sm text-gray-600">
             ({product.rating})
           </span>
-        </div>
+        </div> */}
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
         </p>
@@ -94,14 +72,21 @@ ProductCard.propTypes = {
 
 const Activities = () => {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.product.products);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 4;
+
+  // Đảm bảo products luôn là một mảng
+  const products = useSelector((state) => {
+    const productData = state.product.products;
+    return Array.isArray(productData) ? productData : [];
+  });
 
   useEffect(() => {
     dispatch(getProduct());
   }, [dispatch]);
 
+  // Tính toán các chỉ số và sản phẩm hiện tại
+  const totalPages = Math.ceil(products.length / productsPerPage);
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = products.slice(
@@ -110,7 +95,7 @@ const Activities = () => {
   );
 
   const nextPage = () => {
-    if (currentPage < Math.ceil(products.length / productsPerPage)) {
+    if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -120,6 +105,11 @@ const Activities = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  // Reset trang khi products thay đổi
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [products.length]);
 
   return (
     <div className="max-w-[1300px] mx-auto px-4 py-8">
@@ -147,12 +137,10 @@ const Activities = () => {
         </Link>
         <button
           onClick={nextPage}
-          disabled={
-            currentPage === Math.ceil(products.length / productsPerPage)
-          }
+          disabled={currentPage === totalPages}
           className={`text-blue-500 transition-transform duration-200 
             ${
-              currentPage === Math.ceil(products.length / productsPerPage)
+              currentPage === totalPages
                 ? "opacity-50 cursor-not-allowed"
                 : "hover:scale-105 active:scale-95"
             }`}
@@ -166,14 +154,13 @@ const Activities = () => {
             key={product._id}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }} // Thời gian chuyển tiếp
+            transition={{ duration: 0.5 }}
           >
             <ProductCard product={product} />
           </motion.div>
         ))}
       </div>
       <div className="w-full h-px bg-gray-400 my-16"></div>
-      {/* Banner */}
       <div className="relative w-full h-36 sm:h-[400px] overflow-hidden">
         <Link to="/listproducts">
           <img
@@ -183,7 +170,6 @@ const Activities = () => {
           />
         </Link>
       </div>
-      {/* Banner */}
       <div className="w-full h-px bg-gray-400 my-16"></div>
       <BestSellingProducts />
       <div className="relative w-full h-36 sm:h-[400px] overflow-hidden mb-4">

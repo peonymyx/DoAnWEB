@@ -44,6 +44,7 @@ const Product = () => {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   useEffect(() => {
@@ -233,6 +234,21 @@ const Product = () => {
               </tbody>
             </table>
           </CardBody>
+          <div className="sticky bottom-0 right-0 flex justify-end p-4 bg-white">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`mx-1 px-3 py-1 rounded ${
+                  currentPage === page
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
           <div className="sticky bottom-0 right-0 flex justify-end p-4 bg-white">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button

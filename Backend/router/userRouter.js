@@ -7,6 +7,7 @@ const {
   getUserById,
   updateRole,
   wishListProduct,
+  removeFromWishList,
   getWishListProduct,
   addCouponToAllUsers,
   addCouponToUser,
@@ -20,6 +21,7 @@ router.put("/updateRole", updateRole);
 router.put("/:id", fileUpload.single("avatar"), updateUser);
 router.get("/:id", getUserById);
 router.post("/wishListProduct", wishListProduct);
+router.delete("/removeFromWishList/:id/:productId", removeFromWishList);
 router.get("/wishListProduct/:id", getWishListProduct);
 // Route để thêm coupon vào danh sách của tất cả người dùng
 router.post('/coupons/add-to-all', allowRole(["admin"]), addCouponToAllUsers);

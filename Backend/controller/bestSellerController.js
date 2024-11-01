@@ -35,4 +35,6 @@ const bestSeller = async (req, res) => {
   }
 };
 
-module.exports = { bestSeller };
+module.exports = {
+  bestSeller,
+};
