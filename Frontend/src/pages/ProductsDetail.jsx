@@ -211,4 +211,4 @@ const Favatie = () => {
   );
 };
 
-export default ProductsDetail;
+export default Favatie;
