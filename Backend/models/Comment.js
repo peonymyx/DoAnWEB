@@ -9,7 +9,7 @@ const commentSchema = new Schema(
     },
     Product_id: {
       type: Schema.Types.ObjectId,
-      ref: "product",
+      ref: "Product",
     },
     content: {
       type: String,
