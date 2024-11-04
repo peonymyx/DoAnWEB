@@ -1,4 +1,5 @@
 const product = require("../models/Product");
+const orderDetail = require("../models/oderDetail");
 const mongoose = require('mongoose'); 
 
 const addProduct = async (req, res) => {
@@ -84,10 +85,22 @@ const getProductById = async (req, res) => {
   }
 };
 
+const updateSoldCount = async (req, res) => {
+  const { id } = req.params;
+  try {
+    let soldCount = (await orderDetail.find({ Product_id: id })).reduce((sum, current) => sum + current.quantity, 0);
+    const Product = product.findByIdAndUpdate(id, { soldCount });
+    res.status(200).json({ Product });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   addProduct,
   getProduct,
   deleteProduct,
   updateProduct,
   getProductById,
+  updateSoldCount
 };
