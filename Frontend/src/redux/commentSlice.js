@@ -13,20 +13,30 @@ const token = Cookies.get("token");
 
 export const addComment = createAsyncThunk(
   "comment/addComment",
-  async (commentData, { rejectWithValue }) => {
+  async (payload, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("token");
       const res = await axios.post(
         "http://localhost:3000/api/v1/comment/addComment",
-        commentData,
+        payload,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Thêm token vào header
+            "Content-Type": "application/json",
+            token: `Bearer ${token}`,
           },
         }
       );
-      return res.data;
+      Swal.fire({
+        icon: "success",
+        text: "Thêm bình luận thành công",
+      });
+      return res.data.comment;
     } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: "Vui lòng đăng nhập để bình luận",
+        confirmButtonText: ` <a href="/login">Đăng Nhập</a> `,
+      });
       return rejectWithValue(error.response.data);
     }
   }

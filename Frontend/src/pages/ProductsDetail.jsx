@@ -19,31 +19,22 @@ const ProductsDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const product = useSelector((state) => state.product.products);
-  const auth = useSelector((state) => state.auth.currentUser);
+  const auth = useSelector((state) => state.auth);
   const userId = auth?._id;
   const commentList = useSelector((state) => state.comment.comment);
   const { pathname } = useLocation();
 
-  const handleAddComment = async (comment) => {
-    if (!auth) {
-      // Kiểm tra userId thay vì auth
-      // navigate("/login");
-      // return;
-    }
-
-    try {
+  const handleAddComment = (comment) => {
+    if (!auth.currentUser) {
+      navigate("/login");
+      return null;
+    } else {
       const data = {
         user_id: userId,
         product_id: id,
         content: comment,
       };
-      console.log("data", data);
-      await dispatch(addComment(data));
-      setComment(""); // Clear comment input after successful submission
-    } catch (error) {
-      console.error("Failed to add comment:", error);
-      // Có thể hiển thị thông báo lỗi cho người dùng
-      setError("Có lỗi xảy ra khi thêm bình luận. Vui lòng thử lại.");
+      dispatch(addComment(data));
     }
   };
 
@@ -117,7 +108,7 @@ const ProductsDetail = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-16 sm:mt-24">
+    <div className="container mx-auto px-4 py-8 mt-10 sm:mt-16">
       <div className="flex flex-col lg:flex-row lg:space-x-8">
         <div className="lg:w-1/2 mb-8 lg:mb-0">
           <div className="w-full h-64 sm:h-96 lg:h-[calc(100vh-300px)] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
@@ -179,7 +170,7 @@ const ProductsDetail = () => {
             </button>
             <button
               onClick={handleWishlist}
-              className="flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-gray-100 transition duration-300 flex items-center justify-center text-md sm:text-xl"
+              className="flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-pink-500 hover:text-white transition duration-300 flex items-center justify-center text-md sm:text-xl"
             >
               Thêm vào danh sách yêu thích
             </button>
@@ -188,17 +179,18 @@ const ProductsDetail = () => {
       </div>
 
       {/* COMMENT */}
-      <div className="row mt-5">
+      <div className="row my-5">
         <div className="col">
-          <h3>Bình Luận</h3>
           <form>
             <div className="form-group">
-              <label htmlFor="message">Bình Luận:</label>
+              <label htmlFor="message" className="text-2xl my-7 font-bold">
+                Bình Luận
+              </label>
               <textarea
                 id="message"
                 name="message"
                 rows="4"
-                className="form-control"
+                className="form-control text-lg"
                 placeholder="Nhập bình luận của bạn..."
                 onChange={(e) => setComment(e.target.value)}
               ></textarea>
@@ -208,7 +200,7 @@ const ProductsDetail = () => {
                 e.preventDefault();
                 handleAddComment(comment);
               }}
-              className="btn btn-primary mt-3"
+              className="btn btn-primary mt-6"
             >
               Gửi
             </button>
@@ -220,11 +212,6 @@ const ProductsDetail = () => {
           {commentList.length > 0 ? (
             commentList.map((item) => (
               <div key={item._id} className="media mb-4">
-                <img
-                  src="https://via.placeholder.com/40"
-                  alt="User Avatar"
-                  className="mr-3 rounded-circle"
-                />
                 <div className="media-body">
                   <h5 className="mt-0">{item.user_id?.username}</h5>
                   <p>{item.content}</p>
@@ -243,79 +230,10 @@ const ProductsDetail = () => {
               </div>
             ))
           ) : (
-            <p>Không có bình luận nào.</p>
+            <p className="text-lg mb-2">Không có bình luận nào...</p>
           )}
         </div>
       </div>
-      {/* <div className="mt-12">
-        <h3 className="text-xl sm:text-2xl font-bold mb-4 text-black text-left">
-          Bình luận
-        </h3>
-        {error && (
-          <div
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-            role="alert"
-          >
-            <span className="block sm:inline">{error}</span>
-          </div>
-        )}
-        <form onSubmit={handleAddComment} className="mb-8">
-          <textarea
-            id="message"
-            rows="4"
-            className="w-full p-2 border rounded text-sm sm:text-base"
-            placeholder="Enter your comment..."
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            required
-          ></textarea>
-          <button
-            type="submit"
-            className="mt-2 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 text-sm sm:text-base"
-          >
-            Submit
-          </button>
-        </form>
-
-        <div className="space-y-6">
-          {commentList.length > 0 ? (
-            commentList.map((item) => (
-              <div key={item._id} className="bg-gray-100 p-4 rounded">
-                <div className="flex items-center mb-2">
-                  <img
-                    src={
-                      item.user_id?.avatar || "https://via.placeholder.com/40"
-                    }
-                    alt="User Avatar"
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full mr-3"
-                  />
-                  <div>
-                    <h5 className="font-semibold text-sm sm:text-base">
-                      {item.user_id?.username}
-                    </h5>
-                    <small className="text-gray-500 text-xs sm:text-sm">
-                      {new Date(item.createdAt).toLocaleString()}
-                    </small>
-                  </div>
-                </div>
-                <p className="mb-2 text-sm sm:text-base">{item.content}</p>
-                {userId === item?.user_id?._id && (
-                  <button
-                    onClick={() => handleDeleteComment(item._id)}
-                    className="text-red-600 hover:text-red-800 transition duration-300 text-sm sm:text-base"
-                  >
-                    Delete
-                  </button>
-                )}
-              </div>
-            ))
-          ) : (
-            <p className="text-sm sm:text-base">
-              No comments yet. Be the first to comment!
-            </p>
-          )}
-        </div>
-      </div> */}
     </div>
   );
 };
