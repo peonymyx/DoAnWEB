@@ -1,45 +1,51 @@
-import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductById } from "../redux/productSlice";
-import axios from "axios";
 import {
   addComment,
   deleteCommentByAuthor,
   getCommentByProductId,
 } from "../redux/commentSlice";
 import { addToCart } from "../redux/cartSlice";
-import Footer from "../components/post/Footer";
+import axios from "axios";
+import { AlertCircle, ShoppingCart } from "lucide-react";
 import Swal from "sweetalert2";
 
-function ProductsDetail() {
+const ProductsDetail = () => {
   const [comment, setComment] = useState("");
-  const { id } = useParams();
-  const dispatch = useDispatch();
-  const product = useSelector((state) => state.product.product);
-  const auth = useSelector((state) => state.auth);
-  const userId = auth.currentUser?._id;
   const [selectedSize, setSelectedSize] = useState("");
   const [error, setError] = useState("");
-
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const product = useSelector((state) => state.product.products);
+  const auth = useSelector((state) => state.auth);
+  const userId = auth?._id;
   const commentList = useSelector((state) => state.comment.comment);
-  
+  const { pathname } = useLocation();
+
   const handleAddComment = (comment) => {
     if (!auth.currentUser) {
       navigate("/login");
       return null;
-    }else{
-    const data = {
-      user_id: userId,
-      product_id: id,
-      content: comment,
-    };
-    dispatch(addComment(data));
+    } else {
+      const data = {
+        user_id: userId,
+        product_id: id,
+        content: comment,
+      };
+      dispatch(addComment(data));
     }
-}
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   const handleDeleteComment = (id) => {
     dispatch(deleteCommentByAuthor(id));
   };
+
   useEffect(() => {
     dispatch(getProductById(id));
     dispatch(getCommentByProductId(id));
@@ -52,29 +58,9 @@ function ProductsDetail() {
 
   const navigate = useNavigate();
 
-
-  const handleAddToCart = () => {
-    if (!selectedSize) {
-      setError("Vui lòng chọn kích cỡ trước khi thêm vào giỏ hàng.");
-      return;
-    }
-
-    const data = {
-      user_id: userId,
-      product_id: id,
-      image: product.image,
-      name: product.name,
-      price: product.price,
-      description: product.description,
-      size: selectedSize,
-    };
-    dispatch(addToCart(data));
-    navigate("/cart");
-  };
-
   const handleWishlist = async () => {
     try {
-      await axios.post("http://localhost:3000/api/v1/wishListProduct", {
+      await axios.post("http://localhost:3000/api/v1/users/wishListProduct", {
         id: userId,
         productId: id,
       });
@@ -96,62 +82,115 @@ function ProductsDetail() {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
+  useEffect(() => {
+    dispatch(getProductById(id));
+    dispatch(getCommentByProductId(id));
+  }, [id, dispatch]);
+
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      setError("Vui lòng chọn kích cỡ trước khi thêm vào giỏ hàng.");
+      return;
+    }
+
+    const data = {
+      user_id: userId,
+      product_id: id,
+      image: product.image,
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      size: selectedSize,
+    };
+    console.log("datacar", data);
+    dispatch(addToCart(data));
+    navigate("/cart");
+  };
+
   return (
-    <div className="container py-5 mt-24">
-      <div className="row">
-        <div className="col-md-5">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="img-fluid"
-            style={{ borderRadius: "5px", border: "1px solid #ddd", height: "auto", marginLeft: "120px" }}
-          />
-        </div>
-        <div className="col-md-6">
-          <h1 className="display-4">{product.name}</h1>
-          <h2 className="text-danger">{formatPrice(product.price)} VNĐ</h2>
-          <p className="lead" dangerouslySetInnerHTML={{ __html: product.description }}></p>
-          <div className="mb-4">
-            <strong>Kích cỡ: </strong>
-            {product?.size?.map((size) => (
-              <span
-                key={size}
-                onClick={() => handleSelectSize(size)}
-                className={`badge badge-${selectedSize === size ? "primary" : "secondary"} mx-1 p-2 cursor-pointer`}
-              >
-                {size}
-              </span>
-            ))}
+    <div className="container mx-auto px-4 py-8 mt-10 sm:mt-16">
+      <div className="flex flex-col lg:flex-row lg:space-x-8">
+        <div className="lg:w-1/2 mb-8 lg:mb-0">
+          <div className="w-full h-64 sm:h-96 lg:h-[calc(100vh-300px)] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full object-contain"
+            />
           </div>
-          {error && <div className="text-danger">{error}</div>}
-          <button
-            onClick={handleAddToCart}
-            className="btn btn-primary btn-lg btn-block mb-2"
-            disabled={!selectedSize} // Disable button when no size is selected
-          >
-            THÊM VÀO GIỎ HÀNG
-          </button>
-          <button
-            onClick={handleWishlist}
-            className="btn btn-outline-secondary btn-lg btn-block"
-          >
-            THÊM VÀO YÊU THÍCH
-          </button>
+        </div>
+        <div className="lg:w-1/2 flex flex-col">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4">
+            {product.name}
+          </h1>
+          <h2 className="text-xl sm:text-2xl text-red-600 font-semibold mb-4">
+            {formatPrice(product.price)} VNĐ
+          </h2>
+          <div
+            className="prose prose-sm sm:prose mb-6 flex-grow overflow-auto max-h-48 sm:max-h-64 lg:max-h-96"
+            dangerouslySetInnerHTML={{ __html: product.description }}
+          ></div>
+          <div className="mb-6">
+            <strong className="block mb-2">Size:</strong>
+            <div className="flex flex-wrap gap-2">
+              {product?.size?.map((size) => (
+                <button
+                  key={size}
+                  onClick={() => handleSelectSize(size)}
+                  className={`px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded ${
+                    selectedSize === size
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 text-gray-800"
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div>
+          {error && (
+            <div
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+              role="alert"
+            >
+              <span className="flex items-center text-sm">
+                <AlertCircle className="h-4 w-4 mr-2" />
+                {error}
+              </span>
+            </div>
+          )}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={handleAddToCart}
+              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 flex items-center justify-center text-md sm:text-xl"
+              disabled={!selectedSize}
+            >
+              <ShoppingCart className="mr-2 h-4 w-4 sm:h-6 sm:w-6" />
+              Thêm giỏ hàng
+            </button>
+            <button
+              onClick={handleWishlist}
+              className="flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-pink-500 hover:text-white transition duration-300 flex items-center justify-center text-md sm:text-xl"
+            >
+              Thêm vào danh sách yêu thích
+            </button>
+          </div>
         </div>
       </div>
-    
-      {/* Comment Section */}
-      <div className="row mt-5">
+
+      {/* COMMENT */}
+      <div className="row my-5">
         <div className="col">
-          <h3>Bình Luận</h3>
           <form>
             <div className="form-group">
-              <label htmlFor="message">Bình Luận:</label>
+              <label htmlFor="message" className="text-2xl my-7 font-bold">
+                Bình Luận
+              </label>
               <textarea
                 id="message"
                 name="message"
                 rows="4"
-                className="form-control"
+                className="form-control text-lg"
                 placeholder="Nhập bình luận của bạn..."
                 onChange={(e) => setComment(e.target.value)}
               ></textarea>
@@ -161,7 +200,7 @@ function ProductsDetail() {
                 e.preventDefault();
                 handleAddComment(comment);
               }}
-              className="btn btn-primary mt-3"
+              className="btn btn-primary mt-6"
             >
               Gửi
             </button>
@@ -173,11 +212,6 @@ function ProductsDetail() {
           {commentList.length > 0 ? (
             commentList.map((item) => (
               <div key={item._id} className="media mb-4">
-                <img
-                  src="https://via.placeholder.com/40"
-                  alt="User Avatar"
-                  className="mr-3 rounded-circle"
-                />
                 <div className="media-body">
                   <h5 className="mt-0">{item.user_id?.username}</h5>
                   <p>{item.content}</p>
@@ -196,13 +230,12 @@ function ProductsDetail() {
               </div>
             ))
           ) : (
-            <p>Không có bình luận nào.</p>
+            <p className="text-lg mb-2">Không có bình luận nào...</p>
           )}
         </div>
       </div>
-      <Footer />
     </div>
   );
-}
+};
 
 export default ProductsDetail;

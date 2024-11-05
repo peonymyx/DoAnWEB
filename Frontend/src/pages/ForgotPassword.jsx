@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
 
@@ -20,7 +21,7 @@ const ForgotPassword = () => {
           title: "Hoàn thành",
           text: "Đã gửi về email thành công",
         });
-        setEmail(""); 
+        setEmail("");
       } else {
         Swal.fire({
           icon: "error",
@@ -38,15 +39,16 @@ const ForgotPassword = () => {
       });
     }
   };
+
   return (
-    <div className=" pt-28">
+    <div className="flex items-center justify-center h-[480px]">
       <div
-        className="p-4 border border-gray-200 rounded-full max-w-[400px] mx-auto mt-20 flex items-center"
+        className="p-4 border border-gray-200 rounded-full max-w-[400px] flex items-center"
         aria-label="form-send-email"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="w-6 h-6"
+          className="w-8 h-8"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -61,18 +63,18 @@ const ForgotPassword = () => {
         <div className="flex-1">
           <input
             type="text"
-            className="w-full px-5 text-black bg-transparent outline-none placeholder:text-black"
-            placeholder="Your email"
+            className="w-full pl-4 pr-16 text-xl text-black bg-transparent outline-none placeholder:text-black"
+            placeholder="Nhập email của bạn"
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <span
           onClick={handleSubmit}
-          className="flex-shrink-0 rotate-45 cursor-pointer"
+          className="flex-shrink-0 rotate-45 cursor-pointer mb-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6"
+            className="w-8 h-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

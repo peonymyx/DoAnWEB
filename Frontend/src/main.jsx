@@ -28,12 +28,12 @@ import OtherSuccess from "./pages/OtherSuccess.jsx";
 import Dashboard from "./components/Admin/pageAdmin/Dashboard.jsx";
 import LayoutAdmin from "./components/LayoutAdmin.jsx";
 import CategoryMain from "./components/Admin/pageAdmin/CategoryMain.jsx";
-import Productlist from "./components/post/ProductList.jsx";
 import ListProducts from "./pages/ListProducts.jsx";
 import MyOrder from "./pages/MyOrder.jsx";
 import MyOrderDetail from "./pages/MyOrderDetail.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import Favatie from "./pages/favatie.jsx";
+import CouponAdmin from "./components/Admin/pageAdmin/Coupon.jsx";
 const router = createBrowserRouter([
   {
     element: <Layoutmain></Layoutmain>,
@@ -42,10 +42,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <HomePage></HomePage>,
       },
-    {
-      path:"/fava",
-      element:<Favatie></Favatie>
-    },
+      {
+        path: "/fava",
+        element: <Favatie></Favatie>,
+      },
       {
         path: "/othersuccess",
         element: <OtherSuccess></OtherSuccess>,
@@ -58,8 +58,6 @@ const router = createBrowserRouter([
         path: "/reset-password",
         element: <ResetPassword></ResetPassword>,
       },
-     
-     
       {
         path: "/cart",
         element: <Cart></Cart>,
@@ -69,16 +67,12 @@ const router = createBrowserRouter([
         element: <PayProducts></PayProducts>,
       },
       {
-        path: "/vacxindetail/:id",
+        path: "/productdetail/:id",
         element: <ProductsDetail></ProductsDetail>,
       },
       {
         path: "/UpdateMain/:id",
         element: <UpdateMain></UpdateMain>,
-      },
-      {
-        path: "/productlist",
-        element: <Productlist></Productlist>,
       },
       {
         path: "/listProducts",
@@ -121,14 +115,15 @@ const router = createBrowserRouter([
         path: "/Editproduct/:id",
         element: <EditProduct></EditProduct>,
       },
-   
-    
+      {
+        path: "/CouponManage",
+        element: <CouponAdmin></CouponAdmin>
+      },
       {
         path: "/AccountManagement",
         element: <AccountManagement></AccountManagement>,
       },
-     
-      
+
       {
         path: "/addCategory",
         element: <AddCategory></AddCategory>,
@@ -137,8 +132,7 @@ const router = createBrowserRouter([
         path: "/category",
         element: <CategoryMain></CategoryMain>,
       },
-     
-     
+
       {
         path: "/mess",
         element: <Message></Message>,
@@ -154,7 +148,7 @@ const router = createBrowserRouter([
       {
         path: "/otherdetails/:id",
         element: <OtherDetails></OtherDetails>,
-      }
+      },
     ],
   },
   {
@@ -165,7 +159,6 @@ const router = createBrowserRouter([
     path: "/register",
     element: <SignUp></SignUp>,
   },
-  
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

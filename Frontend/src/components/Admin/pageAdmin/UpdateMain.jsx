@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import { getUserById, updateUser } from "../../../redux/userSlice";
 import "../cruds/loading.css";
 import Footer from "../../post/Footer";
-import axios from "axios";
 
 const schema = yup.object().shape({
   username: yup.string().required("Vui lòng nhập tên"),
@@ -45,9 +44,14 @@ const UpdateMain = () => {
   const [age, setAge] = useState(user?.age);
   const [address, setAddress] = useState(user?.address);
   const [avatar, setAvatar] = useState(user?.avatar);
+  const [preview, setPreview] = useState(user?.avatar); // state để lưu URL preview
 
   const handleSelectFile = (e) => {
-    setAvatar(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      setAvatar(file);
+      setPreview(URL.createObjectURL(file)); // tạo URL tạm thời để preview ảnh
+    }
   };
 
   const handleUpdateUser = async (data) => {
@@ -66,15 +70,13 @@ const UpdateMain = () => {
 
   return (
     <div>
-      <div className="container mt-28">
+      <div className="container mt-28 max-w-[550px]">
         <form
           onSubmit={handleSubmit(handleUpdateUser)}
           className="container-fluid bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           encType="multipart/form-data"
         >
-          <h1 style={{ fontSize: "25px", marginLeft: "50px" }}>
-            Cập Nhật Thông Tin
-          </h1>
+          <h1 className="text-3xl mb-3">Cập Nhật Thông Tin</h1>
           {isLoading && (
             <div className="loading-overlay">
               <div className="loading-spinner"></div>
@@ -82,13 +84,13 @@ const UpdateMain = () => {
           )}
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="mb-3 block font-bold text-[#07074D] text-xl"
               htmlFor="username"
             >
               Tên
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full rounded-md border text-xl border-[#e0e0e0] bg-white py-3 px-6 font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               type="text"
               id="name"
               {...register("username")}
@@ -99,13 +101,13 @@ const UpdateMain = () => {
           </div>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="mb-3 block font-bold text-[#07074D] text-xl"
               htmlFor="phone"
             >
               Số điện thoại
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full rounded-md border text-xl border-[#e0e0e0] bg-white py-3 px-6 font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               type="text"
               id="phone"
               {...register("phone")}
@@ -116,13 +118,13 @@ const UpdateMain = () => {
           </div>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="mb-3 block font-bold text-[#07074D] text-xl"
               htmlFor="gender"
             >
               Giới tính
             </label>
             <select
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full rounded-md border text-xl border-[#e0e0e0] bg-white py-3 px-6 font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               id="gender"
               {...register("gender")}
             >
@@ -140,13 +142,13 @@ const UpdateMain = () => {
           </div>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="mb-3 block font-bold text-[#07074D] text-xl"
               htmlFor="dateOfBirth"
             >
               Ngày sinh
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full rounded-md border text-xl border-[#e0e0e0] bg-white py-3 px-6 font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               type="date"
               id="dateOfBirth"
               {...register("age")}
@@ -156,13 +158,13 @@ const UpdateMain = () => {
           </div>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="mb-3 block font-bold text-[#07074D] text-xl"
               htmlFor="address"
             >
-              Địa chỉ cụ thể
+              Địa chỉ
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full rounded-md border text-xl border-[#e0e0e0] bg-white py-3 px-6 font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               type="text"
               id="address"
               {...register("address")}
@@ -173,26 +175,32 @@ const UpdateMain = () => {
           </div>
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="mb-3 block font-bold text-[#07074D] text-xl"
               htmlFor="avatar"
             >
               Ảnh đại diện
             </label>
             <input
               onChange={handleSelectFile}
-              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none w-full rounded-md border text-xl border-[#e0e0e0] bg-white py-3 px-6 font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               type="file"
+              accept="image/*"
             />
-            <img className="w-[50px] rounded-full mt-2" src={avatar} alt="" />
+            {preview && (
+              <img
+                className="w-[50px] h-[50px] rounded-full mt-2 object-cover"
+                src={preview}
+                alt="Avatar preview"
+              />
+            )}
           </div>
           <div className="flex items-center justify-between">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-blue-500 mx-auto hover:bg-blue-700 text-lg text-white font-bold py-3 px-6 mt-4 rounded focus:outline-none focus:shadow-outline"
             >
               Cập nhật thông tin
             </button>
-            <a href="/">quay lại</a>
           </div>
         </form>
       </div>

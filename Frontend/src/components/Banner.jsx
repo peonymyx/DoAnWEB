@@ -1,93 +1,79 @@
-import React from 'react';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+
+const BANNER = [
+  { src: "./HangMuaDong.webp" },
+  { src: "./KhuyenMai.webp" },
+  { src: "./XaHangHe.webp" },
+  { src: "./AnhGiaMoi.webp" },
+];
 
 const Banner = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % BANNER.length);
+    }, 3000); // Change slide every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? BANNER.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % BANNER.length);
+  };
+
   return (
-    <div className="container-fluid p-0 mt-20">
-      <div
-        id="header-carousel"
-        className="carousel slide carousel-fade"
-        data-bs-ride="carousel"
-      >
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img
-              className="w-100"
-              src="https://bizweb.dktcdn.net/100/494/200/themes/918976/assets/slider_2.jpg?1712645470838"
-              alt="Image"
-            />
-            <div className="carousel-caption d-flex flex-column align-items-center justify-content-center">
-              <div className="p-3" style={{ maxWidth: "900px" }}>
-                <h5 className="text-white text-uppercase mb-3 animated slideInDown fw-bold" style={{ color: 'white', textShadow: '2px 2px 5px red' }}>
-                  Hãy trân trọng sức khỏe của bạn
-                </h5>
-                <h1 className="display-1 text-dark mb-md-4 animated zoomIn fw-bold" style={{ color: 'white', textShadow: '2px 2px 5px red' }}>
-                  HÃY TIÊM PHÒNG VẮC-XIN NGAY HÔM NAY
-                </h1>
-                <a
-                  href="/RegisterVaccination"
-                  className="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft"
+    <div className="relative md:h-[778px] h-[220px] overflow-hidden">
+      <div className="carousel-inner relative w-full h-full">
+        <AnimatePresence initial={false}>
+          {BANNER.map(
+            (item, index) =>
+              index === currentIndex && (
+                <motion.div
+                  key={index}
+                  className="absolute inset-0"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
                 >
-                  Đăng Ký Ngay
-                </a>
-                <a
-                  href=""
-                  className="btn btn-secondary py-md-3 px-md-5 animated slideInRight pd-10"
-                >
-                  Liên Hệ Ngay
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="carousel-item active">
-            <img
-              className="w-100"
-              src="https://bizweb.dktcdn.net/100/494/200/themes/918976/assets/slider_2.jpg?1712645470838"
-              alt="Image"
-            />
-            <div className="carousel-caption d-flex flex-column align-items-center justify-content-center">
-              <div className="p-3" style={{ maxWidth: "900px" }}>
-                <h5 className="text-white text-uppercase mb-3 animated slideInDown fw-bold" style={{ color: 'white', textShadow: '2px 2px 5px red' }}>
-                  Hãy trân trọng sức khỏe của bạn
-                </h5>
-                <h1 className="display-1 text-white mb-md-4 animated zoomIn fw-bold" style={{ color: 'white', textShadow: '2px 2px 5px red' }}>
-                  CHÚNG TÔI LUÔN SẴN SÀNG PHỤC VỤ BẠN 
-                </h1>
-                <a
-                  href="/RegisterVaccination"
-                  className="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft"
-                >
-                  Đăng Ký Ngay
-                </a>
-                <a
-                  href=""
-                  className="btn btn-secondary py-md-3 px-md-5 animated slideInRight"
-                >
-                  Liên Hệ Ngay
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+                  <Link to="/listproducts">
+                    <img
+                      className="w-full h-full object-cover"
+                      src={item.src}
+                      alt="Image"
+                    />
+                  </Link>
+                </motion.div>
+              )
+          )}
+        </AnimatePresence>
       </div>
       <button
-      style={{marginTop:"-100px",position:"absolute"}}
-        className="carousel-control-prev"
         type="button"
-        data-bs-target="#header-carousel"
-        data-bs-slide="prev"
+        className="flex absolute top-0 left-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none hover:scale-125 transition-transform duration-100"
+        onClick={handlePrev}
       >
-        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span className="visually-hidden">Previous</span>
+        <span className="carousel-control-prev-icon flex justify-center items-center w-6 h-6 rounded-full sm:w-10 sm:h-10 text-white">
+          <span className="hidden">Previous</span>
+        </span>
       </button>
       <button
-      style={{marginTop:"-100px",position:"absolute"}}
-        className="carousel-control-next"
         type="button"
-        data-bs-target="#header-carousel"
-        data-bs-slide="next"
+        className="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none hover:scale-125 transition-transform duration-100"
+        onClick={handleNext}
       >
-        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-        <span className="visually-hidden">Next</span>
+        <span className="carousel-control-next-icon flex justify-center items-center w-6 h-6 rounded-full sm:w-10 sm:h-10  text-white">
+          <span className="hidden">Next</span>
+        </span>
       </button>
     </div>
   );

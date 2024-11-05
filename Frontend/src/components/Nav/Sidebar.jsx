@@ -1,93 +1,146 @@
-import "./Sidebar.css";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../redux/authSlice";
 import {
   HomeIcon,
-  QrCodeIcon,
-  ClipboardDocumentListIcon,
   ShoppingBagIcon,
   ChatBubbleOvalLeftIcon,
   UserIcon,
+  Bars3Icon,
+  XMarkIcon,
+  ChartBarIcon,
+  TagIcon,
+  CogIcon,
+  Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
-import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
 const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(false); // Manage sidebar open/close state
   const auth = useSelector((state) => state.auth.currentUser);
+  const dispatch = useDispatch();
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen); // Toggle sidebar
+  };
+
+  const handleLogOut = () => {
+    dispatch(logOut());
+    window.location.href = "/";
+  };
+
+  // NavItem component to handle each sidebar link
+  // eslint-disable-next-line react/prop-types
+  const NavItem = ({ to, icon: Icon, text }) => (
+    <li>
+      <Link
+        to={to}
+        className="flex items-center p-2 text-white hover:bg-blue-800 rounded-lg"
+        onClick={() => setIsOpen(false)} // Close sidebar on item click
+      >
+        <Icon className="h-6 w-6" />
+        <span className="ml-3">{text}</span>
+      </Link>
+    </li>
+  );
 
   return (
-    <>
-      <div className="h-max">
-        {/* <!-- Main Sidebar Container --> */}
-        <aside className="main-sidebar sidebar-primary bg-blue-900 elevation-4">
-          <div className="sidebar pt-4">
-            <nav className="mt-2">
-              <ul
-                className="nav nav-pills nav-sidebar flex-column"
-                data-widget="treeview"
-                role="menu"
-                data-accordion="false"
-              >
-                <li className="nav-item">
-                  <Link to="/dashBoard" className="nav-link text-white">
-                    <HomeIcon className="h-5 w-5" />
-                    <p className="ml-2">Thống Kê</p>
-                  </Link>
-                </li>
-                <li className="nav-item ">
-                  <Link to="/category" className="nav-link text-white">
-                    <HomeIcon className="h-5 w-5" />
-                    <p className="ml-2">Danh Mục Sản Phẩm</p>
-                  </Link>
-                </li>
-                <li className="nav-item ">
-                  <Link to="/ProductManagement" className="nav-link text-white">
-                    <MedicalInformationIcon className="h-5 w-5" />
-                    <p className="ml-2">Quản Lý Sản Phẩm</p>
-                  </Link>
-                </li>
-            
-          
-                <li className="nav-item ">
-                  <Link to="/otherManagement" className="nav-link text-white">
-                    <ShoppingBagIcon className="h-5 w-5" />
-                    <p className="ml-2">Quản Lý Hóa Đơn</p>
-                  </Link>
-                </li>
-               
-              
-                <li className="nav-item ">
-                  <Link to="/mess" className="nav-link text-white">
-                    <ChatBubbleOvalLeftIcon className="h-5 w-5" />
-                    <p className="ml-2">Tin Nhắn</p>
-                  </Link>
-                </li>
-                <li className="nav-item ">
-                  <Link to="/commentManagement" className="nav-link text-white">
-                    <HomeIcon className="h-5 w-5" />
-                    <p className="ml-2">Bình Luận</p>
-                  </Link>
-                </li>
-                <li className="nav-item ">
-                  
-                </li>
-               
-                {auth.role === "admin" && (
-                  <li className="nav-item ">
-                    <Link
-                      to="/AccountManagement"
-                      className="nav-link text-white"
-                    >
-                      <UserIcon className="h-5 w-5" />
-                      <p className="ml-2">Quản Lý Tài Khoản</p>
-                    </Link>
-                  </li>
-                )}
-              </ul>
-            </nav>
-          </div>
-        </aside>
+    <div>
+      {/* Mobile toggle button */}
+      <div className="lg:hidden fixed top-4 left-4 z-40">
+        {isOpen ? (
+          <button
+            onClick={toggleSidebar}
+            className="text-white hover:bg-blue-800 rounded-lg p-2 ml-[190px] mt-[2px]"
+            aria-label="Toggle Sidebar"
+          >
+            <XMarkIcon className="h-6 w-6" />
+          </button>
+        ) : (
+          <button
+            onClick={toggleSidebar}
+            className="text-white bg-gray-300 border-gray-500 border hover:bg-blue-800 rounded-lg p-2 ml-3"
+            aria-label="Toggle Sidebar"
+          >
+            <Bars3Icon className="h-6 w-6" />
+          </button>
+        )}
       </div>
-    </>
+
+      {/* Sidebar */}
+      <aside
+        className={`bg-blue-900 w-72 fixed top-0 bottom-0 z-30 transition-transform duration-300 ease-in-out overflow-y-auto 
+        ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
+      >
+        <div className="flex flex-col h-full justify-between">
+          {/* Menu Items */}
+          <div className="px-3 py-4">
+            <ul className="space-y-6 text-xl mt-4">
+              <NavItem to="/dashBoard" icon={ChartBarIcon} text="Thống Kê" />
+              <NavItem to="/category" icon={TagIcon} text="Danh Mục Sản Phẩm" />
+              <NavItem
+                to="/ProductManagement"
+                icon={CogIcon}
+                text="Quản Lý Sản Phẩm"
+              />
+              <NavItem
+                to="/otherManagement"
+                icon={ShoppingBagIcon}
+                text="Quản Lý Đơn Hàng"
+              />
+              <NavItem
+                to="/mess"
+                icon={ChatBubbleOvalLeftIcon}
+                text="Tin Nhắn"
+              />
+              <NavItem to="/CouponManage" icon={Cog6ToothIcon} text="Coupon" />
+              <NavItem
+                to="/commentManagement"
+                icon={HomeIcon}
+                text="Bình Luận"
+              />
+              {auth.role === "admin" && (
+                <NavItem
+                  to="/AccountManagement"
+                  icon={UserIcon}
+                  text="Quản Lý Tài Khoản"
+                />
+              )}
+            </ul>
+          </div>
+
+          {/* Footer with Home and Logout Buttons */}
+          <div className="p-4">
+            <div className="flex flex-col items-center space-y-4">
+              {/* Trang chủ button */}
+              <Link
+                to="/"
+                className="flex items-center text-white bg-blue-700 hover:bg-blue-500 p-2 rounded-lg w-full justify-center"
+                onClick={() => setIsOpen(false)}
+              >
+                <span className="font-semibold">Trang chủ</span>
+              </Link>
+
+              {/* Logout button */}
+              <Link
+                onClick={handleLogOut}
+                className="flex items-center text-white bg-red-500 hover:bg-red-700 p-2 rounded-lg w-full justify-center"
+              >
+                <span className="font-semibold">Đăng xuất</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* Overlay to close the sidebar when clicking outside */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 opacity-50 lg:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
+    </div>
   );
 };
 

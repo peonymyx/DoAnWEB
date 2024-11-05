@@ -4,12 +4,12 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import "./loading.css";
 import { addProduct } from "../../../redux/productSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCategory } from "../../../redux/categorySlice";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import Sidebar from "../../Nav/Sidebar";
+import { handleUploadToImgBB } from "../../../config/apiConfig";
 
 const schema = yup.object().shape({
   name: yup.string().required("Vui lòng nhập tên"),
@@ -17,9 +17,8 @@ const schema = yup.object().shape({
 });
 
 const AddProduct = () => {
-  const [imageUpload, setImageUpload] = useState("");
+  const [imageUpload, setImageUpload] = useState(null);
   const [description, setDescription] = useState("");
-  const availableSizes = ["S", "M", "L", "XL"];
   const [selectedSize, setSelectedSize] = useState([]);
   const isLoading = useSelector((state) => state.product.isLoading);
   const {
@@ -33,49 +32,67 @@ const AddProduct = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
   const category = useSelector((state) => state.category.category);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (user.role !== "admin") {
       navigate("/login");
     }
-  }, [user.role]);
+  }, [user.role, navigate]);
 
   useEffect(() => {
     dispatch(getCategory());
-  }, []);
+  }, [dispatch]);
 
   const handleUploadImage = async (e) => {
-    setImageUpload(e.target.files[0]);
+    const file = e.target.files[0];
+    console.log("Selected file:", file);
+    setImageUpload(file);
   };
 
-  const handleSizeSelect = (size) => {
-    setSelectedSize(size);
-  };
   const handleAddSize = (size) => {
-    setSelectedSize([...selectedSize, size]);
+    setSelectedSize((prevSelectedSize) =>
+      prevSelectedSize.includes(size)
+        ? prevSelectedSize.filter((s) => s !== size)
+        : [...prevSelectedSize, size]
+    );
   };
 
   const handleAddProduct = async (data) => {
-    const { name, address, category, price } = data;
+    const { name, category, price } = data;
+    console.log("Form data:", data);
+    console.log("Image file:", imageUpload);
+
+    if (!imageUpload) {
+      console.error("No image file selected");
+      return;
+    }
+
+    const imageUrl = await handleUploadToImgBB(imageUpload);
+
+    if (!imageUrl) {
+      console.error("Failed to upload image");
+      return;
+    }
 
     await dispatch(
       addProduct({
         name,
-        size: selectedSize,
-        address,
+        size: selectedSize.join(","),
         category,
-        description: description,
+        description,
         price,
-        image: imageUpload,
+        image: imageUrl,
       })
     );
+
+    navigate("/ProductManagement");
   };
 
   return (
-    <div className=" flex h-[100vh]">
-      <Sidebar />
-      <div className="container mx-auto p-4 overflow-y-scroll">
+    <div className="flex h-[100vh]">
+      <div className="container min-h-screen mx-auto p-4">
         <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-xl">
-          <h1 className="font-bold text-2xl text-center mb-6">Thêm Sản Phẩm</h1>
+          <h1 className="font-bold text-3xl text-center mb-6">Thêm Sản Phẩm</h1>
           {isLoading && (
             <div className="loading-overlay">
               <div className="loading-spinner"></div>
@@ -87,7 +104,10 @@ const AddProduct = () => {
             encType="multipart/form-data"
           >
             <div className="mb-4">
-              <label htmlFor="name" className="text-sm text-gray-600">
+              <label
+                htmlFor="name"
+                className="mb-3 block font-bold text-[#07074D] text-xl"
+              >
                 Tên sản phẩm:
               </label>
               <input
@@ -95,13 +115,16 @@ const AddProduct = () => {
                 type="text"
                 id="name"
                 placeholder="Hãy nhập tên sản phẩm"
-                className="w-full border border-gray-300 rounded-lg py-2 px-3 outline-none bg-transparent  focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-md border text-xl border-[#e0e0e0] bg-white py-3 px-6 font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                 {...register("name")}
               />
               <p className="text-red-500 mt-1">{errors.name?.message}</p>
             </div>
             <div className="mb-4">
-              <label htmlFor="name" className="text-sm text-gray-600">
+              <label
+                htmlFor="price"
+                className="mb-3 block font-bold text-[#07074D] text-xl"
+              >
                 Giá sản phẩm:
               </label>
               <input
@@ -109,65 +132,77 @@ const AddProduct = () => {
                 type="text"
                 id="price"
                 placeholder="Hãy nhập giá sản phẩm"
-                className="w-full border border-gray-300 rounded-lg py-2 px-3 outline-none bg-transparent  focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-md border text-xl border-[#e0e0e0] bg-white py-3 px-6 font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                 {...register("price")}
               />
               <p className="text-red-500 mt-1">{errors.price?.message}</p>
             </div>
-
-            {/* <div className="flex gap-2 items-center">
-              {availableSizes.map((size) => (
-                <div
-                  key={size}
-                  onClick={() => handleSizeSelect(size)}
-                  className={`border p-2 cursor-pointer size-item ${
-                    selectedSize === size ? "active border-primary" : ""
-                  }`}
-                >
-                  {size}
-                </div>
-              ))}
-            </div> */}
-            <div className="flex gap-2 items-center mt-2">
-            <label htmlFor="name" className="text-sm text-gray-600">
-               Chọn Size:
+            <div className="flex gap-2 items-center mt-2 mb-4">
+              <label
+                htmlFor="size"
+                className="block font-bold text-[#07074D] text-xl"
+              >
+                Chọn Size:
               </label>
               {selectedSize.map((size) => (
                 <div
                   key={size}
-                  className="border p-2 cursor-pointer size-item active border-primary"
+                  className="border px-4 py-2 cursor-pointer size-item active border-primary"
                 >
                   {size}
                 </div>
               ))}
             </div>
-            <div className="flex gap-2 items-center mt-2">
+            <div className="flex gap-2 items-center mt-2 text-xl">
               <button
                 type="button"
                 onClick={() => handleAddSize("S")}
-                className="border p-2 cursor-pointer size-item"
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("S") ? "bg-blue-500 text-white" : ""
+                }`}
               >
-                Thêm S
+                S
               </button>
-              <button type="button" onClick={() => handleAddSize("M")}>
-                Thêm M
+              <button
+                type="button"
+                onClick={() => handleAddSize("M")}
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("M") ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                M
               </button>
-              <button type="button" onClick={() => handleAddSize("L")}>
-                Thêm L
+              <button
+                type="button"
+                onClick={() => handleAddSize("L")}
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("L") ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                L
               </button>
-              <button type="button" onClick={() => handleAddSize("XL")}>
-                Thêm XL
+              <button
+                type="button"
+                onClick={() => handleAddSize("XL")}
+                className={`border px-4 py-2 cursor-pointer size-item ${
+                  selectedSize.includes("XL") ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                XL
               </button>
             </div>
-
-            <div className="mb-4">
-              {/* danh muc */}
-              <label htmlFor="origin" className="text-sm text-gray-600">
-                Danh muc
+            <div className="my-4">
+              <label
+                htmlFor="category"
+                className="mb-3 block font-bold text-[#07074D] text-xl"
+              >
+                Danh mục
               </label>
               <select
-              className="w-full border border-gray-300 rounded-lg py-2 px-3 outline-none bg-transparent focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              name="category" {...register("category")}>
+                className="w-full rounded-md border text-xl border-[#e0e0e0] bg-white py-3 px-6 font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                name="category"
+                {...register("category")}
+              >
                 {category.map((item) => (
                   <option key={item._id} value={item._id}>
                     {item.name}
@@ -176,27 +211,27 @@ const AddProduct = () => {
               </select>
             </div>
             <div className="mb-4">
-              <label htmlFor="image" className="text-sm text-gray-600">
+              <label
+                htmlFor="image"
+                className="mb-3 block font-bold text-[#07074D] text-xl"
+              >
                 Hình ảnh:
               </label>
               <input
                 {...register("image")}
                 type="file"
                 onChange={handleUploadImage}
+                className="text-xl"
               />
               <p className="text-red-500 mt-1">{errors.file?.message}</p>
             </div>
             <div className="mb-4">
-              <label htmlFor="description" className="text-sm text-gray-600">
+              <label
+                htmlFor="description"
+                className="mb-3 block font-bold text-[#07074D] text-xl"
+              >
                 Mô tả:
               </label>
-              {/* <textarea
-              name="description"
-              id="description"
-              className="w-full h-32 border border-gray-300 rounded-lg py-2 px-3 outline-none bg-transparent resize-none  focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              placeholder="Enter description"
-              {...register("description")}
-            /> */}
               <ReactQuill
                 theme="snow"
                 value={description}
@@ -207,12 +242,17 @@ const AddProduct = () => {
               />
               <p className="text-red-500 mt-1">{errors.description?.message}</p>
             </div>
-    
-
-            <button className="block w-full h-10 bg-blue-800 text-white rounded-md">
-              Thêm
-            </button>
-            <a href="/ProductManagement">quay lại</a>
+            <div className="flex justify-between">
+              <Link to="/ProductManagement" className="mt-3 text-lg py-3 px-6">
+                Quay Lại
+              </Link>
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-lg text-white font-bold py-3 px-6 mt-3 rounded focus:outline-none focus:shadow-outline"
+              >
+                Thêm sản phẩm
+              </button>
+            </div>
           </form>
         </div>
       </div>

@@ -1,5 +1,6 @@
-const User = require("../models/Users");
-
+const User = require("../models/Users")
+const Coupon = require("../models/Coupon")
+const Product = require("../models/Product.js")
 const getUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -54,21 +55,74 @@ const updateRole = async (req, res) => {
 
 const wishListProduct = async (req, res) => {
   const { id, productId } = req.body;
-  const user = await User.findByIdAndUpdate(id, {
-    $push: { wishList: productId },
-  });
-  res.status(200).json({ user });
-};
 
-const getWishListProduct = async (req, res) => {
-  const { id } = req.params;
   try {
-    const user = await User.findById(id).populate("wishList");
-    res.status(200).json({ user });
+    // Kiểm tra xem người dùng có tồn tại không
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "Người dùng không tìm thấy." });
+    }
+
+    // Kiểm tra xem sản phẩm có tồn tại không
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Sản phẩm không tìm thấy." });
+    }
+
+    // Thêm productId vào wishList nếu chưa có
+    if (!user.wishList.includes(productId)) {
+      user.wishList.push(productId);
+      await user.save();
+    }
+
+    res.status(200).json({ wishList: user.wishList });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+const removeFromWishList = async (req, res) => {
+  const { id, productId } = req.params;
+
+  try {
+    // Kiểm tra xem người dùng có tồn tại không
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "Người dùng không tìm thấy." });
+    }
+
+    // Kiểm tra xem sản phẩm có tồn tại không
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Sản phẩm không tìm thấy." });
+    }
+
+    // Xóa productId ra khỏi wishList nếu đã có
+    if (user.wishList.includes(productId)) {
+      user.wishList.filter(otherId => otherId !== productId);
+      await user.save();
+    }
+
+    res.status(200).json({ wishList: user.wishList });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+const getWishListProduct = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id)
+    if (!user) {
+      return res.status(404).json({ message: "Người dùng không tìm thấy." });
+    }
+    res.status(200).json({ wishList: user.wishList });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 const addCouponToUser = async (req, res) => {
   const { userId, couponId } = req.params;
@@ -130,12 +184,12 @@ const getUserCoupons = async (req, res) => {
   const { userId } = req.params;
 
   try {
-      const user = await User.findById(userId).populate('availableCoupons');
+      const user = await User.findById(userId).populate('CouponList');
       if (!user) {
           return res.status(404).json({ message: 'Người dùng không tìm thấy.' });
       }
 
-      res.status(200).json(user.availableCoupons);
+      res.status(200).json(user.CouponList);
   } catch (error) {
       res.status(500).json({ message: 'Có lỗi xảy ra.', error });
   }
@@ -148,6 +202,7 @@ module.exports = {
   getUserById,
   updateRole,
   wishListProduct,
+  removeFromWishList,
   getWishListProduct,
   addCouponToUser,
   getUserCoupons,

@@ -340,7 +340,7 @@ const SignUp = () => {
               <div>
                 <label
                   htmlFor="username"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-md font-medium text-gray-700"
                 >
                   Tên Người Dùng
                 </label>
@@ -348,15 +348,15 @@ const SignUp = () => {
                   type="text"
                   id="username"
                   name="username"
-                  placeholder="Tên người dùng"
+                  placeholder="Nhập tên người dùng"
                   {...register("username")}
-                  className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 w-full text-md border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
               </div>
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-md font-medium text-gray-700"
                 >
                   Email
                 </label>
@@ -364,15 +364,15 @@ const SignUp = () => {
                   type="text"
                   id="email"
                   name="email"
-                  placeholder="Email"
+                  placeholder="Nhập email"
                   {...register("email")}
-                  className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 w-full text-md border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
               </div>
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-md font-medium text-gray-700"
                 >
                   Mật Khẩu
                 </label>
@@ -382,28 +382,28 @@ const SignUp = () => {
                   name="password"
                   placeholder="Nhập mật khẩu"
                   {...register("password")}
-                  className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 text-md w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
               </div>
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-md font-medium text-gray-700"
                 >
                   Xác Nhận Mật Khẩu
                 </label>
                 <input
                   id="confirmPassword"
                   type="password"
-                  placeholder="Xác nhận mật khẩu"
+                  placeholder="Nhập lại mật khẩu"
                   {...register("confirmPassword")}
-                  className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 w-full text-md border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
               </div>
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-md font-medium text-gray-700"
                 >
                   Số Điện Thoại
                 </label>
@@ -413,13 +413,13 @@ const SignUp = () => {
                   name="phone"
                   placeholder="Nhập số điện thoại"
                   {...register("phone")}
-                  className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 w-full border text-md rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
               </div>
               <div>
                 <label
                   htmlFor="address"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-md font-medium text-gray-700"
                 >
                   Địa Chỉ
                 </label>
@@ -428,26 +428,32 @@ const SignUp = () => {
                   type="text"
                   placeholder="Nhập địa chỉ"
                   {...register("address")}
-                  className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                  className="mt-1 p-2 text-md w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                 />
               </div>
               <div className="flex flex-col mb-3">
                 <label
                   htmlFor="birthday"
-                  className="text-sm font-medium cursor-pointer"
+                  className="text-md font-medium cursor-pointer"
                 >
                   Birthday
                 </label>
-                <input type="date" id="age" name="age" {...register("age")} />
+                <input
+                  type="date"
+                  id="age"
+                  name="age"
+                  {...register("age")}
+                  className="mt-2 text-md"
+                />
               </div>
               <div className="flex flex-col mb-3">
                 <label
                   htmlFor="gender"
-                  className="text-sm font-medium cursor-pointer"
+                  className="text-md font-medium cursor-pointer"
                 >
                   Gender
                 </label>
-                <select {...register("gender")}>
+                <select {...register("gender")} className="text-md mt-2">
                   <option value="nam">Nam</option>
                   <option value="nu">Nữ</option>
                 </select>
@@ -455,16 +461,19 @@ const SignUp = () => {
               <div>
                 <button
                   type="submit"
-                  className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
+                  className="w-full mt-3 bg-black text-white p-2 rounded-md hover:bg-gray-800 text-lg focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
                 >
                   Đăng Ký
                 </button>
               </div>
             </form>
-            <div className="mt-4 text-sm text-gray-600 text-center">
+            <div className="mt-4 text-md text-gray-600 text-center">
               <p>
-                Bạn đã có tài khoản?
-                <a href="/login" className="text-black hover:underline">
+                Bạn đã có tài khoản?{" "}
+                <a
+                  href="/login"
+                  className="text-black hover:underline font-semibold"
+                >
                   Đăng nhập
                 </a>
               </p>

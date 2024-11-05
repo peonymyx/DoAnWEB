@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOther, updateStatusOder } from "../../../redux/otherSlice";
 import "../cruds/loading.css";
-import ReactHTMLTableToExcel from "react-html-table-to-excel";
+import { CSVLink } from "react-csv";
 
 const TABLE_HEAD = [
   "ID",
@@ -18,17 +18,39 @@ const TABLE_HEAD = [
   "Tên người nhận",
   "Số điện thoại",
   "Địa chỉ",
-  "Ghi chú",
   "Trạng thái",
+  "Ghi chú",
   "",
   "",
 ];
 
+const ITEMS_PER_PAGE = 5;
+
 const OtherManagement = () => {
   const dispatch = useDispatch();
   const other = useSelector((state) => state.other.other);
+  console.log("other", other);
 
+  const csvData = other.map((item) => ({
+    _id: item._id,
+    username: item.username,
+    phone_number: item.phone_number,
+    address: item.address,
+    note: item.note,
+    status: item.status,
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+    cart: JSON.stringify(
+      item.cart.map((cartItem) => ({
+        name: cartItem.name,
+        quantity: cartItem.quantity,
+        price: cartItem.price,
+      }))
+    ),
+  }));
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  // const isLoading = useSelector((state) => state.user.isLoading);
 
   useEffect(() => {
     dispatch(getOther());
@@ -36,6 +58,7 @@ const OtherManagement = () => {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   const handleUpdateStatus = (id) => {
@@ -62,24 +85,38 @@ const OtherManagement = () => {
     });
   };
 
+  const filteredOther = Array.isArray(other)
+    ? other.filter(
+        (item) =>
+          item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.phone_number.includes(searchTerm)
+      )
+    : [];
+
+  const totalPages = Math.ceil(filteredOther.length / ITEMS_PER_PAGE);
+  // const paginatedOther = filteredOther.slice(
+  //   (currentPage - 1) * ITEMS_PER_PAGE,
+  //   currentPage * ITEMS_PER_PAGE
+  // );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <div className="content-wrapper">
-      <Card className="ml-2 w-full">
-        <CardHeader
-          floated={false}
-          shadow={false}
-          className="content-header rounded-none"
-        >
-          <div className="mb-12 flex flex-col justify-between gap-8 md:flex-row md:items-center">
-            <div className="font-bold mt-7 text-2xl ml-6">
-              <h1>Quản Lý Hóa Đơn Thanh Toán</h1>
+    <div className="flex">
+      <Card className="w-full shadow-none">
+        <CardHeader floated={false} shadow={false} className="rounded-none">
+          <div className="mb-3 mt-3 flex flex-col justify-between gap-8 md:flex-row md:items-center">
+            <div className="font-bold text-3xl">
+              <h1>Quản Lý Đơn hàng</h1>
             </div>
-            <div className="flex w-full shrink-0 gap-2 md:w-max mt-10 mr-3">
-              <div className="flex items-center gap-5 w-[350px] h-[40px] border border-gray-200 rounded-lg py-3 px-5">
+            <div className="flex w-full shrink-0 gap-2 md:w-max mr-3">
+              <div className="flex items-center gap-5 w-[350px] h-[40px] border border-gray-200 rounded-lg py-4 px-4">
                 <input
                   type="text"
-                  className="w-full outline-none bg-transparent"
-                  placeholder="Tìm kiếm..."
+                  className="w-full outline-none bg-transparent text-xl"
+                  placeholder="Nhập tên tìm kiếm..."
                   value={searchTerm}
                   onChange={handleSearch}
                 />
@@ -101,29 +138,32 @@ const OtherManagement = () => {
                 </span>
               </div>
             </div>
-            <ReactHTMLTableToExcel
+            <CSVLink
               id="test-table-xls-button"
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full"
-              table="otherTable"
-              filename="hoadon"
-              sheet="hoadon"
-              buttonText="Xuất Excel"
-            />
+              data={csvData}
+              filename="hoa-don.csv"
+            >
+              Xuất Excel
+            </CSVLink>
           </div>
         </CardHeader>
-        <CardBody className="container-fluid px-0 ">
-          <table id="otherTable" className="w-full min-w-max table-auto text-left">
+        <CardBody className="px-2 container-fluid overflow-x-auto">
+          <table
+            id="otherTable"
+            className="w-full min-w-max table-auto text-left"
+          >
             <thead>
               <tr className="bg-blue-800 text-white">
                 {TABLE_HEAD.map((head) => (
                   <th
                     key={head}
-                    className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                    className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 text-center"
                   >
                     <Typography
                       variant="small"
                       color="blue-gray"
-                      className="font-normal leading-none"
+                      className="font-normal leading-none text-xl"
                     >
                       {head}
                     </Typography>
@@ -132,20 +172,31 @@ const OtherManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {other.filter(
+              {other
+                ?.filter(
                   (item) =>
-                    item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.username
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
                     item.phone_number.includes(searchTerm)
                 )
                 .map(
                   (
-                    { _id, createdAt, username, phone_number, address, note, status },
+                    {
+                      _id,
+                      createdAt,
+                      username,
+                      phone_number,
+                      address,
+                      note,
+                      status,
+                    },
                     index
                   ) => {
-                    const isLast = index === other.length - 1;
+                    const isLast = index === other?.length - 1;
                     const classes = isLast
-                      ? "p-4"
-                      : "p-4 border-b border-blue-gray-50";
+                      ? "px-8 py-4 text-center"
+                      : "px-8 py-4 border-b border-blue-gray-50 text-center";
 
                     return (
                       <tr key={_id}>
@@ -153,7 +204,7 @@ const OtherManagement = () => {
                           <Typography
                             variant="small"
                             color="blue-gray"
-                            className="font-normal"
+                            className="font-bold text-xl"
                           >
                             {_id}
                           </Typography>
@@ -162,7 +213,7 @@ const OtherManagement = () => {
                           <Typography
                             variant="small"
                             color="blue-gray"
-                            className="font-normal"
+                            className="font-normal text-xl"
                           >
                             {new Date(createdAt).toLocaleDateString("en-GB")}
                           </Typography>
@@ -171,7 +222,7 @@ const OtherManagement = () => {
                           <Typography
                             variant="small"
                             color="blue-gray"
-                            className="font-normal"
+                            className="font-normal text-xl"
                           >
                             {username}
                           </Typography>
@@ -180,7 +231,7 @@ const OtherManagement = () => {
                           <Typography
                             variant="small"
                             color="blue-gray"
-                            className="font-normal"
+                            className="font-normal text-xl"
                           >
                             {phone_number}
                           </Typography>
@@ -189,7 +240,7 @@ const OtherManagement = () => {
                           <Typography
                             variant="small"
                             color="blue-gray"
-                            className="font-normal"
+                            className="font-normal text-xl"
                           >
                             {address}
                           </Typography>
@@ -198,29 +249,27 @@ const OtherManagement = () => {
                           <Typography
                             variant="small"
                             color="blue-gray"
-                            className="font-normal"
+                            className="font-normal text-xl"
                           >
-                            {note}
+                            {status}
                           </Typography>
                         </td>
                         <td className={classes}>
                           <Typography
                             variant="small"
                             color="blue-gray"
-                            className="font-normal"
+                            className="font-normal text-xl w-[160px]"
                           >
-                            {status}
+                            {note}
                           </Typography>
                         </td>
                         <td className={classes}>
                           <button
-                            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full"
+                            className="mr-3 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full"
                             onClick={() => handleUpdateStatus(_id)}
                           >
                             Cập nhật
                           </button>
-                        </td>
-                        <td className={classes}>
                           <Link to={`/otherdetails/${_id}`}>
                             <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full">
                               Chi tiết
@@ -234,10 +283,60 @@ const OtherManagement = () => {
             </tbody>
           </table>
         </CardBody>
+        <div className="fixed bottom-10 right-10 flex justify-center items-center">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={`mx-1 px-3 py-1 rounded ${
+                currentPage === page ? "bg-blue-500 text-white" : "bg-gray-200"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
       </Card>
     </div>
+    // bảng xuất file excel
+    // <table id="otherTableForExcel" className="hidden">
+    //   <thead>
+    //     <tr>
+    //       {TABLE_HEAD.slice(0, -2).map(
+    //         (
+    //           head // Loại bỏ hai cột cuối cùng
+    //         ) => (
+    //           <th key={head}>{head}</th>
+    //         )
+    //       )}
+    //     </tr>
+    //   </thead>
+    //   <tbody>
+    //     {paginatedOther.map(
+    //       ({
+    //         _id,
+    //         createdAt,
+    //         username,
+    //         phone_number,
+    //         address,
+    //         note,
+    //         status,
+    //       }) => (
+    //         <tr key={_id}>
+    //           <td>{_id}</td>
+    //           <td>{new Date(createdAt).toLocaleDateString("en-GB")}</td>
+    //           <td>{username}</td>
+    //           <td>{phone_number}</td>
+    //           <td>{address}</td>
+    //           <td>{note}</td>
+    //           <td>{status}</td>
+    //         </tr>
+    //       )
+    //     )}
+    //   </tbody>
+    // </table>
+    // </div>
   );
 };
 
 export default OtherManagement;
-

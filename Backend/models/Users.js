@@ -28,7 +28,7 @@ const userSchema = new Schema(
     wishList: [
       {
         type: Schema.Types.ObjectId,
-        ref: "product",
+        ref: "Product",
       },
     ],
     phone: {
@@ -76,10 +76,10 @@ const userSchema = new Schema(
       minlength: 3,
       default: "user",
     },
-    CouponList: {
-       type: mongoose.Schema.Types.ObjectId,
+    CouponList: [{
+       type: Schema.Types.ObjectId,
         ref: 'DiscountCode'
-    }
+    }]
   },
   {
     timestamps: true,

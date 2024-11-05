@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
-import axios from "axios";
+import axios from "../utils/axios";
 import Cookies from "js-cookie";
 
 const initialState = {
