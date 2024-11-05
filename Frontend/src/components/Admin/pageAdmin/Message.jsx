@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Card, CardHeader } from "@material-tailwind/react";
 import SendIcon from "@mui/icons-material/Send";
 import io from "socket.io-client";
-import { Link } from "react-router-dom";
 
 const socket = io("http://localhost:3000");
 
@@ -24,13 +23,17 @@ const Message = () => {
 
   const sendMessage = () => {
     if (message) {
-      const newMessage = { text: message, role: "admin", timestamp: Date.now() };
+      const newMessage = {
+        text: message,
+        role: "admin",
+        timestamp: Date.now(),
+      };
       socket.emit("message", newMessage);
       console.log(newMessage);
       setMessage("");
     }
   };
-  
+
   return (
     <div className="content-wrapper flex h-screen ">
       <Card className="w-full ml-4 p-4">
@@ -63,7 +66,6 @@ const Message = () => {
                     <div key={index} className="flex justify-start mb-2">
                       <div className="bg-slate-300 text-black rounded-md p-2">
                         {item.text}
-                        
                       </div>
                     </div>
                   );
@@ -71,8 +73,9 @@ const Message = () => {
                   return (
                     <div key={index} className="flex justify-end mb-2">
                       <div className="bg-blue-300 text-black rounded-md p-2">
-                        {item.text}<br/ >
-                        <small>{formattedTime}</small> 
+                        {item.text}
+                        <br />
+                        <small>{formattedTime}</small>
                       </div>
                     </div>
                   );
