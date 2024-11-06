@@ -15,8 +15,8 @@ import Swal from "sweetalert2";
 const TABLE_HEAD = [
   "Mã ID",
   "Tên",
-  "Tên Sản phẩm",
   "Nội dung",
+  "Tên Sản phẩm",
   "Ngày đăng",
   "",
 ];
@@ -131,7 +131,7 @@ const CommentManagement = () => {
                               color="blue-gray"
                               className="font-normal text-xl"
                             >
-                              {product_id?.name}
+                              {content}
                             </Typography>
                           </td>
                           <td className={classes}>
@@ -140,7 +140,7 @@ const CommentManagement = () => {
                               color="blue-gray"
                               className="font-normal text-xl"
                             >
-                              {content}
+                              {product_id?.name}
                             </Typography>
                           </td>
                           <td className={classes}>

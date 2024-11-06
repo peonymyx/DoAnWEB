@@ -21,7 +21,9 @@ const OtherSuccess = () => {
             />
           </svg>
           <button className="bg-green-500 hover:bg-green-600 text-white hover:text-white font-bold py-3 px-6 rounded">
-            <a href="/">Quay Lại Trang Chủ</a>
+            <a href="/" className="hover:text-white">
+              Quay Lại Trang Chủ
+            </a>
           </button>
         </div>
       </div>

@@ -94,10 +94,10 @@ const OtherManagement = () => {
     : [];
 
   const totalPages = Math.ceil(filteredOther.length / ITEMS_PER_PAGE);
-  // const paginatedOther = filteredOther.slice(
-  //   (currentPage - 1) * ITEMS_PER_PAGE,
-  //   currentPage * ITEMS_PER_PAGE
-  // );
+  const paginatedOther = filteredOther.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -172,118 +172,110 @@ const OtherManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {other
-                ?.filter(
-                  (item) =>
-                    item.username
-                      .toLowerCase()
-                      .includes(searchTerm.toLowerCase()) ||
-                    item.phone_number.includes(searchTerm)
-                )
-                .map(
-                  (
-                    {
-                      _id,
-                      createdAt,
-                      username,
-                      phone_number,
-                      address,
-                      note,
-                      status,
-                    },
-                    index
-                  ) => {
-                    const isLast = index === other?.length - 1;
-                    const classes = isLast
-                      ? "px-8 py-4 text-center"
-                      : "px-8 py-4 border-b border-blue-gray-50 text-center";
+              {paginatedOther.map(
+                (
+                  {
+                    _id,
+                    createdAt,
+                    username,
+                    phone_number,
+                    address,
+                    note,
+                    status,
+                  },
+                  index
+                ) => {
+                  const isLast = index === paginatedOther.length - 1;
+                  const classes = isLast
+                    ? "px-8 py-4 text-center"
+                    : "px-8 py-4 border-b border-blue-gray-50 text-center";
 
-                    return (
-                      <tr key={_id}>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-bold text-xl"
-                          >
-                            {_id}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal text-xl"
-                          >
-                            {new Date(createdAt).toLocaleDateString("en-GB")}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal text-xl"
-                          >
-                            {username}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal text-xl"
-                          >
-                            {phone_number}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal text-xl"
-                          >
-                            {address}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal text-xl"
-                          >
-                            {status}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal text-xl w-[160px]"
-                          >
-                            {note}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <button
-                            className="mr-3 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full"
-                            onClick={() => handleUpdateStatus(_id)}
-                          >
-                            Cập nhật
+                  return (
+                    <tr key={_id}>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-bold text-xl"
+                        >
+                          {_id}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal text-xl"
+                        >
+                          {new Date(createdAt).toLocaleDateString("en-GB")}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal text-xl"
+                        >
+                          {username}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal text-xl"
+                        >
+                          {phone_number}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal text-xl"
+                        >
+                          {address}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal text-xl"
+                        >
+                          {status}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal text-xl w-[160px]"
+                        >
+                          {note}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <button
+                          className="mr-3 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full"
+                          onClick={() => handleUpdateStatus(_id)}
+                        >
+                          Cập nhật
+                        </button>
+                        <Link to={`/otherdetails/${_id}`}>
+                          <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full">
+                            Chi tiết
                           </button>
-                          <Link to={`/otherdetails/${_id}`}>
-                            <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full">
-                              Chi tiết
-                            </button>
-                          </Link>
-                        </td>
-                      </tr>
-                    );
-                  }
-                )}
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                }
+              )}
             </tbody>
           </table>
         </CardBody>
-        <div className="fixed bottom-10 right-10 flex justify-center items-center">
+        <div className="sticky bottom-0 right-0 flex justify-end p-4 bg-white">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
@@ -298,44 +290,6 @@ const OtherManagement = () => {
         </div>
       </Card>
     </div>
-    // bảng xuất file excel
-    // <table id="otherTableForExcel" className="hidden">
-    //   <thead>
-    //     <tr>
-    //       {TABLE_HEAD.slice(0, -2).map(
-    //         (
-    //           head // Loại bỏ hai cột cuối cùng
-    //         ) => (
-    //           <th key={head}>{head}</th>
-    //         )
-    //       )}
-    //     </tr>
-    //   </thead>
-    //   <tbody>
-    //     {paginatedOther.map(
-    //       ({
-    //         _id,
-    //         createdAt,
-    //         username,
-    //         phone_number,
-    //         address,
-    //         note,
-    //         status,
-    //       }) => (
-    //         <tr key={_id}>
-    //           <td>{_id}</td>
-    //           <td>{new Date(createdAt).toLocaleDateString("en-GB")}</td>
-    //           <td>{username}</td>
-    //           <td>{phone_number}</td>
-    //           <td>{address}</td>
-    //           <td>{note}</td>
-    //           <td>{status}</td>
-    //         </tr>
-    //       )
-    //     )}
-    //   </tbody>
-    // </table>
-    // </div>
   );
 };
 

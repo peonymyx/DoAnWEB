@@ -52,7 +52,7 @@ const Dashboard = () => {
             <div className="bg-blue-500 text-white p-4 rounded shadow-lg">
               <div className="text-lg">Tổng Doanh Thu</div>
               <div className="text-3xl font-bold mt-2">
-                {/* {totalRevenue?.toLocaleString("vi-VN")} Đ */}
+                {totalRevenue?.toLocaleString("vi-VN")} Đ
               </div>
               <div className="text-right mt-2">
                 <i className="fas fa-money-bill-wave text-xl"></i>

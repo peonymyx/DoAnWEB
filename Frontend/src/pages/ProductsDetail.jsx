@@ -20,7 +20,8 @@ const ProductsDetail = () => {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.product.products);
   const auth = useSelector((state) => state.auth);
-  const userId = auth?._id;
+  // const userId = auth?._id;
+  const userId = auth.currentUser._id;
   const commentList = useSelector((state) => state.comment.comment);
   const { pathname } = useLocation();
 
@@ -102,13 +103,12 @@ const ProductsDetail = () => {
       description: product.description,
       size: selectedSize,
     };
-    console.log("datacar", data);
     dispatch(addToCart(data));
     navigate("/cart");
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-10 sm:mt-16">
+    <div className="container sm:w-[1270px] mx-auto px-4 py-8 mt-10 sm:mt-16">
       <div className="flex flex-col lg:flex-row lg:space-x-8">
         <div className="lg:w-1/2 mb-8 lg:mb-0">
           <div className="w-full h-64 sm:h-96 lg:h-[calc(100vh-300px)] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
@@ -170,7 +170,7 @@ const ProductsDetail = () => {
             </button>
             <button
               onClick={handleWishlist}
-              className="flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-pink-500 hover:text-white transition duration-300 flex items-center justify-center text-md sm:text-xl"
+              className="flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-pink-500 hover:text-white transition duration-700 flex items-center justify-center text-md sm:text-xl"
             >
               Thêm vào danh sách yêu thích
             </button>
@@ -189,7 +189,7 @@ const ProductsDetail = () => {
               <textarea
                 id="message"
                 name="message"
-                rows="4"
+                rows="3"
                 className="form-control text-lg"
                 placeholder="Nhập bình luận của bạn..."
                 onChange={(e) => setComment(e.target.value)}
@@ -207,30 +207,41 @@ const ProductsDetail = () => {
           </form>
         </div>
       </div>
-      <div className="row mt-4">
-        <div className="col">
+      <div className="mt-4">
+        <div>
           {commentList.length > 0 ? (
             commentList.map((item) => (
-              <div key={item._id} className="media mb-4">
-                <div className="media-body">
-                  <h5 className="mt-0">{item.user_id?.username}</h5>
-                  <p>{item.content}</p>
-                  <small className="text-muted">
-                    {new Date(item.createdAt).toLocaleDateString()}
-                  </small>
-                  {userId === item?.user_id?._id && (
-                    <button
-                      onClick={() => handleDeleteComment(item._id)}
-                      className="btn btn-danger btn-sm ml-3"
-                    >
-                      Xóa
-                    </button>
-                  )}
+              <div
+                key={item._id}
+                className="flex flex-col sm:flex-row sm:items-start bg-white shadow rounded-lg p-4 mb-4"
+              >
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <h5 className="text-lg font-semibold text-gray-800">
+                        {item.user_id?.username || "Unknown User"}
+                      </h5>
+                      <small className="text-gray-500 text-sm">
+                        {new Date(item.createdAt).toLocaleDateString()}
+                      </small>
+                    </div>
+                    {userId === item?.user_id?._id && (
+                      <button
+                        onClick={() => handleDeleteComment(item._id)}
+                        className="text-red-500 hover:text-red-600 text-lg sm:xl mt-4"
+                      >
+                        Xóa
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-gray-700 mt-2 text-sm sm:text-base sm:ml-6">
+                    {item.content}
+                  </p>
                 </div>
               </div>
             ))
           ) : (
-            <p className="text-lg mb-2">Không có bình luận nào...</p>
+            <p className="text-lg text-gray-600">Không có bình luận nào...</p>
           )}
         </div>
       </div>
