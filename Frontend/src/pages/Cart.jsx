@@ -16,7 +16,7 @@ function Cart() {
   const auth = useSelector((state) => state.auth.currentUser);
   const cart = useSelector(selectCart);
   const [coupons, setCoupons] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [setLoading] = useState(true);
 
   const [discountedTotal, setDiscountedTotal] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -248,7 +248,7 @@ function Cart() {
           {/* Nút tiếp tục thanh toán */}
           <div className="mt-8">
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 hover:text-white"
+              className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 "
               onClick={() => {
                 if (auth) {
                   const CouponList = coupons.filter(
@@ -260,7 +260,7 @@ function Cart() {
             >
               <Link
                 to="/payproducts"
-                className="text-lg font-bold"
+                className="text-lg font-bold hover:text-white"
                 state={{ discountedTotal: getTotal().discountedTotal }}
               >
                 Tiếp tục thanh toán

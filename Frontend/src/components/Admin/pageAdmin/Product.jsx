@@ -249,21 +249,6 @@ const Product = () => {
               </button>
             ))}
           </div>
-          <div className="sticky bottom-0 right-0 flex justify-end p-4 bg-white">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                className={`mx-1 px-3 py-1 rounded ${
-                  currentPage === page
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-          </div>
         </Card>
       </div>
     </div>

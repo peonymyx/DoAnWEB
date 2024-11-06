@@ -70,12 +70,12 @@ export const updateUser = createAsyncThunk(
       });
       return response.data.user;
     } catch (error) {
-      Swal.fire({
-        title: "Error!",
-        text: "Update user failed!",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      // Swal.fire({
+      //   title: "Error!",
+      //   text: "Update user failed!",
+      //   icon: "error",
+      //   confirmButtonText: "OK",
+      // });
       return rejectWithValue(error.response.data);
     }
   }
