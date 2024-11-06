@@ -8,7 +8,21 @@ const statistical = async (req, res) => {
   try {
     const totalUsers = await Users.find({});
     const totalProducts = await Product.find({});
-    const totalComments = await Comment.find({});
+    const totalComments = await Comment.aggregate([
+      {
+        $group: {
+          _id: {
+            createdAt: {
+              $dateToString: {
+                format: "%d/%m/%Y",
+                date: "$createdAt"
+              }
+            }
+          },
+          comments: { $sum: 1 }
+        }
+      }
+    ]);
     const totalOrders = await Order.find({});
     const productSoldCounts = await Order.aggregate([
       { $unwind: "$cart" },
@@ -23,7 +37,7 @@ const statistical = async (req, res) => {
     res.json({
       totalUsers:totalUsers.length,
       totalProducts:totalProducts.length,
-      totalComments:totalComments.length,
+      totalComments:totalComments,
       totalOrders:totalOrders.length,
       productSoldCounts:productSoldCounts,
       totalRevenue:totalRevenue
