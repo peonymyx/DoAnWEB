@@ -5,8 +5,7 @@ const {
   getProduct,
   deleteProduct,
   updateProduct,
-  getProductById,
-  updateSoldCount
+  getProductById
 } = require("../controller/ProductsController");
   const { isAdmin, allowRole } = require("../middleware/middlewareController");
   const fileUpload = require("../middleware/cloudinary");
@@ -26,5 +25,4 @@ router.put(
   updateProduct
 );
 router.get("/:id", getProductById);
-router.put("/updateSoldCount/:id", updateSoldCount);
 module.exports = router;
