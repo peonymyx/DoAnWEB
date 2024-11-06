@@ -24,14 +24,6 @@ const statistical = async (req, res) => {
       }
     ]);
     const totalOrders = await Order.find({});
-    const productSoldCounts = await Order.aggregate([
-      { $unwind: "$cart" },
-      { $group: {
-          _id: "$cart.product_id",
-          soldCount: { $sum: "$cart.quantity" }
-        }
-      }
-    ]);
     const totalRevenue = (await OrderDetail.find({})).reduce((sum, current) => sum + current.totalPrices, 0);
 
     res.json({
@@ -39,7 +31,6 @@ const statistical = async (req, res) => {
       totalProducts:totalProducts.length,
       totalComments:totalComments,
       totalOrders:totalOrders.length,
-      productSoldCounts:productSoldCounts,
       totalRevenue:totalRevenue
     }); 
   } catch (error) {

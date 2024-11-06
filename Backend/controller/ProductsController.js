@@ -85,28 +85,37 @@ const getProductById = async (req, res) => {
   }
 };
 
-// const updateSoldCount = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const soldCount = await order.aggregate([
-//       { $match: { "cart.product_id": id } },
-//       { $unwind: "$cart" },
-//       { $group: {
-//           _id: "$cart.product_id",
-//           quantity: { $sum: "$cart.quantity" }
-//         }
-//       }
-//     ]);
-
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// }
+const updateSoldCount = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const soldCount = await order.aggregate([
+      { $match: {
+        $and: [
+          { "cart.product_id": id },
+          { "status": {
+            $in: ["Đã hoàn thành", "Đã thanh toán"]
+          } }
+        ] 
+      } },
+      { $unwind: "$cart" },
+      { $group: {
+          _id: "$cart.product_id",
+          quantity: { $sum: "$cart.quantity" }
+        }
+      }
+    ]);
+    const Product = product.findByIdAndUpdate(id, { soldCount });
+    res.status(200).json({ Product });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 module.exports = {
   addProduct,
   getProduct,
   deleteProduct,
   updateProduct,
-  getProductById
+  getProductById,
+  updateSoldCount
 };
