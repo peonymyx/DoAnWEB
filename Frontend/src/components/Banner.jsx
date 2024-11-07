@@ -10,24 +10,36 @@ const BANNER = [
 ];
 
 const Banner = () => {
+  // Khai báo state currentIndex, quản lý chỉ số của banner hiện tại
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // useEffect để tự động chuyển banner mỗi 3 giây
   useEffect(() => {
+    // Thiết lập một interval để tự động chuyển banner sau mỗi 3 giây
     const interval = setInterval(() => {
+      // Cập nhật currentIndex, khi hết mảng quay lại từ đầu
       setCurrentIndex((prevIndex) => (prevIndex + 1) % BANNER.length);
-    }, 3000); // Change slide every 3 seconds
+    }, 3000); // Đặt thời gian chờ giữa các lần chuyển banner là 3000ms (3 giây)
 
+    // Cleanup function để dọn dẹp interval khi component bị unmount
     return () => clearInterval(interval);
-  }, []);
+  }, []); // useEffect chỉ chạy một lần khi component mount, không phụ thuộc vào biến nào khác
 
+  // Hàm để chuyển đến banner trước
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
+      // Nếu currentIndex đang là 0, chuyển đến banner cuối cùng (BANNER.length - 1)
       prevIndex === 0 ? BANNER.length - 1 : prevIndex - 1
     );
   };
 
+  // Hàm để chuyển đến banner tiếp theo (next)
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % BANNER.length);
+    setCurrentIndex(
+      (prevIndex) =>
+        // Cập nhật currentIndex, khi đạt đến cuối mảng, quay lại từ đầu
+        (prevIndex + 1) % BANNER.length
+    );
   };
 
   return (

@@ -14,6 +14,11 @@ import { Link } from "react-router-dom";
 
 const ProductCard = ({ product, onRemoveFromWishlist }) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  if (!product) {
+    return null; // Return null if product is null or undefined
+  }
+
   return (
     <motion.div
       className="border rounded-lg p-2 hover:shadow-lg transition-shadow bg-white relative"
@@ -39,19 +44,6 @@ const ProductCard = ({ product, onRemoveFromWishlist }) => {
         <h2 className="text-sm sm:text-lg mt-3 font-bold truncate">
           {product.name}
         </h2>
-        {/* <div className="flex items-center mt-1">
-          {[...Array(5)].map((_, index) => (
-            <Star
-              key={index}
-              className={`h-4 w-4 ${
-                index < product.rating ? "text-yellow-500" : "text-gray-300"
-              }`}
-            />
-          ))}
-          <span className="ml-1 text-xs sm:text-sm text-gray-600">
-            ({product.rating})
-          </span>
-        </div> */}
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
         </p>
@@ -266,7 +258,7 @@ const Favatie = () => {
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
               {currentProducts.map((product) => (
                 <ProductCard
-                  key={product._id}
+                  key={product?._id}
                   product={product}
                   onRemoveFromWishlist={removeFromWishlist}
                 />

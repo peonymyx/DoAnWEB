@@ -35,19 +35,6 @@ const ProductCard = ({ product }) => {
         <h2 className="text-sm sm:text-lg mt-3 font-bold truncate">
           {product.name}
         </h2>
-        {/* <div className="flex items-center mt-1">
-          {[...Array(5)].map((_, index) => (
-            <Star
-              key={index}
-              className={`h-4 w-4 ${
-                index < product.rating ? "text-yellow-500" : "text-gray-300"
-              }`}
-            />
-          ))}
-          <span className="ml-1 text-xs sm:text-sm text-gray-600">
-            ({product.rating})
-          </span>
-        </div> */}
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
         </p>
@@ -71,45 +58,61 @@ ProductCard.propTypes = {
 };
 
 const Activities = () => {
+  // Import hook của Redux để dispatch action và hook của React để quản lý trạng thái
   const dispatch = useDispatch();
+
+  // Khai báo trạng thái của trang hiện tại, mặc định là trang 1
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Số sản phẩm hiển thị trên mỗi trang
   const productsPerPage = 4;
 
-  // Đảm bảo products luôn là một mảng
+  // Sử dụng useSelector để lấy danh sách sản phẩm từ Redux store
+  // Đảm bảo rằng dữ liệu products luôn là một mảng, nếu không trả về mảng rỗng
   const products = useSelector((state) => {
-    const productData = state.product.products;
+    const productData = state.product.products; // Lấy dữ liệu sản phẩm từ state
+    // Kiểm tra xem productData có phải là mảng không, nếu không trả về mảng rỗng
     return Array.isArray(productData) ? productData : [];
   });
 
+  // useEffect để gọi action lấy sản phẩm khi component mount hoặc khi dispatch thay đổi
   useEffect(() => {
-    dispatch(getProduct());
-  }, [dispatch]);
+    dispatch(getProduct()); // Gọi action getProduct để lấy dữ liệu sản phẩm từ API hoặc backend
+  }, [dispatch]); // Chạy lại mỗi khi dispatch thay đổi
 
-  // Tính toán các chỉ số và sản phẩm hiện tại
+  // Tính toán tổng số trang (totalPages) dựa trên tổng số sản phẩm và số sản phẩm mỗi trang
   const totalPages = Math.ceil(products.length / productsPerPage);
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+
+  // Tính toán chỉ số của sản phẩm cuối cùng và sản phẩm đầu tiên trong trang hiện tại
+  const indexOfLastProduct = currentPage * productsPerPage; // Chỉ số của sản phẩm cuối cùng trong trang hiện tại
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage; // Chỉ số của sản phẩm đầu tiên trong trang hiện tại
+
+  // Lấy danh sách sản phẩm hiển thị trong trang hiện tại bằng cách cắt mảng products
   const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
+    indexOfFirstProduct, // Bắt đầu từ sản phẩm đầu tiên trong trang hiện tại
+    indexOfLastProduct // Kết thúc tại sản phẩm cuối cùng trong trang hiện tại
   );
 
+  // Hàm để chuyển sang trang tiếp theo
   const nextPage = () => {
+    // Kiểm tra nếu trang hiện tại chưa phải là trang cuối cùng thì mới chuyển
     if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
+      setCurrentPage(currentPage + 1); // Cập nhật trạng thái currentPage để chuyển sang trang tiếp theo
     }
   };
 
+  // Hàm để quay lại trang trước
   const prevPage = () => {
+    // Kiểm tra nếu trang hiện tại chưa phải là trang đầu tiên thì mới quay lại
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+      setCurrentPage(currentPage - 1); // Cập nhật trạng thái currentPage để quay lại trang trước
     }
   };
 
-  // Reset trang khi products thay đổi
+  // useEffect để reset lại trang khi danh sách sản phẩm thay đổi
   useEffect(() => {
-    setCurrentPage(1);
-  }, [products.length]);
+    setCurrentPage(1); // Đặt lại trang hiện tại về 1 mỗi khi dữ liệu sản phẩm thay đổi
+  }, [products.length]); // Chạy lại khi độ dài của mảng sản phẩm thay đổi
 
   return (
     <div className="max-w-[1300px] mx-auto px-4 py-8">

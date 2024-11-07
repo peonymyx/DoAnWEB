@@ -1,7 +1,7 @@
 import {
-  PencilSquareIcon,
-  PlusIcon,
-  TrashIcon,
+  PencilSquareIcon, // Biểu tượng bút chì dùng để chỉnh sửa
+  PlusIcon, // Biểu tượng dấu cộng dùng để thêm danh mục
+  TrashIcon, // Biểu tượng thùng rác dùng để xóa danh mục
 } from "@heroicons/react/24/solid";
 import {
   Card,
@@ -10,63 +10,60 @@ import {
   CardBody,
   Button,
 } from "@material-tailwind/react";
-import Swal from "sweetalert2";
+import Swal from "sweetalert2"; // Thư viện thông báo SweetAlert2
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  deleteCategory,
-  getCategory,
-  updateCategory,
+  deleteCategory, // Hàm xóa danh mục
+  getCategory, // Hàm lấy danh sách danh mục
+  updateCategory, // Hàm cập nhật danh mục
 } from "../../../redux/categorySlice";
-import "../cruds/loading.css";
+import "../cruds/loading.css"; // Tệp CSS cho hiệu ứng loading
 import { Link } from "react-router-dom";
 
 const TABLE_HEAD = [
-  "Mã ID",
-  "Tên Danh Mục",
-  "Slug",
-  "Ngày Tạo",
-  "Ngày Sửa",
-  "",
+  "Mã ID", // Tiêu đề cột cho mã danh mục
+  "Tên Danh Mục", // Tiêu đề cột cho tên danh mục
+  "Slug", // Tiêu đề cột cho slug của danh mục
+  "Ngày Tạo", // Tiêu đề cột cho ngày tạo danh mục
+  "Ngày Sửa", // Tiêu đề cột cho ngày cập nhật danh mục
+  "", // Cột trống để chứa các nút hành động
 ];
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 5; // Số lượng mục hiển thị mỗi trang
 
 const CategoryMain = () => {
-  const category = useSelector((state) => state.category.category);
-  const isLoading = useSelector((state) => state.category.isLoading);
+  const category = useSelector((state) => state.category.category); // Lấy danh sách danh mục từ Redux
+  const isLoading = useSelector((state) => state.category.isLoading); // Kiểm tra trạng thái đang tải
   const dispatch = useDispatch();
-  // State for search term
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1); // State for current page
+  const [searchTerm, setSearchTerm] = useState(""); // State cho từ khóa tìm kiếm
+  const [currentPage, setCurrentPage] = useState(1); // State cho trang hiện tại
 
-  // Update search term on input change
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1); // Đặt lại trang về đầu khi tìm kiếm
   };
 
   useEffect(() => {
-    dispatch(getCategory());
+    dispatch(getCategory()); // Gọi hàm lấy danh mục khi component tải
   }, [dispatch]);
 
   const handleDelete = (id) => {
-    dispatch(deleteCategory(id));
+    dispatch(deleteCategory(id)); // Gọi hàm xóa danh mục khi nhấn nút Xóa
   };
 
-  // Filter and paginate categories
   const filteredCategory = category.filter(
     (item) =>
       item.name && item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  const totalPages = Math.ceil(filteredCategory.length / ITEMS_PER_PAGE);
+  ); // Lọc danh mục theo từ khóa tìm kiếm
+  const totalPages = Math.ceil(filteredCategory.length / ITEMS_PER_PAGE); // Tính tổng số trang
   const paginatedCategory = filteredCategory.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
-  );
+  ); // Lấy dữ liệu danh mục của trang hiện tại
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    setCurrentPage(page); // Chuyển trang khi nhấn nút phân trang
   };
 
   return (
@@ -254,22 +251,25 @@ const CategoryMain = () => {
                   )}
               </tbody>
             </table>
+            {/* Phân trang */}
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-4">
+                {Array.from({ length: totalPages }).map((_, index) => (
+                  <button
+                    key={index + 1}
+                    onClick={() => handlePageChange(index + 1)}
+                    className={`mx-1 px-4 py-2 rounded ${
+                      index + 1 === currentPage
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+            )}
           </CardBody>
-          <div className="sticky bottom-0 right-0 flex justify-end p-4 bg-white">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                className={`mx-1 px-3 py-1 rounded ${
-                  currentPage === page
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-          </div>
         </Card>
       </div>
     </div>

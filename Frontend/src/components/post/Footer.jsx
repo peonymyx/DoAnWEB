@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 const Footer = () => {
   const [showButton, setShowButton] = useState(false);
 
+  //cuộn lên đầu trang khi nhấn nút
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 300) {
