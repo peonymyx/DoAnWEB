@@ -21,7 +21,7 @@ const Dashboard = () => {
     const fetchBestSellers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/best-sellers"
+          "https://doanweb-api.onrender.com/api/v1/best-sellers"
         );
         setBestSellers(response.data.products);
       } catch (err) {

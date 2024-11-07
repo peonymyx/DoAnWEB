@@ -8,7 +8,7 @@ const CategoryPage = () => {
 
   const getProductList = async () => {
     const res = await axios.get(
-      `http://localhost:3000/api/v1/getProduct?category=${id}`
+      `https://doanweb-api.onrender.com/api/v1/getProduct?category=${id}`
     );
     setProductList(res.data.product);
   };

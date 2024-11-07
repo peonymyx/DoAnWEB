@@ -14,7 +14,7 @@ export const getMessenger = createAsyncThunk(
     console.log(payload);
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/v1/messenger?senderId=${payload}`
+        `https://doanweb-api.onrender.com/api/v1/messenger?senderId=${payload}`
       );
       console.log(res.data);
       return res.data;
@@ -29,7 +29,7 @@ export const addMessenger = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/messenger/add",
+        "https://doanweb-api.onrender.com/api/v1/messenger/add",
         payload
       );
       return res.data.messenger;

@@ -60,7 +60,7 @@ const ProductsDetail = () => {
 
   const handleWishlist = async () => {
     try {
-      await axios.post("http://localhost:3000/api/v1/users/wishListProduct", {
+      await axios.post("https://doanweb-api.onrender.com/api/v1/users/wishListProduct", {
         id: userId,
         productId: id,
       });

@@ -30,7 +30,7 @@ export const addCategory = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/category/add",
+        "https://doanweb-api.onrender.com/api/v1/category/add",
         payload,
         {
           headers: {
@@ -62,7 +62,7 @@ export const updateCategory = createAsyncThunk(
   async ({ data }, { rejectWithValue }) => {
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/v1/category/update`,
+        `https://doanweb-api.onrender.com/api/v1/category/update`,
         data,
         {
           headers: {
@@ -93,7 +93,7 @@ export const deleteCategory = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const res = await axios.delete(
-        `http://localhost:3000/api/v1/category/delete/${id}`,
+        `https://doanweb-api.onrender.com/api/v1/category/delete/${id}`,
         {
           headers: {
             "Content-Type": "application/json",

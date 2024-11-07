@@ -16,7 +16,7 @@ export const addComment = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/comment/addComment",
+        "https://doanweb-api.onrender.com/api/v1/comment/addComment",
         payload,
         {
           headers: {
@@ -47,7 +47,7 @@ export const getComment = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.get(
-        "http://localhost:3000/api/v1/comment/getComment",
+        "https://doanweb-api.onrender.com/api/v1/comment/getComment",
         {
           headers: {
             "Content-Type": "application/json",
@@ -67,7 +67,7 @@ export const getCommentByProductId = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/v1/comment/getCommentByProductId/${payload}`,
+        `https://doanweb-api.onrender.com/api/v1/comment/getCommentByProductId/${payload}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -87,7 +87,7 @@ export const deleteCommentByAuthor = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.delete(
-        "http://localhost:3000/api/v1/comment/deleteCommentByAuthor/" + payload
+        "https://doanweb-api.onrender.com/api/v1/comment/deleteCommentByAuthor/" + payload
       );
       Swal.fire({
         icon: "success",

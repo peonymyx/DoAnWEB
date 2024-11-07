@@ -13,7 +13,7 @@ export const getCategoryPost = createAsyncThunk(
   "categoryPost/getCategoryPost",
   async (payload, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/category-post");
+      const res = await axios.get("https://doanweb-api.onrender.com/api/v1/category-post");
       return res.data.categoryPost;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -26,7 +26,7 @@ export const addCategoryPost = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/category-post/add",
+        "https://doanweb-api.onrender.com/api/v1/category-post/add",
         payload
       );
       Swal.fire({
@@ -51,7 +51,7 @@ export const deleteCategoryPost = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.delete(
-        `http://localhost:3000/api/v1/category-post/delete/${payload}`
+        `https://doanweb-api.onrender.com/api/v1/category-post/delete/${payload}`
       );
       Swal.fire({
         icon: "success",
@@ -75,7 +75,7 @@ export const updateCategoryPost = createAsyncThunk(
   async ({ data }, { rejectWithValue }) => {
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/v1/category-post/update`,
+        `https://doanweb-api.onrender.com/api/v1/category-post/update`,
         data
       );
       Swal.fire({

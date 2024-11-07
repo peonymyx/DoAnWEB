@@ -145,7 +145,7 @@ const Favatie = () => {
 
       const productsResponse = await Promise.all(
         uniqueProductIds.map((id) =>
-          axios.get(`http://localhost:3000/api/v1/getProductById/${id}`)
+          axios.get(`https://doanweb-api.onrender.com/api/v1/getProductById/${id}`)
         )
       );
       setProductWish(productsResponse.map((res) => res.data.Product));
@@ -158,7 +158,7 @@ const Favatie = () => {
   const removeFromWishlist = async (productId) => {
     try {
       await axios.delete(
-        `http://localhost:3000/api/v1/users/removeFromWishList/${auth._id}/${productId}`
+        `https://doanweb-api.onrender.com/api/v1/users/removeFromWishList/${auth._id}/${productId}`
       );
 
       // Update local state
@@ -179,7 +179,7 @@ const Favatie = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/v1/users/wishListProduct/${auth._id}`
+          `https://doanweb-api.onrender.com/api/v1/users/wishListProduct/${auth._id}`
         );
 
         setWishlist(response.data.wishList);

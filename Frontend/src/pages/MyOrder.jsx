@@ -14,7 +14,7 @@ const MyOrder = () => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/v1/otherProduct?userId=${auth?._id}`
+          `https://doanweb-api.onrender.com/api/v1/otherProduct?userId=${auth?._id}`
         );
         setMyOrder(response.data.otherProduct);
       } catch (error) {

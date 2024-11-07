@@ -16,7 +16,7 @@ export const getUsers = createAsyncThunk(
   "user/getUsers",
   async (payload, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/getUsers", {
+      const res = await axios.get("https://doanweb-api.onrender.com/api/v1/getUsers", {
         headers: {
           token: `Bearer ${token}`,
         },
@@ -33,7 +33,7 @@ export const updateRoleUser = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.put(
-        "http://localhost:3000/api/v1/users/updateRole",
+        "https://doanweb-api.onrender.com/api/v1/users/updateRole",
         payload,
         {
           headers: {
@@ -53,7 +53,7 @@ export const updateUser = createAsyncThunk(
   async ({ id, data1 }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/v1/updateUser/${id}`,
+        `https://doanweb-api.onrender.com/api/v1/updateUser/${id}`,
         data1,
         {
           headers: {

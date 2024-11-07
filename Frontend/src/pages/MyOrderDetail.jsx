@@ -7,7 +7,7 @@ const MyOrderDetail = () => {
   const [other, setOther] = React.useState([]);
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/v1/otherProduct/${id}`)
+      .get(`https://doanweb-api.onrender.com/api/v1/otherProduct/${id}`)
       .then((res) => {
         setOther(res.data.otherProduct);
       })

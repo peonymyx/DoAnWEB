@@ -14,7 +14,7 @@ export const createCoupon = createAsyncThunk(
   'coupon/create',
   async (couponData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/coupons', couponData);
+      const response = await axios.post('https://doanweb-api.onrender.com/api/v1/coupons', couponData);
       return response.data; // Return coupon data
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -27,7 +27,7 @@ export const fetchCoupons = createAsyncThunk(
   'coupon/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:3000/api/v1/coupons');
+      const response = await axios.get('https://doanweb-api.onrender.com/api/v1/coupons');
       return response.data; // Return array of coupons
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -40,7 +40,7 @@ export const updateCoupon = createAsyncThunk(
   'coupon/update',
   async ({ id, couponData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`http://localhost:3000/api/v1/coupons/${id}`, couponData);
+      const response = await axios.put(`https://doanweb-api.onrender.com/api/v1/coupons/${id}`, couponData);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -55,7 +55,7 @@ export const deleteCoupon = createAsyncThunk(
   'coupon/delete',
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:3000/api/v1/coupons/${id}`);
+      await axios.delete(`https://doanweb-api.onrender.com/api/v1/coupons/${id}`);
       return id; // Return coupon ID to delete
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -68,7 +68,7 @@ export const applyCoupon = createAsyncThunk(
   'coupon/apply',
   async (code, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/apply', { code });
+      const response = await axios.post('https://doanweb-api.onrender.com/api/v1/apply', { code });
       return response.data.discount; // Return discount value
     } catch (error) {
       return rejectWithValue(error.response.data);

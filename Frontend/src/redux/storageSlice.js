@@ -28,7 +28,7 @@ export const deleteStorage = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const res = await axios.delete(
-        `http://localhost:3000/api/v1/deleteStorage/${id}`,
+        `https://doanweb-api.onrender.com/api/v1/deleteStorage/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export const updateStorageByproduct_id = createAsyncThunk(
     console.log(data)
     try {
       const res = await axios.put(
-        `http://localhost:3000/api/v1/updateStorage`,
+        `https://doanweb-api.onrender.com/api/v1/updateStorage`,
         data,
         {
           headers: {

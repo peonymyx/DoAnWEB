@@ -9,7 +9,7 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:3000");
+const socket = io("https://doanweb-api.onrender.com");
 
 // eslint-disable-next-line react/prop-types
 const Message = ({ role }) => {

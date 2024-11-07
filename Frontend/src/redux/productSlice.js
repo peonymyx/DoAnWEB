@@ -14,7 +14,7 @@ export const addComment = createAsyncThunk(
   async (commentData, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/comment",
+        "https://doanweb-api.onrender.com/api/v1/comment",
         commentData
       );
       return res.data;

@@ -43,7 +43,7 @@ const SignUp = () => {
     try {
       dispatch(registerStart());
       const res = await axios.post(
-        "http://localhost:3000/api/v1/signup",
+        "https://doanweb-api.onrender.com/api/v1/signup",
         data,
         { headers }
       );

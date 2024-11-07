@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import SendIcon from "@mui/icons-material/Send";
 import { useSelector } from "react-redux";
 
-const socket = io("http://localhost:3000");
+const socket = io("https://doanweb-api.onrender.com");
 
 const Message = () => {
   const [message, setMessage] = useState("");

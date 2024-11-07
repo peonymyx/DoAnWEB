@@ -13,7 +13,7 @@ export const getOther = createAsyncThunk(
   "other/getOther",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/otherProduct");
+      const res = await axios.get("https://doanweb-api.onrender.com/api/v1/otherProduct");
       console.log(res.data.otherProduct);
       return res.data.otherProduct;
     } catch (error) {
@@ -28,7 +28,7 @@ export const updateStatusOder = createAsyncThunk(
     console.log(payload);
     try {
       const res = await axios.put(
-        "http://localhost:3000/api/v1/otherProduct/update",
+        "https://doanweb-api.onrender.com/api/v1/otherProduct/update",
         payload
       );
       console.log(res.data.otherProduct);
@@ -44,7 +44,7 @@ export const getOtherById = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/v1/otherProduct/${payload}`
+        `https://doanweb-api.onrender.com/api/v1/otherProduct/${payload}`
       );
       return res.data.otherProduct;
     } catch (error) {
@@ -58,7 +58,7 @@ export const addOther = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/otherProduct/add",
+        "https://doanweb-api.onrender.com/api/v1/otherProduct/add",
         payload,
         {
           headers: {

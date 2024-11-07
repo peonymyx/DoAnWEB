@@ -103,7 +103,7 @@ const ListProducts = () => {
 
   const getCategoryList = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/category");
+      const res = await axios.get("https://doanweb-api.onrender.com/api/v1/category");
       setCategories(res.data.category);
     } catch (error) {
       console.error("Error fetching categories:", error);

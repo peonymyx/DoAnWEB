@@ -28,7 +28,7 @@ function Cart() {
       const fetchCoupons = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:3000/api/v1/users/${auth._id}/coupons`
+            `https://doanweb-api.onrender.com/api/v1/users/${auth._id}/coupons`
           );
           setCoupons(response.data);
         } catch (error) {

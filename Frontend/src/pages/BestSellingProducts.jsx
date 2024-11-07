@@ -91,7 +91,7 @@ const BestSellingProducts = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "http://localhost:3000/api/v1/best-sellers"
+          "https://doanweb-api.onrender.com/api/v1/best-sellers"
         );
         setBestSellers(response.data.products.slice(0, 4));
         setIsLoading(false);

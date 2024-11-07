@@ -11,7 +11,7 @@ export const fetchStatistical = createAsyncThunk(
   "/statistical/fetchStatistical",
   async () => {
     const response = await axios.get(
-      "http://localhost:3000/api/v1/statistical"
+      "https://doanweb-api.onrender.com/api/v1/statistical"
     );
     return response.data;
   }
