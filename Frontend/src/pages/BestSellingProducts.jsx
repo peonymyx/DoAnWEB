@@ -68,7 +68,7 @@ const BestSellingProducts = () => {
         // Khi bắt đầu gọi API, đặt trạng thái `isLoading` thành `true` để hiển thị loading
         setIsLoading(true);
 
-        // Gọi API với phương thức GET tới endpoint `http://localhost:3000/api/v1/best-sellers`
+        // Gọi API với phương thức GET tới endpoint `https://doanweb-api.onrender.com/api/v1/best-sellers`
         const response = await axios.get(
           "https://doanweb-api.onrender.com/api/v1/best-sellers"
         );
