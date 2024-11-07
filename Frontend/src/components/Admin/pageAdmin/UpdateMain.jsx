@@ -204,7 +204,6 @@ const UpdateMain = () => {
           </div>
         </form>
       </div>
-      <Footer></Footer>
     </div>
   );
 };
