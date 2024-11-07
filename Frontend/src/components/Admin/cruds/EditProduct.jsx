@@ -1,69 +1,70 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { getProductById, updateProduct } from "../../../redux/productSlice";
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { getCategory } from "../../../redux/categorySlice";
-import "./loading.css";
-import Swal from "sweetalert2";
+import { yupResolver } from "@hookform/resolvers/yup"; // Sử dụng yupResolver để tích hợp yup cho xác thực trong react-hook-form
+import * as yup from "yup"; // Import yup để tạo các quy tắc xác thực
+import { useForm } from "react-hook-form"; // Import useForm để quản lý form và xử lý sự kiện
+import { useDispatch, useSelector } from "react-redux"; // Import các hook của redux để quản lý và truy cập trạng thái trong store
+import { getProductById, updateProduct } from "../../../redux/productSlice"; // Import các action để lấy sản phẩm theo ID và cập nhật sản phẩm
+import { useEffect, useState } from "react"; // Import useEffect và useState để quản lý vòng đời và trạng thái
+import { useNavigate, useParams } from "react-router-dom"; // Import các hook của react-router-dom để điều hướng và lấy tham số URL
+import { getCategory } from "../../../redux/categorySlice"; // Import action để lấy danh mục
+import "./loading.css"; // Import file CSS cho loading
+import Swal from "sweetalert2"; // Import thư viện SweetAlert2 để hiển thị thông báo đẹp
 
+// Xác định schema xác thực cho form sử dụng yup
 const schema = yup.object().shape({
-  name: yup.string().required("Vui lòng nhập tên"),
+  name: yup.string().required("Vui lòng nhập tên"), // Tên là trường bắt buộc
 });
 
 const EditProduct = () => {
-  const category = useSelector((state) => state.category.category);
+  const category = useSelector((state) => state.category.category); // Lấy danh mục từ redux store
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema), // Cấu hình yup resolver cho useForm
   });
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const product = useSelector((state) => state.product.products);
-  const isLoading = useSelector((state) => state.product.isLoading);
-  const [selectedSize, setSelectedSize] = useState([]);
-  const [imageUpload, setImageUpload] = useState("");
-  const { id } = useParams();
+  const dispatch = useDispatch(); // Khởi tạo dispatch để gửi action
+  const navigate = useNavigate(); // Sử dụng navigate để điều hướng
+  const product = useSelector((state) => state.product.products); // Lấy sản phẩm từ redux store
+  const isLoading = useSelector((state) => state.product.isLoading); // Kiểm tra trạng thái loading
+  const [selectedSize, setSelectedSize] = useState([]); // Khởi tạo trạng thái cho các size đã chọn
+  const [imageUpload, setImageUpload] = useState(""); // Trạng thái để lưu ảnh được tải lên
+  const { id } = useParams(); // Lấy ID sản phẩm từ tham số URL
 
   useEffect(() => {
-    dispatch(getProductById(id));
-    dispatch(getCategory());
+    dispatch(getProductById(id)); // Gửi action để lấy sản phẩm theo ID
+    dispatch(getCategory()); // Gửi action để lấy danh mục
   }, [dispatch, id]);
 
   useEffect(() => {
     if (product && typeof product.size === "string") {
-      setSelectedSize(product.size.split(","));
+      setSelectedSize(product.size.split(",")); // Chia chuỗi size thành mảng và lưu vào selectedSize
     }
   }, [product]);
 
   const handleToggleSize = (size) => {
     if (selectedSize.includes(size)) {
-      setSelectedSize(selectedSize.filter((s) => s !== size));
+      setSelectedSize(selectedSize.filter((s) => s !== size)); // Bỏ size nếu đã chọn
     } else {
-      setSelectedSize([...selectedSize, size]);
+      setSelectedSize([...selectedSize, size]); // Thêm size vào danh sách đã chọn
     }
   };
 
   const handleSelectImage = async (e) => {
-    setImageUpload(e.target.files[0]);
+    setImageUpload(e.target.files[0]); // Cập nhật trạng thái với ảnh được tải lên
   };
 
   const handleEditProduct = (data) => {
     const { name, description, category, price } = data;
     const updatedProduct = {
       id,
-      name: name !== undefined ? name : product.name,
+      name: name !== undefined ? name : product.name, // Kiểm tra tên trước khi cập nhật
       description:
-        description !== undefined ? description : product.description,
-      size: selectedSize.length > 0 ? selectedSize.join(",") : product.size,
-      category: category !== undefined ? category : product.category,
-      price: price !== undefined ? price : product.price,
-      image: imageUpload ? imageUpload : product.image,
+        description !== undefined ? description : product.description, // Kiểm tra mô tả
+      size: selectedSize.length > 0 ? selectedSize.join(",") : product.size, // Kiểm tra và cập nhật size
+      category: category !== undefined ? category : product.category, // Kiểm tra danh mục
+      price: price !== undefined ? price : product.price, // Kiểm tra giá
+      image: imageUpload ? imageUpload : product.image, // Kiểm tra ảnh
     };
 
     console.log("Updated Product Data:", updatedProduct);
@@ -75,7 +76,7 @@ const EditProduct = () => {
         icon: "success",
         confirmButtonText: "OK",
       }).then(() => {
-        navigate("/ProductManagement");
+        navigate("/ProductManagement"); // Điều hướng về trang quản lý sản phẩm sau khi cập nhật
       });
     });
   };
@@ -89,7 +90,8 @@ const EditProduct = () => {
           </h1>
           {isLoading && (
             <div className="loading-overlay">
-              <div className="loading-spinner"></div>
+              <div className="loading-spinner"></div>{" "}
+              {/* Hiển thị loading spinner khi đang tải */}
             </div>
           )}
           <form
@@ -97,6 +99,7 @@ const EditProduct = () => {
             className="w-full max-w-[60rem]"
             encType="multipart/form-data"
           >
+            {/* Nhập tên sản phẩm */}
             <div className="mb-4">
               <label
                 htmlFor="name"
@@ -114,6 +117,7 @@ const EditProduct = () => {
               />
               <p className="text-red-500 mt-1">{errors.name?.message}</p>
             </div>
+            {/* Nhập giá */}
             <div className="mb-4">
               <label
                 htmlFor="price"
@@ -131,6 +135,7 @@ const EditProduct = () => {
               />
               <p className="text-red-500 mt-1">{errors.price?.message}</p>
             </div>
+            {/* Chọn size */}
             <div className="mb-4">
               <label
                 htmlFor="size"
@@ -152,6 +157,7 @@ const EditProduct = () => {
                 ))}
               </div>
             </div>
+            {/* Chọn danh mục */}
             <div className="mb-4">
               <label
                 htmlFor="category"
@@ -172,6 +178,7 @@ const EditProduct = () => {
                 ))}
               </select>
             </div>
+            {/* Tải lên hình ảnh */}
             <div className="mb-4">
               <label
                 htmlFor="image"
@@ -194,6 +201,7 @@ const EditProduct = () => {
               />
               <p className="text-red-500 mt-1">{errors.image?.message}</p>
             </div>
+            {/* Nhập mô tả */}
             <div className="mb-4">
               <label
                 htmlFor="description"
@@ -210,17 +218,13 @@ const EditProduct = () => {
               />
               <p className="text-red-500 mt-1">{errors.description?.message}</p>
             </div>
-            <div className="flex justify-between">
-              <Link to="/ProductManagement" className="mt-3 text-lg py-3 px-6">
-                Quay Lại
-              </Link>
-              <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-lg text-white font-bold py-3 px-6 mt-3 rounded focus:outline-none focus:shadow-outline"
-              >
-                Cập nhật
-              </button>
-            </div>
+            {/* Nút submit */}
+            <button
+              type="submit"
+              className="w-full bg-primary py-2 px-4 text-white rounded-md hover:bg-blue-600 transition-colors mt-4"
+            >
+              Cập nhật sản phẩm
+            </button>
           </form>
         </div>
       </div>

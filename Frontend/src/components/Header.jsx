@@ -4,16 +4,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
 const Header = () => {
+  // Khai báo dispatch từ Redux để có thể gửi action
   const dispatch = useDispatch();
+
+  // Hàm xử lý đăng xuất (log out)
   const handleLogOut = () => {
-    dispatch(logOut());
+    dispatch(logOut()); // Gửi action logOut để đăng xuất người dùng
   };
+
+  // Lấy thông tin người dùng hiện tại từ store của Redux
   const user = useSelector((state) => state.auth.currentUser);
 
+  // Khởi tạo state 'menuVisible' với giá trị mặc định là false, dùng để điều khiển sự hiển thị của menu
   const [menuVisible, setMenuVisible] = useState(false);
 
+  // Hàm toggle (đảo ngược) trạng thái menu, dùng để hiển thị hoặc ẩn menu
   const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
+    setMenuVisible(!menuVisible); // Đảo ngược giá trị của menuVisible
   };
 
   return (

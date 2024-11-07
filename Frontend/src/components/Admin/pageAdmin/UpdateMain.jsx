@@ -8,65 +8,77 @@ import { getUserById, updateUser } from "../../../redux/userSlice";
 import "../cruds/loading.css";
 import Footer from "../../post/Footer";
 
+// Tạo schema validation cho form
 const schema = yup.object().shape({
-  username: yup.string().required("Vui lòng nhập tên"),
-  phone: yup.string().required("Vui lòng nhập số điện thoại"),
-  gender: yup.string().required("Vui lòng chọn giới tính"),
-  address: yup.string().required("Vui lòng nhập địa chỉ"),
+  username: yup.string().required("Vui lòng nhập tên"), // Tên người dùng không được để trống
+  phone: yup.string().required("Vui lòng nhập số điện thoại"), // Số điện thoại không được để trống
+  gender: yup.string().required("Vui lòng chọn giới tính"), // Giới tính không được để trống
+  address: yup.string().required("Vui lòng nhập địa chỉ"), // Địa chỉ không được để trống
 });
 
+// Component UpdateMain dùng để cập nhật thông tin người dùng
 const UpdateMain = () => {
+  // Khởi tạo form và lấy các lỗi từ form
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema), // Áp dụng validation schema với yup
   });
 
+  // Lấy id từ URL để truy vấn người dùng cần cập nhật
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); // Dùng dispatch để gửi action cho Redux
 
+  // Lấy dữ liệu người dùng từ store
   useEffect(() => {
     const getUser = async () => {
-      dispatch(getUserById(id));
+      dispatch(getUserById(id)); // Gửi action lấy người dùng theo id
     };
-    getUser();
-  }, [dispatch, id]);
-  // const user = useSelector((state) => state.auth.currentUser);
+    getUser(); // Gọi hàm lấy dữ liệu người dùng
+  }, [dispatch, id]); // Thực hiện lại khi id thay đổi
+
+  // Lấy thông tin người dùng từ Redux store
   const user = useSelector((state) => state.auth.currentUser);
-  // const user = useSelector((state) => state.user.users);
-  console.log(user);
+  console.log(user); // In thông tin người dùng ra console để kiểm tra
+
+  // Kiểm tra trạng thái loading khi đang tải dữ liệu
   const isLoading = useSelector((state) => state.user.isLoading);
+
+  // Khởi tạo state cho các trường thông tin người dùng
   const [username, setUsername] = useState(user?.username);
   const [phone, setPhone] = useState(user?.phone);
   const [gender, setGender] = useState(user?.gender);
   const [age, setAge] = useState(user?.age);
   const [address, setAddress] = useState(user?.address);
   const [avatar, setAvatar] = useState(user?.avatar);
-  const [preview, setPreview] = useState(user?.avatar); // state để lưu URL preview
+  const [preview, setPreview] = useState(user?.avatar);
 
+  // Hàm xử lý chọn ảnh đại diện
   const handleSelectFile = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files[0]; // Lấy file ảnh đã chọn
     if (file) {
-      setAvatar(file);
-      setPreview(URL.createObjectURL(file)); // tạo URL tạm thời để preview ảnh
+      setAvatar(file); // Lưu file vào state avatar
+      setPreview(URL.createObjectURL(file)); // Tạo URL tạm thời để preview ảnh
     }
   };
 
+  // Hàm xử lý khi submit form để cập nhật thông tin người dùng
   const handleUpdateUser = async (data) => {
     const data1 = {
-      ...data,
-      avatar: avatar ? avatar : user?.avatar,
+      ...data, // Lấy tất cả dữ liệu từ form
+      avatar: avatar ? avatar : user?.avatar, // Nếu có avatar mới thì dùng avatar mới, không thì dùng avatar cũ
     };
-    dispatch(updateUser({ id, data1 }));
+    dispatch(updateUser({ id, data1 })); // Gửi action cập nhật người dùng vào Redux
   };
 
+  // Kiểm tra thông tin người dùng trong sessionStorage khi trang tải lại
   useEffect(() => {
     sessionStorage.getItem("user")
       ? JSON.parse(sessionStorage.getItem("user"))
       : null;
-  }, [dispatch]);
+  }, [dispatch]); // Không thay đổi bất cứ giá trị nào
 
   return (
     <div>

@@ -1,17 +1,18 @@
-import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
+import { Link } from "react-router-dom"; // Import Link từ react-router-dom để tạo các liên kết điều hướng
+import Swal from "sweetalert2"; // Import thư viện SweetAlert2 để hiển thị các popup thông báo
 import {
   CardBody,
   Card,
   CardHeader,
   Typography,
-} from "@material-tailwind/react";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getOther, updateStatusOder } from "../../../redux/otherSlice";
-import "../cruds/loading.css";
-import { CSVLink } from "react-csv";
+} from "@material-tailwind/react"; // Import các thành phần giao diện từ thư viện Material Tailwind
+import { useEffect, useState } from "react"; // Import hook useEffect và useState từ React
+import { useDispatch, useSelector } from "react-redux"; // Import hook useDispatch và useSelector từ Redux để tương tác với store
+import { getOther, updateStatusOder } from "../../../redux/otherSlice"; // Import các action từ Redux để lấy dữ liệu và cập nhật trạng thái đơn hàng
+import "../cruds/loading.css"; // Import file CSS để hiển thị loading
+import { CSVLink } from "react-csv"; // Import CSVLink từ thư viện react-csv để xuất dữ liệu ra file CSV
 
+// Định nghĩa các tiêu đề của bảng
 const TABLE_HEAD = [
   "ID",
   "Thời gian đặt",
@@ -24,13 +25,15 @@ const TABLE_HEAD = [
   "",
 ];
 
+// Số lượng đơn hàng hiển thị trên mỗi trang
 const ITEMS_PER_PAGE = 5;
 
 const OtherManagement = () => {
-  const dispatch = useDispatch();
-  const other = useSelector((state) => state.other.other);
-  console.log("other", other);
+  const dispatch = useDispatch(); // Tạo đối tượng dispatch để gửi action tới Redux store
+  const other = useSelector((state) => state.other.other); // Lấy dữ liệu đơn hàng từ Redux store
+  console.log("other", other); // In dữ liệu đơn hàng ra console
 
+  // Chuyển đổi dữ liệu từ Redux thành dữ liệu cho file CSV
   const csvData = other.map((item) => ({
     _id: item._id,
     username: item.username,
@@ -48,43 +51,48 @@ const OtherManagement = () => {
       }))
     ),
   }));
+
+  // State để lưu trữ từ khóa tìm kiếm và trang hiện tại
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  // const isLoading = useSelector((state) => state.user.isLoading);
 
+  // Gọi action getOther để lấy tất cả đơn hàng khi component được render lần đầu
   useEffect(() => {
     dispatch(getOther());
   }, [dispatch]);
 
+  // Hàm xử lý tìm kiếm
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page when searching
+    setSearchTerm(e.target.value); // Cập nhật từ khóa tìm kiếm
+    setCurrentPage(1); // Đặt lại trang hiện tại về 1 sau khi tìm kiếm
   };
 
+  // Hàm xử lý cập nhật trạng thái đơn hàng
   const handleUpdateStatus = (id) => {
     Swal.fire({
-      title: "Cập nhật trạng thái",
-      input: "select",
+      title: "Cập nhật trạng thái", // Tiêu đề của popup
+      input: "select", // Loại input là select (chọn trạng thái)
       inputOptions: {
         "Chưa xử lý": "Chưa xử lý",
         "Đang xử lý": "Đang xử lý",
         "Đã hoàn thành": "Đã hoàn thành",
       },
-      inputPlaceholder: "Chọn trạng thái",
-      showCancelButton: true,
-      confirmButtonText: "Lưu",
-      cancelButtonText: "Hủy",
+      inputPlaceholder: "Chọn trạng thái", // Placeholder khi không có lựa chọn
+      showCancelButton: true, // Hiển thị nút hủy
+      confirmButtonText: "Lưu", // Nút xác nhận
+      cancelButtonText: "Hủy", // Nút hủy
     }).then((result) => {
       if (result.isConfirmed) {
         const data = {
           id: id,
-          status: result.value,
+          status: result.value, // Lấy giá trị trạng thái người dùng chọn
         };
-        dispatch(updateStatusOder(data));
+        dispatch(updateStatusOder(data)); // Gửi action cập nhật trạng thái đơn hàng
       }
     });
   };
 
+  // Lọc danh sách đơn hàng theo từ khóa tìm kiếm (theo tên người nhận hoặc số điện thoại)
   const filteredOther = Array.isArray(other)
     ? other.filter(
         (item) =>
@@ -93,14 +101,18 @@ const OtherManagement = () => {
       )
     : [];
 
+  // Tính số trang cần thiết cho phân trang
   const totalPages = Math.ceil(filteredOther.length / ITEMS_PER_PAGE);
+
+  // Lọc các đơn hàng trong phạm vi trang hiện tại
   const paginatedOther = filteredOther.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
 
+  // Hàm thay đổi trang
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    setCurrentPage(page); // Cập nhật trang hiện tại
   };
 
   return (
@@ -112,13 +124,14 @@ const OtherManagement = () => {
               <h1>Quản Lý Đơn hàng</h1>
             </div>
             <div className="flex w-full shrink-0 gap-2 md:w-max mr-3">
+              {/* Phần input tìm kiếm */}
               <div className="flex items-center gap-5 w-[350px] h-[40px] border border-gray-200 rounded-lg py-4 px-4">
                 <input
                   type="text"
                   className="w-full outline-none bg-transparent text-xl"
                   placeholder="Nhập tên tìm kiếm..."
                   value={searchTerm}
-                  onChange={handleSearch}
+                  onChange={handleSearch} // Gọi hàm tìm kiếm khi người dùng nhập
                 />
                 <span className="flex-shrink-0 text-gray-500">
                   <svg
@@ -138,6 +151,7 @@ const OtherManagement = () => {
                 </span>
               </div>
             </div>
+            {/* Nút xuất dữ liệu ra file CSV */}
             <CSVLink
               id="test-table-xls-button"
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full"
@@ -155,6 +169,7 @@ const OtherManagement = () => {
           >
             <thead>
               <tr className="bg-blue-800 text-white">
+                {/* Hiển thị tiêu đề của bảng */}
                 {TABLE_HEAD.map((head) => (
                   <th
                     key={head}
@@ -172,6 +187,7 @@ const OtherManagement = () => {
               </tr>
             </thead>
             <tbody>
+              {/* Lặp qua các đơn hàng đã phân trang và hiển thị dữ liệu */}
               {paginatedOther.map(
                 (
                   {
@@ -207,7 +223,8 @@ const OtherManagement = () => {
                           color="blue-gray"
                           className="font-normal text-xl"
                         >
-                          {new Date(createdAt).toLocaleDateString("en-GB")}
+                          {new Date(createdAt).toLocaleDateString("en-GB")}{" "}
+                          {/* Hiển thị ngày tháng */}
                         </Typography>
                       </td>
                       <td className={classes}>
@@ -255,10 +272,11 @@ const OtherManagement = () => {
                           {note}
                         </Typography>
                       </td>
+                      {/* Các nút cập nhật trạng thái và chi tiết */}
                       <td className={classes}>
                         <button
                           className="mr-3 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full"
-                          onClick={() => handleUpdateStatus(_id)}
+                          onClick={() => handleUpdateStatus(_id)} // Gọi hàm cập nhật trạng thái
                         >
                           Cập nhật
                         </button>
@@ -275,6 +293,7 @@ const OtherManagement = () => {
             </tbody>
           </table>
         </CardBody>
+        {/* Phần phân trang */}
         <div className="sticky bottom-0 right-0 flex justify-end p-4 bg-white">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
@@ -293,4 +312,4 @@ const OtherManagement = () => {
   );
 };
 
-export default OtherManagement;
+export default OtherManagement; // Xuất component ra để sử dụng

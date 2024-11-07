@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; // Import các hook của React để quản lý hiệu ứng và trạng thái
 import {
   Card,
   CardHeader,
   Typography,
   CardBody,
   Button,
-} from "@material-tailwind/react";
-import { PencilSquareIcon } from "@heroicons/react/24/solid";
-import { useDispatch, useSelector } from "react-redux";
-import { getUsers, updateRoleUser } from "../../../redux/userSlice";
-import Swal from "sweetalert2";
+} from "@material-tailwind/react"; // Import các component từ thư viện Material Tailwind
+import { PencilSquareIcon } from "@heroicons/react/24/solid"; // Import icon chỉnh sửa
+import { useDispatch, useSelector } from "react-redux"; // Import các hook của Redux để dispatch action và lấy state
+import { getUsers, updateRoleUser } from "../../../redux/userSlice"; // Import action để lấy danh sách user và cập nhật quyền
+import Swal from "sweetalert2"; // Import thư viện Sweetalert2 để hiển thị popup thông báo
 
+// Khai báo tiêu đề cho các cột trong bảng
 const TABLE_HEAD = [
   "Tên",
   "Số Điện Thoại",
@@ -21,35 +22,40 @@ const TABLE_HEAD = [
   "",
 ];
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 5; // Số lượng phần tử hiển thị trên mỗi trang
 
 const AccountManagement = () => {
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.user.users || []);
-  const isLoading = useSelector((state) => state.user.isLoading);
-  const auth = useSelector((state) => state.auth.currentUser);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const users = useSelector((state) => state.user.users || []); // Lấy danh sách người dùng từ Redux store
+  const isLoading = useSelector((state) => state.user.isLoading); // Kiểm tra xem có đang tải dữ liệu hay không
+  const auth = useSelector((state) => state.auth.currentUser); // Lấy thông tin người dùng hiện tại
+  const [searchTerm, setSearchTerm] = useState(""); // Khai báo trạng thái cho từ khóa tìm kiếm
+  const [currentPage, setCurrentPage] = useState(1); // Khai báo trạng thái cho trang hiện tại
 
+  // Xử lý khi tìm kiếm, cập nhật từ khóa và đặt lại trang hiện tại về 1
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1); // Reset trang về đầu khi tìm kiếm
   };
 
+  // Lọc người dùng theo từ khóa tìm kiếm
   const filteredUser = users.filter((v) =>
     v.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Tính số trang và cắt dữ liệu người dùng theo trang hiện tại
   const totalPages = Math.ceil(filteredUser.length / ITEMS_PER_PAGE);
   const paginatedUsers = filteredUser.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
 
+  // Gọi API lấy dữ liệu người dùng khi component được render lần đầu
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch]);
 
+  // Hàm cập nhật quyền người dùng với popup lựa chọn vai trò
   const handlePermission = (id) => {
     return () => {
       Swal.fire({
@@ -76,10 +82,12 @@ const AccountManagement = () => {
     };
   };
 
+  // Chuyển trang và cập nhật trạng thái trang hiện tại
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
+  // Kiểm tra nếu người dùng hiện tại không phải là admin thì không hiển thị component này
   if (auth.role !== "admin") {
     return null;
   }
@@ -96,7 +104,7 @@ const AccountManagement = () => {
           <CardHeader floated={false} shadow={false} className="rounded-none">
             <div className="mb-3 mt-3 flex flex-col justify-between gap-8 md:flex-row md:items-center">
               <div className="font-bold text-3xl">
-                <h1>Quản Lý Tài Khoản</h1>
+                <h1>Quản Lý Tài Khoản</h1> {/* Tiêu đề của trang */}
               </div>
               <div className="flex w-full shrink-0 gap-2 md:w-max mr-3">
                 <div className="flex items-center gap-5 w-[350px] h-[40px] border border-gray-200 rounded-lg py-4 px-4">
@@ -108,6 +116,7 @@ const AccountManagement = () => {
                     onChange={handleSearch}
                   />
                   <span className="flex-shrink-0 text-gray-500">
+                    {/* Icon tìm kiếm */}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="w-6 h-6"
@@ -195,15 +204,6 @@ const AccountManagement = () => {
                             {new Date(age).toLocaleDateString("en-GB")}
                           </Typography>
                         </td>
-                        {/* <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal text-xl"
-                          >
-                            {new Date(createAt).toLocaleDateString("en-GB")}
-                          </Typography>
-                        </td> */}
                         <td className={classes}>
                           <Typography
                             variant="small"
@@ -240,6 +240,7 @@ const AccountManagement = () => {
               </tbody>
             </table>
           </CardBody>
+          {/* Thanh phân trang */}
           <div className="sticky bottom-0 right-0 flex justify-end p-4 bg-white">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button

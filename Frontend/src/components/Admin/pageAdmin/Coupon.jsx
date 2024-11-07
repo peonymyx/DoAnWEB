@@ -1,96 +1,101 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  createCoupon,
-  fetchCoupons,
-  deleteCoupon,
-  updateCoupon,
+  createCoupon, // Import hàm tạo mã giảm giá
+  fetchCoupons, // Import hàm lấy danh sách mã giảm giá
+  deleteCoupon, // Import hàm xóa mã giảm giá
+  updateCoupon, // Import hàm cập nhật mã giảm giá
 } from "../../../redux/couponSlice";
 
 const CouponAdmin = () => {
-  const dispatch = useDispatch();
-  const coupons = useSelector((state) => state.coupons.coupons);
-  console.log("coupons", coupons);
+  const dispatch = useDispatch(); // Khởi tạo dispatch để sử dụng các hàm trong redux
+  const coupons = useSelector((state) => state.coupons.coupons); // Lấy danh sách mã giảm giá từ redux store
+  console.log("coupons", coupons); // In ra danh sách mã giảm giá trong console để kiểm tra
 
-  const [newCouponCode, setNewCouponCode] = useState("");
-  const [discount, setDiscount] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
-  const [editingCoupon, setEditingCoupon] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const couponsPerPage = 5;
+  const [newCouponCode, setNewCouponCode] = useState(""); // Trạng thái lưu mã giảm giá mới
+  const [discount, setDiscount] = useState(""); // Trạng thái lưu mức giảm giá
+  const [expiryDate, setExpiryDate] = useState(""); // Trạng thái lưu ngày hết hạn
+  const [editingCoupon, setEditingCoupon] = useState(null); // Trạng thái lưu mã giảm giá đang chỉnh sửa
+  const [searchQuery, setSearchQuery] = useState(""); // Trạng thái lưu chuỗi tìm kiếm
+  const [currentPage, setCurrentPage] = useState(1); // Trạng thái lưu trang hiện tại của phân trang
+  const couponsPerPage = 5; // Số lượng mã giảm giá hiển thị trên mỗi trang
 
   useEffect(() => {
-    dispatch(fetchCoupons());
+    dispatch(fetchCoupons()); // Gọi hàm lấy danh sách mã giảm giá khi component được render
   }, [dispatch]);
 
   const handleAddCoupon = () => {
-    if (!newCouponCode || !discount || !expiryDate) return;
+    // Hàm thêm mã giảm giá mới
+    if (!newCouponCode || !discount || !expiryDate) return; // Kiểm tra xem có trường nào trống không
 
     const newCoupon = {
-      code: newCouponCode,
-      discount: parseFloat(discount),
-      expiryDate,
+      code: newCouponCode, // Lưu mã giảm giá mới
+      discount: parseFloat(discount), // Chuyển mức giảm giá sang kiểu số thực
+      expiryDate, // Lưu ngày hết hạn
     };
-    dispatch(createCoupon(newCoupon));
-    resetForm();
+    dispatch(createCoupon(newCoupon)); // Dispatch hàm tạo mã giảm giá
+    resetForm(); // Reset lại form nhập
   };
 
   const handleEditCoupon = (coupon) => {
-    setEditingCoupon(coupon);
-    setNewCouponCode(coupon.code);
-    setDiscount(coupon.discount);
-    setExpiryDate(coupon.expiryDate);
+    // Hàm chỉnh sửa mã giảm giá
+    setEditingCoupon(coupon); // Đặt mã giảm giá đang chỉnh sửa
+    setNewCouponCode(coupon.code); // Điền mã giảm giá vào form
+    setDiscount(coupon.discount); // Điền mức giảm giá vào form
+    setExpiryDate(coupon.expiryDate); // Điền ngày hết hạn vào form
   };
 
   const handleUpdateCoupon = () => {
-    if (!editingCoupon) return;
+    // Hàm cập nhật mã giảm giá
+    if (!editingCoupon) return; // Kiểm tra có mã giảm giá đang chỉnh sửa không
 
     const updatedCoupon = {
-      code: newCouponCode,
-      discount: discount,
-      expiryDate: expiryDate,
+      code: newCouponCode, // Mã giảm giá mới
+      discount: discount, // Mức giảm giá mới
+      expiryDate: expiryDate, // Ngày hết hạn mới
     };
 
-    console.log("Updating coupon with ID:", editingCoupon._id);
+    console.log("Updating coupon with ID:", editingCoupon._id); // Log ID mã giảm giá đang cập nhật
 
     dispatch(
-      updateCoupon({ id: editingCoupon._id, couponData: updatedCoupon })
+      updateCoupon({ id: editingCoupon._id, couponData: updatedCoupon }) // Dispatch cập nhật mã giảm giá
     );
-    resetForm();
+    resetForm(); // Reset lại form nhập
   };
 
   const handleDeleteCoupon = (id) => async () => {
-    console.log("xóa ", id);
+    // Hàm xóa mã giảm giá
+    console.log("xóa ", id); // Log ID mã giảm giá đang xóa
     try {
-      dispatch(deleteCoupon(id));
+      dispatch(deleteCoupon(id)); // Dispatch xóa mã giảm giá
     } catch (error) {
-      console.error("Failed to delete coupon:", error);
+      console.error("Failed to delete coupon:", error); // Log lỗi nếu xóa thất bại
     }
   };
 
   const resetForm = () => {
-    setNewCouponCode("");
-    setDiscount("");
-    setExpiryDate("");
-    setEditingCoupon(null);
+    // Hàm reset lại form nhập
+    setNewCouponCode(""); // Xóa mã giảm giá trong form
+    setDiscount(""); // Xóa mức giảm giá trong form
+    setExpiryDate(""); // Xóa ngày hết hạn trong form
+    setEditingCoupon(null); // Xóa mã giảm giá đang chỉnh sửa
   };
 
-  const filteredCoupons = coupons.filter((coupon) =>
-    coupon.code.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCoupons = coupons.filter(
+    (coupon) => coupon.code.toLowerCase().includes(searchQuery.toLowerCase()) // Lọc danh sách mã giảm giá theo từ khóa tìm kiếm
   );
 
-  const indexOfLastCoupon = currentPage * couponsPerPage;
-  const indexOfFirstCoupon = indexOfLastCoupon - couponsPerPage;
+  const indexOfLastCoupon = currentPage * couponsPerPage; // Tính chỉ số mã giảm giá cuối cùng của trang hiện tại
+  const indexOfFirstCoupon = indexOfLastCoupon - couponsPerPage; // Tính chỉ số mã giảm giá đầu tiên của trang hiện tại
   const currentCoupons = filteredCoupons.slice(
     indexOfFirstCoupon,
-    indexOfLastCoupon
+    indexOfLastCoupon // Lấy danh sách mã giảm giá hiện tại trên trang
   );
 
-  const totalPages = Math.ceil(filteredCoupons.length / couponsPerPage);
+  const totalPages = Math.ceil(filteredCoupons.length / couponsPerPage); // Tính tổng số trang
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    setCurrentPage(page); // Thay đổi trang hiện tại
   };
 
   return (
@@ -186,14 +191,16 @@ const CouponAdmin = () => {
         </table>
       </div>
 
-      {/* Pagination Controls */}
+      {/* Phân trang*/}
       <div className="sticky bottom-0 right-0 flex justify-end p-4 bg-white">
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <button
             key={page}
             onClick={() => handlePageChange(page)}
             className={`mx-1 px-3 py-1 rounded ${
-              currentPage === page ? "bg-blue-500 text-white" : "bg-gray-200"
+              page === currentPage
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
             }`}
           >
             {page}
