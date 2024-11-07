@@ -99,7 +99,7 @@ const removeFromWishList = async (req, res) => {
 
     // Xóa productId ra khỏi wishList nếu đã có
     if (user.wishList.includes(productId)) {
-      user.wishList.filter(otherId => otherId !== productId);
+      user.wishList.pull(productId);
       await user.save();
     }
 
