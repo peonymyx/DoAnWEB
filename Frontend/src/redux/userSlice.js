@@ -10,84 +10,92 @@ const initialState = {
   error: null,
 };
 
+// Lấy token từ cookie để xác thực người dùng
 const token = Cookies.get("token");
 
+// Thực hiện gọi API để lấy danh sách người dùng
 export const getUsers = createAsyncThunk(
-  "user/getUsers",
+  "user/getUsers", // Tên action trong Redux
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu GET đến API để lấy danh sách người dùng, thêm token vào header để xác thực
       const res = await axios.get("https://doanweb-api.onrender.com/api/v1/getUsers", {
         headers: {
-          token: `Bearer ${token}`,
+          token: `Bearer ${token}`, // Thêm token vào header
         },
       });
-      return res.data.users;
+      return res.data.users; // Trả về danh sách người dùng nhận được từ API
     } catch (error) {
+      // Nếu có lỗi, trả về lỗi
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Cập nhật vai trò người dùng
 export const updateRoleUser = createAsyncThunk(
-  "user/updateRoleUser",
+  "user/updateRoleUser", // Tên action trong Redux
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu PUT đến API để cập nhật vai trò người dùng, thêm token vào header
       const res = await axios.put(
         "https://doanweb-api.onrender.com/api/v1/users/updateRole",
         payload,
         {
           headers: {
-            token: `Bearer ${token}`,
+            token: `Bearer ${token}`, // Thêm token vào header
           },
         }
       );
-      return res.data;
+      return res.data; // Trả về kết quả cập nhật
     } catch (error) {
+      // Nếu có lỗi, trả về lỗi
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Cập nhật thông tin người dùng
 export const updateUser = createAsyncThunk(
-  "user/updateUser",
+  "user/updateUser", // Tên action trong Redux
   async ({ id, data1 }, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu PUT để cập nhật thông tin người dùng với dữ liệu multipart/form-data và thêm token vào header
       const response = await axios.put(
         `https://doanweb-api.onrender.com/api/v1/updateUser/${id}`,
         data1,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
-            token: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // Định dạng dữ liệu
+            token: `Bearer ${token}`, // Thêm token vào header
           },
         }
       );
+      // Hiển thị thông báo thành công
       Swal.fire({
         title: "Success!",
-        text: "Update user successfully!",
+        text: "Update user successfully!", // Thông báo thành công
         icon: "success",
         confirmButtonText: "OK",
       });
-      return response.data.user;
+      return response.data.user; // Trả về thông tin người dùng đã cập nhật
     } catch (error) {
-      // Swal.fire({
-      //   title: "Error!",
-      //   text: "Update user failed!",
-      //   icon: "error",
-      //   confirmButtonText: "OK",
-      // });
+      // Nếu có lỗi xảy ra, trả về lỗi
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Lấy thông tin người dùng theo ID
 export const getUserById = createAsyncThunk(
-  "user/getUserById",
+  "user/getUserById", // Tên action trong Redux
   async (id, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu GET đến API để lấy thông tin người dùng theo ID
       const response = await API.get(`/api/v1/getUserById/${id}`);
-      return response.data.user;
+      return response.data.user; // Trả về thông tin người dùng
     } catch (error) {
+      // Nếu có lỗi xảy ra, trả về lỗi
       return rejectWithValue(error.response.data);
     }
   }

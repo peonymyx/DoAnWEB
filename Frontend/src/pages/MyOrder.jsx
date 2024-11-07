@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -10,34 +10,47 @@ const MyOrder = () => {
 
   const auth = useSelector((state) => state.auth.currentUser);
 
+  // useEffect này được dùng để lấy danh sách đơn hàng từ server khi người dùng đã đăng nhập (có `auth`)
+  // Nếu người dùng đã đăng nhập, gửi yêu cầu lấy đơn hàng từ API
   useEffect(() => {
     const fetchOrders = async () => {
       try {
+        // Gửi yêu cầu GET đến API để lấy danh sách đơn hàng cho người dùng
         const response = await axios.get(
           `https://doanweb-api.onrender.com/api/v1/otherProduct?userId=${auth?._id}`
         );
+        // Cập nhật state `myOrder` với dữ liệu đơn hàng nhận được từ API
         setMyOrder(response.data.otherProduct);
       } catch (error) {
+        // Nếu có lỗi xảy ra khi lấy dữ liệu, log lỗi ra console
         console.error("Error fetching orders:", error);
       }
     };
 
+    // Nếu người dùng đã đăng nhập (có `auth`), gọi hàm `fetchOrders` để lấy dữ liệu
     if (auth) {
       fetchOrders();
     }
-  }, [auth]);
+  }, [auth]); // Chạy lại mỗi khi `auth` thay đổi
 
+  // useEffect này kiểm tra nếu người dùng chưa đăng nhập (không có `auth`)
+  // Nếu chưa đăng nhập, chuyển hướng người dùng tới trang đăng nhập (`/login`)
   useEffect(() => {
     if (!auth) {
-      navigate("/login");
+      navigate("/login"); // Điều hướng người dùng tới trang đăng nhập
     }
-  }, [auth, navigate]);
+  }, [auth, navigate]); // Chạy lại mỗi khi `auth` hoặc `navigate` thay đổi
 
+  // Hàm tính tổng giá trị đơn hàng trong giỏ hàng
+  // `cart` là mảng các sản phẩm trong giỏ hàng
   const calculateTotal = (cart) => {
-    return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    return cart.reduce((acc, item) => acc + item.price * item.quantity, 0); // Tính tổng giá trị của giỏ hàng
   };
 
+  // Hàm định dạng ngày tháng từ chuỗi ngày (string)
+  // `dateString` là chuỗi ngày cần định dạng
   const formatDate = (dateString) => {
+    // Chuyển đổi chuỗi ngày thành đối tượng `Date` và định dạng lại theo định dạng Việt Nam
     return new Date(dateString).toLocaleDateString("vi-VN");
   };
 

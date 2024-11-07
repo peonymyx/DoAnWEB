@@ -3,22 +3,36 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 const MyOrderDetail = () => {
+  // Lấy tham số `id` từ URL bằng hook `useParams()`
+  // Tham số này dùng để truy vấn thông tin sản phẩm theo `id` từ URL
   const { id } = useParams();
+
+  // Khai báo state `other` để lưu trữ thông tin sản phẩm hoặc các dữ liệu liên quan
   const [other, setOther] = React.useState([]);
+
+  // `useEffect` để gọi API và lấy thông tin sản phẩm dựa trên `id` từ URL
   useEffect(() => {
+    // Gửi yêu cầu GET đến API để lấy thông tin sản phẩm theo `id`
     axios
       .get(`https://doanweb-api.onrender.com/api/v1/otherProduct/${id}`)
       .then((res) => {
+        // Khi dữ liệu nhận được, cập nhật state `other` với thông tin sản phẩm
         setOther(res.data.otherProduct);
       })
       .catch((error) => {
+        // Nếu có lỗi xảy ra trong quá trình lấy dữ liệu, log lỗi ra console
         console.log(error);
       });
-  }, [id]);
+  }, [id]); // useEffect này sẽ chạy lại khi giá trị của `id` thay đổi
+
+  // Tính tổng giá trị đơn hàng trong giỏ hàng (nếu có thông tin giỏ hàng trong `other`)
   let totalPrice = 0;
+  // Duyệt qua tất cả các sản phẩm trong giỏ hàng và tính tổng giá trị
   other?.cart?.forEach((item) => {
+    // Tính tổng giá trị = giá sản phẩm * số lượng và cộng dồn vào `totalPrice`
     totalPrice += item.price * item.quantity;
   });
+
   return (
     <div className="content-wrapper">
       <div className="content-header p-4">

@@ -7,12 +7,15 @@ const initialState = {
   error: null,
 };
 
+// Thực hiện gọi API để lấy thông tin thống kê
 export const fetchStatistical = createAsyncThunk(
-  "/statistical/fetchStatistical",
+  "/statistical/fetchStatistical", // Tên action trong Redux
   async () => {
+    // Gửi yêu cầu GET đến API để lấy thông tin thống kê
     const response = await axios.get(
-      "https://doanweb-api.onrender.com/api/v1/statistical"
+      "https://doanweb-api.onrender.com/api/v1/statistical" // Địa chỉ API lấy thông tin thống kê
     );
+    // Trả về dữ liệu thống kê nhận được từ API
     return response.data;
   }
 );

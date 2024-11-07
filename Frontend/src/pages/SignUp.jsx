@@ -11,54 +11,80 @@ import {
 } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 
+// Định nghĩa schema xác thực (validation schema) với yup
 const schema = yup.object().shape({
+  // Trường email: phải là một chuỗi có định dạng email hợp lệ và bắt buộc phải có
   email: yup.string().email().required("Email là bắt buộc."),
+
+  // Trường mật khẩu: phải là chuỗi, có độ dài từ 6 đến 15 ký tự và bắt buộc
   password: yup
     .string()
     .min(6, "Mật khẩu phải có ít nhất 6 ký tự.")
     .max(15, "Mật khẩu không được vượt quá 15 ký tự.")
     .required("Mật khẩu là bắt buộc."),
+
+  // Trường xác nhận mật khẩu: phải khớp với mật khẩu đã nhập ở trên
   confirmPassword: yup
     .string()
     .oneOf([yup.ref("password"), null], "Mật khẩu xác nhận không khớp."),
+
+  // Trường tên người dùng: bắt buộc phải có
   username: yup.string().required("Tên người dùng là bắt buộc."),
+
+  // Trường số điện thoại: bắt buộc phải có
   phone: yup.string().required("Số điện thoại là bắt buộc."),
+
+  // Trường địa chỉ: bắt buộc phải có
   address: yup.string().required("Địa chỉ là bắt buộc."),
+
+  // Trường giới tính: bắt buộc phải có
   gender: yup.string().required("Giới tính là bắt buộc."),
 });
 
 const SignUp = () => {
+  // Dùng hook useForm để quản lý form, kết hợp với yupResolver để áp dụng xác thực
   const { register, handleSubmit } = useForm({
     resolver: yupResolver(schema),
   });
+
+  // Dùng dispatch từ Redux để gửi các action
   const dispatch = useDispatch();
+  // Dùng navigate để chuyển hướng đến các trang khác
   const navigate = useNavigate();
 
+  // Định nghĩa headers cho yêu cầu HTTP
   const headers = {
     "Content-Type": "application/json",
   };
 
+  // Hàm xử lý khi người dùng submit form đăng ký
   const handleSignUp = async (data) => {
-    console.log(data);
+    console.log(data); // In dữ liệu form ra console
     try {
+      // Gửi action đăng ký bắt đầu (registerStart) đến Redux
       dispatch(registerStart());
+      // Gửi yêu cầu POST tới API để đăng ký tài khoản mới
       const res = await axios.post(
-        "https://doanweb-api.onrender.com/api/v1/signup",
-        data,
-        { headers }
+        "https://doanweb-api.onrender.com/api/v1/signup", // API endpoint để đăng ký
+        data, // Dữ liệu form
+        { headers } // Header của yêu cầu
       );
+      // Nếu đăng ký thành công, gửi action đăng ký thành công (registerSuccess)
       dispatch(registerSuccess(res.data));
+      // Hiển thị thông báo thành công bằng SweetAlert
       Swal.fire({
         icon: "success",
         title: "Đăng ký thành công",
         text: "Vui lòng đăng nhập để tiếp tục",
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500, // Thời gian hiển thị thông báo là 1.5 giây
       });
+      // Chuyển hướng đến trang login
       navigate("/login");
     } catch (error) {
-      console.log(error);
-      console.log(error.response.data);
+      console.log(error); // In lỗi ra console
+      console.log(error.response.data); // In chi tiết lỗi từ phản hồi API
+      // Gửi action đăng ký thất bại (registerFailure)
       dispatch(registerFailure(error.message));
     }
   };

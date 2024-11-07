@@ -1,6 +1,6 @@
 // redux/couponSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
   coupons: [],
@@ -9,68 +9,85 @@ const initialState = {
   error: null,
 };
 
-// Create coupon
+// Tạo mã giảm giá (coupon)
 export const createCoupon = createAsyncThunk(
-  'coupon/create',
+  "coupon/create", // Tên action
   async (couponData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('https://doanweb-api.onrender.com/api/v1/coupons', couponData);
-      return response.data; // Return coupon data
+      // Gửi yêu cầu POST để tạo mã giảm giá mới
+      const response = await axios.post(
+        "https://doanweb-api.onrender.com/api/v1/coupons",
+        couponData
+      );
+      return response.data; // Trả về dữ liệu mã giảm giá đã tạo
     } catch (error) {
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-// Get all coupons
+// Lấy tất cả mã giảm giá
 export const fetchCoupons = createAsyncThunk(
-  'coupon/fetchAll',
+  "coupon/fetchAll", // Tên action
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('https://doanweb-api.onrender.com/api/v1/coupons');
-      return response.data; // Return array of coupons
+      // Gửi yêu cầu GET để lấy tất cả mã giảm giá
+      const response = await axios.get("https://doanweb-api.onrender.com/api/v1/coupons");
+      return response.data; // Trả về danh sách mã giảm giá
     } catch (error) {
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-// Update coupon
+// Cập nhật mã giảm giá
 export const updateCoupon = createAsyncThunk(
-  'coupon/update',
+  "coupon/update", // Tên action
   async ({ id, couponData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`https://doanweb-api.onrender.com/api/v1/coupons/${id}`, couponData);
-      return response.data;
+      // Gửi yêu cầu PUT để cập nhật mã giảm giá theo ID
+      const response = await axios.put(
+        `https://doanweb-api.onrender.com/api/v1/coupons/${id}`,
+        couponData
+      );
+      return response.data; // Trả về dữ liệu mã giảm giá đã cập nhật
     } catch (error) {
       console.log(error);
-      
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-// Delete coupon
+// Xóa mã giảm giá
 export const deleteCoupon = createAsyncThunk(
-  'coupon/delete',
+  "coupon/delete", // Tên action
   async (id, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu DELETE để xóa mã giảm giá theo ID
       await axios.delete(`https://doanweb-api.onrender.com/api/v1/coupons/${id}`);
-      return id; // Return coupon ID to delete
+      return id; // Trả về ID của mã giảm giá đã xóa
     } catch (error) {
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-// Apply coupon
+// Áp dụng mã giảm giá
 export const applyCoupon = createAsyncThunk(
-  'coupon/apply',
+  "coupon/apply", // Tên action
   async (code, { rejectWithValue }) => {
     try {
-      const response = await axios.post('https://doanweb-api.onrender.com/api/v1/apply', { code });
-      return response.data.discount; // Return discount value
+      // Gửi yêu cầu POST để áp dụng mã giảm giá
+      const response = await axios.post("https://doanweb-api.onrender.com/api/v1/apply", {
+        code,
+      });
+      return response.data.discount; // Trả về giá trị giảm giá
     } catch (error) {
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
@@ -78,7 +95,7 @@ export const applyCoupon = createAsyncThunk(
 
 // Create slice
 const couponSlice = createSlice({
-  name: 'coupons',
+  name: "coupons",
   initialState,
   reducers: {
     resetDiscount: (state) => {
@@ -121,7 +138,9 @@ const couponSlice = createSlice({
     });
     builder.addCase(updateCoupon.fulfilled, (state, action) => {
       state.isLoading = false;
-      const index = state.coupons.findIndex(coupon => coupon._id === action.payload._id);
+      const index = state.coupons.findIndex(
+        (coupon) => coupon._id === action.payload._id
+      );
       if (index !== -1) {
         state.coupons[index] = action.payload;
       }
@@ -138,7 +157,9 @@ const couponSlice = createSlice({
     });
     builder.addCase(deleteCoupon.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.coupons = state.coupons.filter(coupon => coupon._id !== action.payload);
+      state.coupons = state.coupons.filter(
+        (coupon) => coupon._id !== action.payload
+      );
     });
     builder.addCase(deleteCoupon.rejected, (state, action) => {
       state.isLoading = false;

@@ -29,7 +29,7 @@ axios.interceptors.response.use(
   (error) => {
     // Kiểm tra nếu response trả về lỗi do xác thực
     if (error.response.status === 401) {
-      // 401: Unauthorized, điều hướng người dùng tới trang đăng nhập
+      // 401: Unauthorized - điều hướng người dùng tới trang đăng nhập
       window.location.href = "/login";
     }
 

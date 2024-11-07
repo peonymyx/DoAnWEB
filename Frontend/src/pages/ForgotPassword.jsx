@@ -5,37 +5,50 @@ import Swal from "sweetalert2";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
 
+  // Hàm `handleSubmit` để xử lý việc gửi yêu cầu lấy lại mật khẩu qua email
   const handleSubmit = async () => {
+    // Đặt headers để xác định kiểu nội dung là JSON
     const headers = {
       "Content-Type": "application/json",
     };
+
     try {
+      // Gửi yêu cầu POST tới API 'forgotpassword' với email người dùng
       const res = await axios.post(
         "https://doanweb-api.onrender.com/api/v1/forgotpassword",
-        { email },
+        { email }, // Dữ liệu gửi đi là một đối tượng chứa `email`
         headers
       );
+
+      // Kiểm tra trạng thái phản hồi từ server
       if (res.status === 200) {
+        // Nếu thành công, hiển thị thông báo thành công với SweetAlert
         Swal.fire({
-          icon: "success",
-          title: "Hoàn thành",
-          text: "Đã gửi về email thành công",
+          icon: "success", // Biểu tượng thông báo thành công
+          title: "Hoàn thành", // Tiêu đề thông báo
+          text: "Đã gửi về email thành công", // Nội dung thông báo
         });
+        // Xóa nội dung email trong ô nhập
         setEmail("");
       } else {
+        // Nếu phản hồi không phải là thành công (không phải mã 200), hiển thị thông báo lỗi
         Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Gửi về email thất bại ",
+          icon: "error", // Biểu tượng thông báo lỗi
+          title: "Lỗi", // Tiêu đề thông báo lỗi
+          text: "Gửi về email thất bại ", // Nội dung thông báo lỗi
         });
       }
+
+      // In phản hồi của server ra console để kiểm tra
       console.log(res);
     } catch (error) {
+      // Xử lý lỗi khi có sự cố xảy ra trong quá trình gửi yêu cầu
       console.log(error);
+      // Hiển thị thông báo lỗi với SweetAlert
       Swal.fire({
-        icon: "error",
-        title: "Lỗi",
-        text: "Đã xảy ra lỗi không mong muốn",
+        icon: "error", // Biểu tượng thông báo lỗi
+        title: "Lỗi", // Tiêu đề thông báo lỗi
+        text: "Đã xảy ra lỗi không mong muốn", // Nội dung thông báo lỗi
       });
     }
   };

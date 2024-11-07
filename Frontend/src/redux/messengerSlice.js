@@ -8,37 +8,44 @@ const initialState = {
   error: null,
 };
 
+// Lấy tin nhắn của người gửi
 export const getMessenger = createAsyncThunk(
-  "messenger/getMessenger",
+  "messenger/getMessenger", // Tên action
   async (payload, { rejectWithValue }) => {
-    console.log(payload);
+    console.log(payload); // In ra payload (ID người gửi)
     try {
+      // Gửi yêu cầu GET để lấy tin nhắn của người gửi theo senderId
       const res = await axios.get(
         `https://doanweb-api.onrender.com/api/v1/messenger?senderId=${payload}`
       );
-      console.log(res.data);
-      return res.data;
+      console.log(res.data); // In ra dữ liệu nhận được
+      return res.data; // Trả về dữ liệu tin nhắn
     } catch (error) {
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Thêm tin nhắn mới
 export const addMessenger = createAsyncThunk(
-  "messenger/addMessenger",
+  "messenger/addMessenger", // Tên action
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu POST để thêm tin nhắn mới
       const res = await axios.post(
         "https://doanweb-api.onrender.com/api/v1/messenger/add",
-        payload
+        payload // Dữ liệu tin nhắn mới
       );
-      return res.data.messenger;
+      return res.data.messenger; // Trả về dữ liệu tin nhắn đã thêm
     } catch (error) {
+      // Hiển thị thông báo lỗi nếu có lỗi xảy ra
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response.data.message,
+        text: error.response.data.message, // Lỗi từ API
       });
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }

@@ -6,7 +6,7 @@ const OtherSuccess = () => {
           Thanh toán thành công!
         </h2>
         <p className="text-gray-700 mb-8 text-center">
-          Cảm ơn bạn đã tin tưởng đặt hàng
+          Cảm ơn bạn đã tin tưởng đặt hàng.
         </p>
         <div className="text-center mb-8">
           <svg

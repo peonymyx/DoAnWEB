@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import {
-  Star,
-  ChevronLeft,
-  ChevronRight,
-  ShoppingCart,
-  Trash,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, ShoppingCart, Trash } from "lucide-react";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -16,7 +10,7 @@ const ProductCard = ({ product, onRemoveFromWishlist }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   if (!product) {
-    return null; // Return null if product is null or undefined
+    return null; // Trả về `null` nếu không có sản phẩm
   }
 
   return (
@@ -130,71 +124,98 @@ const Favatie = () => {
   const auth = useSelector((state) => state.auth.currentUser);
   const productsPerPage = 4;
 
+  // Hàm `fetchProducts` để lấy thông tin chi tiết của các sản phẩm trong danh sách yêu thích
   const fetchProducts = async (productIds) => {
     try {
-      // Remove duplicates and maintain order
+      // Lọc ra các `productId` duy nhất bằng cách sử dụng `Set` để loại bỏ các ID trùng lặp
       const uniqueProductIds = [...new Set(productIds)];
 
+      // Sử dụng `Promise.all` để gửi các yêu cầu lấy chi tiết sản phẩm cho mỗi `productId`
       const productsResponse = await Promise.all(
         uniqueProductIds.map((id) =>
+          // Gọi API với từng ID để lấy thông tin chi tiết của sản phẩm
           axios.get(`https://doanweb-api.onrender.com/api/v1/getProductById/${id}`)
         )
       );
+
+      // Cập nhật `productWish` với danh sách sản phẩm lấy được từ `productsResponse`
       setProductWish(productsResponse.map((res) => res.data.Product));
     } catch (error) {
+      // Xử lý lỗi khi có sự cố xảy ra trong quá trình lấy thông tin sản phẩm
       console.error("There was an error fetching the products!", error);
+      // Cập nhật thông báo lỗi cho người dùng
       setError("Không thể tải danh sách sản phẩm");
     }
   };
 
+  // Hàm `removeFromWishlist` để xóa sản phẩm khỏi danh sách yêu thích
   const removeFromWishlist = async (productId) => {
     try {
+      // Gọi API xóa sản phẩm khỏi danh sách yêu thích của người dùng với `auth._id` và `productId`
       await axios.delete(
         `https://doanweb-api.onrender.com/api/v1/users/removeFromWishList/${auth._id}/${productId}`
       );
 
-      // Update local state
+      // Cập nhật `wishlist` để loại bỏ `productId` đã xóa
       setWishlist((prevWishlist) =>
         prevWishlist.filter((id) => id !== productId)
       );
+
+      // Cập nhật `productWish` để loại bỏ sản phẩm có `_id` là `productId`
       setProductWish((prevProducts) =>
         prevProducts.filter((product) => product._id !== productId)
       );
     } catch (error) {
+      // Xử lý lỗi khi có sự cố xảy ra trong quá trình xóa sản phẩm
       console.error("There was an error removing from wishlist!", error);
+      // Cập nhật thông báo lỗi cho người dùng
       setError("Không thể xóa sản phẩm khỏi danh sách yêu thích");
     }
   };
 
+  // `useEffect` để lấy danh sách ID sản phẩm yêu thích khi `auth` thay đổi
   useEffect(() => {
+    // Hàm `fetchWishlist` để lấy danh sách sản phẩm yêu thích của người dùng
     const fetchWishlist = async () => {
+      // Đặt `loading` thành `true` khi bắt đầu lấy dữ liệu
       setLoading(true);
       try {
+        // Gọi API để lấy danh sách sản phẩm yêu thích của người dùng với `auth._id`
         const response = await axios.get(
           `https://doanweb-api.onrender.com/api/v1/users/wishListProduct/${auth._id}`
         );
 
+        // Cập nhật `wishlist` với danh sách ID sản phẩm yêu thích nhận được từ API
         setWishlist(response.data.wishList);
+        // Đặt `loading` thành `false` sau khi tải xong
         setLoading(false);
       } catch (error) {
+        // Xử lý lỗi khi có sự cố xảy ra trong quá trình lấy danh sách yêu thích
         console.error("There was an error fetching the wishlist!", error);
+        // Cập nhật thông báo lỗi cho người dùng
         setError("Không thể tải danh sách yêu thích");
+        // Đặt `loading` thành `false` ngay cả khi có lỗi
         setLoading(false);
       }
     };
 
+    // Chỉ gọi `fetchWishlist` nếu `auth` có dữ liệu (người dùng đã đăng nhập)
     if (auth) {
       fetchWishlist();
     }
+    // `useEffect` này sẽ kích hoạt lại khi `auth` thay đổi
   }, [auth]);
 
+  // `useEffect` để gọi `fetchProducts` khi `wishlist` thay đổi và có ít nhất một sản phẩm
   useEffect(() => {
     if (wishlist.length > 0) {
+      // Gọi `fetchProducts` với danh sách `wishlist` để lấy chi tiết sản phẩm
       fetchProducts(wishlist);
     }
+    // `useEffect` này sẽ kích hoạt lại khi `wishlist` thay đổi
   }, [wishlist]);
 
-  // Pagination logic
+  // Phân trang
   const totalPages = Math.ceil(productWish.length / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
