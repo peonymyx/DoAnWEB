@@ -22,71 +22,87 @@ function Cart() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCoupon, setSelectedCoupon] = useState("");
   const [filteredCoupons, setFilteredCoupons] = useState(coupons);
-
   useEffect(() => {
+    // Kiểm tra nếu người dùng đã đăng nhập (`auth` tồn tại), thực hiện gọi API lấy mã giảm giá
     if (auth) {
+      // Hàm bất đồng bộ `fetchCoupons` để lấy dữ liệu mã giảm giá từ API
       const fetchCoupons = async () => {
         try {
+          // Gọi API lấy mã giảm giá của người dùng với `_id` từ `auth`
           const response = await axios.get(
             `http://localhost:3000/api/v1/users/${auth._id}/coupons`
           );
+          // Cập nhật danh sách mã giảm giá với dữ liệu nhận được từ API
           setCoupons(response.data);
         } catch (error) {
+          // Xử lý lỗi khi có sự cố trong quá trình gọi API
           console.error("Error fetching coupons:", error);
         } finally {
+          // Sau khi kết thúc quá trình (thành công hoặc lỗi), đặt `loading` thành `false`
           setLoading(false);
         }
       };
 
+      // Gọi hàm `fetchCoupons` để lấy dữ liệu mã giảm giá
       fetchCoupons();
     }
+    // `useEffect` này chỉ chạy khi giá trị của `auth` thay đổi
   }, [auth]);
 
   useEffect(() => {
-    // Cập nhật danh sách mã giảm giá được lọc khi coupons hoặc searchTerm thay đổi
+    // Cập nhật danh sách mã giảm giá được lọc khi `coupons` hoặc `searchTerm` thay đổi
     setFilteredCoupons(
+      // Duyệt qua danh sách `coupons` để lọc các mã giảm giá có chứa `searchTerm`
       coupons.filter((coupon) =>
         coupon.code.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
+    // `useEffect` này sẽ được kích hoạt lại khi `coupons` hoặc `searchTerm` thay đổi
   }, [coupons, searchTerm]);
 
+  // Hàm `handleCouponSelect` để xử lý khi người dùng chọn một mã giảm giá
   const handleCouponSelect = (couponCode) => {
+    // Đặt mã giảm giá được chọn vào `selectedCoupon`
     setSelectedCoupon(couponCode);
   };
 
+  // Hàm `applyCoupon` để áp dụng mã giảm giá cho tổng giá trị giỏ hàng
   const applyCoupon = () => {
+    // Kiểm tra nếu chưa có mã giảm giá nào được chọn
     if (!selectedCoupon) {
       alert("Vui lòng chọn mã giảm giá trước!");
       return;
     }
 
-    // Find the selected coupon
+    // Tìm mã giảm giá được chọn từ danh sách `coupons`
     const coupon = coupons.find((c) => c.code === selectedCoupon);
+    // Nếu không tìm thấy mã giảm giá, hiển thị thông báo lỗi
     if (!coupon) {
       alert("Mã giảm giá không hợp lệ!");
       return;
     }
 
-    // Calculate the discounted total
-    const discount = coupon.discount / 100;
-    const { totalPrice } = getTotal(); // Get the original total price
-    const discountedPrice = totalPrice * (1 - discount);
-    setDiscountedTotal(discountedPrice);
+    // Tính tổng giá sau khi áp dụng mã giảm giá
+    const discount = coupon.discount / 100; // Tính phần trăm giảm giá
+    const { totalPrice } = getTotal(); // Lấy tổng giá gốc từ hàm `getTotal`
+    const discountedPrice = totalPrice * (1 - discount); // Tính giá sau khi giảm
+    setDiscountedTotal(discountedPrice); // Đặt `discountedTotal` với giá đã giảm
     alert(`Mã giảm giá ${selectedCoupon} đã được áp dụng!`);
   };
 
+  // Hàm `getTotal` để tính tổng số lượng và tổng giá trị của các sản phẩm trong giỏ hàng
   const getTotal = () => {
-    let totalQuantity = 0;
-    let totalPrice = 0;
+    let totalQuantity = 0; // Tổng số lượng sản phẩm
+    let totalPrice = 0; // Tổng giá trị trước khi giảm giá
+    // Duyệt qua các sản phẩm trong `cart` để tính tổng số lượng và tổng giá
     cart.forEach((item) => {
-      totalQuantity += item.quantity;
-      totalPrice += item.quantity * item.price;
+      totalQuantity += item.quantity; // Cộng dồn số lượng sản phẩm
+      totalPrice += item.quantity * item.price; // Cộng dồn giá của từng sản phẩm
     });
     return {
-      totalQuantity,
-      totalPrice,
-      discountedTotal: discountedTotal || totalPrice,
+      totalQuantity, // Trả về tổng số lượng sản phẩm
+      totalPrice, // Trả về tổng giá gốc
+      discountedTotal: discountedTotal || totalPrice, // Trả về tổng giá sau khi giảm (hoặc giá gốc nếu chưa áp dụng giảm)
     };
   };
 

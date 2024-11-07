@@ -10,109 +10,133 @@ const initialState = {
   error: null,
 };
 
+// Lấy token từ cookies
 const token = Cookies.get("token");
 
+// Lấy danh sách các danh mục từ API
 export const getCategory = createAsyncThunk(
-  "category/getCategory",
+  "category/getCategory", // Tên action
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu GET đến API để lấy danh sách danh mục
       const res = await API.get("/api/v1/category");
-      console.log(res.data.category);
+      console.log(res.data.category); // Hiển thị danh mục nhận được từ API
+      // Trả về danh mục nhận được từ phản hồi của API
       return res.data.category;
     } catch (error) {
+      // Nếu có lỗi, trả về lỗi bằng cách sử dụng rejectWithValue
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Thêm một danh mục mới
 export const addCategory = createAsyncThunk(
-  "category/addCategory",
+  "category/addCategory", // Tên action
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu POST đến API để thêm danh mục mới với token trong headers
       const res = await axios.post(
         "http://localhost:3000/api/v1/category/add",
-        payload,
+        payload, // Dữ liệu gửi lên để thêm danh mục
         {
           headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${token}`,
+            "Content-Type": "application/json", // Xác định loại nội dung gửi lên là JSON
+            token: `Bearer ${token}`, // Gửi token xác thực trong header
           },
         }
       );
+      // Hiển thị thông báo thành công khi thêm danh mục thành công
       Swal.fire({
         icon: "success",
         title: "Success",
-        text: "Add category successfully",
+        text: "Add category successfully", // Thông báo thành công
       });
+      // Chuyển hướng đến trang danh mục sau khi thêm thành công
       window.location.href = "/category";
+      // Trả về danh mục mới được thêm từ phản hồi của API
       return res.data.category;
     } catch (error) {
+      // Hiển thị thông báo lỗi nếu có lỗi xảy ra
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response.data.message,
+        text: error.response.data.message, // Thông báo lỗi từ API
       });
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Cập nhật một danh mục
 export const updateCategory = createAsyncThunk(
-  "category/updateCategory",
+  "category/updateCategory", // Tên action
   async ({ data }, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu PUT đến API để cập nhật danh mục với token trong headers
       const res = await axios.put(
         `http://localhost:3000/api/v1/category/update`,
-        data,
+        data, // Dữ liệu gửi lên để cập nhật danh mục
         {
           headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${token}`,
+            "Content-Type": "application/json", // Xác định loại nội dung gửi lên là JSON
+            token: `Bearer ${token}`, // Gửi token xác thực trong header
           },
         }
       );
+      // Hiển thị thông báo thành công khi cập nhật danh mục thành công
       Swal.fire({
         icon: "success",
         title: "Success",
-        text: "Update category successfully",
+        text: "Update category successfully", // Thông báo thành công
       });
+      // Trả về danh mục đã được cập nhật từ phản hồi của API
       return res.data.category;
     } catch (error) {
+      // Hiển thị thông báo lỗi nếu có lỗi xảy ra
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response.data.message,
+        text: error.response.data.message, // Thông báo lỗi từ API
       });
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Xóa một danh mục theo ID
 export const deleteCategory = createAsyncThunk(
-  "category/deleteCategory",
+  "category/deleteCategory", // Tên action
   async (id, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu DELETE đến API để xóa danh mục theo ID với token trong headers
       const res = await axios.delete(
         `http://localhost:3000/api/v1/category/delete/${id}`,
         {
           headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${token}`,
+            "Content-Type": "application/json", // Xác định loại nội dung gửi lên là JSON
+            token: `Bearer ${token}`, // Gửi token xác thực trong header
           },
         }
       );
+      // Hiển thị thông báo thành công khi xóa danh mục thành công
       Swal.fire({
         icon: "success",
         title: "Success",
-        text: "Delete category successfully",
+        text: "Delete category successfully", // Thông báo thành công
       });
+      // Trả về danh mục đã được xóa từ phản hồi của API
       return res.data.category;
     } catch (error) {
+      // Hiển thị thông báo lỗi nếu có lỗi xảy ra
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response.data.message,
+        text: error.response.data.message, // Thông báo lỗi từ API
       });
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }

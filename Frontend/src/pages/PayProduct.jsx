@@ -16,28 +16,40 @@ function PayProducts() {
   const [note, setNote] = useState("");
   const [status, setStatus] = useState("Đã thanh toán");
 
+  // Hàm tính tổng giá trị đơn hàng sau khi áp dụng giảm giá
   const getTotal = () => {
+    // Tính giá trị đơn hàng sau giảm giá chuyển từ VNĐ sang USD (giả sử tỷ giá 1 USD = 23000 VNĐ)
     const totalPriceUsd = Math.round((discountedTotal / 23000) * 100) / 100;
 
+    // Trả về một đối tượng chứa tổng giá trị sau giảm giá và giá trị đơn hàng tính bằng USD
     return { discountedTotal, totalPriceUsd };
   };
 
+  // Hàm định dạng giá tiền: chuyển giá thành chuỗi và thêm dấu phân cách hàng nghìn
   const formatPrice = (price) => {
+    // Nếu giá trị là `undefined` hoặc `null`, trả về chuỗi rỗng
     if (price === undefined || price === null) {
       return "";
     }
+
+    // Chuyển giá trị thành chuỗi, sau đó thêm dấu chấm (.) vào vị trí hàng nghìn
+    // Ví dụ: 1000000 -> "1.000.000"
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ";
   };
 
+  // Hàm xử lý khi người dùng thanh toán
   const handlePay = () => {
+    // Dữ liệu đơn hàng sẽ được gửi đi bao gồm: tên người dùng, số điện thoại, địa chỉ, ghi chú và giỏ hàng
     const data = {
-      username: username,
-      phone_number: phone_number,
-      address: address,
-      note: note,
-      cart: cart,
-      status: "chưa thanh toán",
+      username: username, // Tên người dùng
+      phone_number: phone_number, // Số điện thoại
+      address: address, // Địa chỉ
+      note: note, // Ghi chú
+      cart: cart, // Giỏ hàng
+      status: "chưa thanh toán", // Trạng thái đơn hàng (chưa thanh toán)
     };
+
+    // Gửi dữ liệu đơn hàng tới reducer (hoặc API) để xử lý thêm (ví dụ: lưu vào cơ sở dữ liệu)
     dispatch(addOther(data));
   };
 

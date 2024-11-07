@@ -31,7 +31,6 @@ import CategoryMain from "./components/Admin/pageAdmin/CategoryMain.jsx";
 import ListProducts from "./pages/ListProducts.jsx";
 import MyOrder from "./pages/MyOrder.jsx";
 import MyOrderDetail from "./pages/MyOrderDetail.jsx";
-import CategoryPage from "./pages/CategoryPage.jsx";
 import Favatie from "./pages/favatie.jsx";
 import CouponAdmin from "./components/Admin/pageAdmin/Coupon.jsx";
 const router = createBrowserRouter([
@@ -79,10 +78,6 @@ const router = createBrowserRouter([
         element: <ListProducts></ListProducts>,
       },
       {
-        path: "/category/:id",
-        element: <CategoryPage></CategoryPage>,
-      },
-      {
         path: "/my-order",
         element: <MyOrder />,
       },
@@ -117,7 +112,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/CouponManage",
-        element: <CouponAdmin></CouponAdmin>
+        element: <CouponAdmin></CouponAdmin>,
       },
       {
         path: "/AccountManagement",
@@ -160,6 +155,7 @@ const router = createBrowserRouter([
     element: <SignUp></SignUp>,
   },
 ]);
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>

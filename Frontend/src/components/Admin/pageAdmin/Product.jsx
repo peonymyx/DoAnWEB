@@ -10,7 +10,6 @@ import {
   Button,
 } from "@material-tailwind/react"; // Import các thành phần UI từ Material Tailwind để xây dựng giao diện
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/solid"; // Import các biểu tượng (icon) từ Heroicons
-import "../../../App.css"; // Import file CSS chính
 import "../cruds/loading.css"; // Import file CSS cho hiệu ứng loading
 
 // Định nghĩa các tiêu đề cho bảng dữ liệu sản phẩm

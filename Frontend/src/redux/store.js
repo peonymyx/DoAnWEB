@@ -10,6 +10,7 @@ import messengerSlice from "./messengerSlice";
 import categoryPostSlice from "./categoryPostSlice";
 import statisticalSlice from "./statisticalSlice";
 import couponSlice from "./couponSlice";
+
 const store = configureStore({
   reducer: {
     auth: authSlice,
@@ -22,7 +23,7 @@ const store = configureStore({
     messenger: messengerSlice,
     categoryPost: categoryPostSlice,
     statistical: statisticalSlice,
-    coupons: couponSlice
+    coupons: couponSlice,
   },
 });
 

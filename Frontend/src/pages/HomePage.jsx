@@ -9,7 +9,6 @@ const HomePage = () => {
       <About></About>
       <Activities></Activities>
       <Message></Message>
-      {/* <Footer></Footer> */}
     </>
   );
 };

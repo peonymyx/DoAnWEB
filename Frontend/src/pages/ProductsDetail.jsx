@@ -20,89 +20,106 @@ const ProductsDetail = () => {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.product.products);
   const auth = useSelector((state) => state.auth);
-  // const userId = auth?._id;
   const userId = auth.currentUser._id;
   const commentList = useSelector((state) => state.comment.comment);
   const { pathname } = useLocation();
 
+  // Hàm thêm bình luận
   const handleAddComment = (comment) => {
+    // Kiểm tra nếu người dùng chưa đăng nhập, chuyển hướng đến trang login
     if (!auth.currentUser) {
       navigate("/login");
       return null;
     } else {
+      // Nếu người dùng đã đăng nhập, tạo đối tượng dữ liệu bình luận và gửi đến Redux để lưu bình luận
       const data = {
-        user_id: userId,
-        product_id: id,
-        content: comment,
+        user_id: userId, // ID người dùng
+        product_id: id, // ID sản phẩm
+        content: comment, // Nội dung bình luận
       };
-      dispatch(addComment(data));
+      dispatch(addComment(data)); // Gửi dữ liệu bình luận đến Redux
     }
   };
 
+  // Hàm cuộn trang lên đầu mỗi khi đường dẫn thay đổi
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0); // Cuộn lên đầu trang
   }, [pathname]);
 
+  // Hàm xóa bình luận theo ID
   const handleDeleteComment = (id) => {
-    dispatch(deleteCommentByAuthor(id));
+    dispatch(deleteCommentByAuthor(id)); // Gửi yêu cầu xóa bình luận đến Redux
   };
 
+  // Sử dụng useEffect để lấy dữ liệu sản phẩm và bình luận mỗi khi ID sản phẩm thay đổi
   useEffect(() => {
-    dispatch(getProductById(id));
-    dispatch(getCommentByProductId(id));
-  }, [id, dispatch, commentList.length]);
+    dispatch(getProductById(id)); // Lấy thông tin sản phẩm theo ID
+    dispatch(getCommentByProductId(id)); // Lấy danh sách bình luận của sản phẩm theo ID
+  }, [id, dispatch, commentList.length]); // Dependency array bao gồm id, dispatch và commentList.length
 
+  // Hàm chọn kích cỡ sản phẩm
   const handleSelectSize = (size) => {
-    setSelectedSize(size);
-    setError(""); // Clear any previous error when a size is selected
+    setSelectedSize(size); // Lưu kích cỡ đã chọn vào state
+    setError(""); // Xóa thông báo lỗi nếu người dùng chọn kích cỡ
   };
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook dùng để điều hướng trang
 
+  // Hàm thêm sản phẩm vào danh sách yêu thích
   const handleWishlist = async () => {
     try {
+      // Gửi yêu cầu POST tới API để thêm sản phẩm vào danh sách yêu thích
       await axios.post("http://localhost:3000/api/v1/users/wishListProduct", {
-        id: userId,
-        productId: id,
+        id: userId, // ID người dùng
+        productId: id, // ID sản phẩm
       });
+      // Hiển thị thông báo thành công khi thêm sản phẩm vào danh sách yêu thích
       Swal.fire({
-        icon: "success",
-        title: "Thêm vào yêu thích thành công!",
-        showConfirmButton: false,
-        timer: 1500,
+        icon: "success", // Biểu tượng thành công
+        title: "Thêm vào yêu thích thành công!", // Tiêu đề thông báo
+        showConfirmButton: false, // Ẩn nút xác nhận
+        timer: 1500, // Thời gian hiển thị thông báo là 1,5 giây
       });
     } catch (error) {
-      console.log(error);
+      console.log(error); // Log lỗi nếu có vấn đề trong quá trình gửi yêu cầu
     }
   };
 
+  // Hàm định dạng giá tiền (để hiển thị giá với dấu phân cách hàng nghìn)
   const formatPrice = (price) => {
     if (price === undefined || price === null) {
-      return "";
+      return ""; // Nếu giá không hợp lệ (undefined hoặc null), trả về chuỗi rỗng
     }
+    // Chuyển giá thành chuỗi và thêm dấu chấm phân cách hàng nghìn
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 
+  // Lấy thông tin sản phẩm và bình luận mỗi khi id sản phẩm thay đổi
   useEffect(() => {
-    dispatch(getProductById(id));
-    dispatch(getCommentByProductId(id));
-  }, [id, dispatch]);
+    dispatch(getProductById(id)); // Lấy thông tin sản phẩm theo ID
+    dispatch(getCommentByProductId(id)); // Lấy danh sách bình luận của sản phẩm theo ID
+  }, [id, dispatch]); // Dependency array bao gồm id và dispatch
 
+  // Hàm thêm sản phẩm vào giỏ hàng
   const handleAddToCart = () => {
+    // Kiểm tra nếu người dùng chưa chọn kích cỡ thì hiển thị thông báo lỗi
     if (!selectedSize) {
       setError("Vui lòng chọn kích cỡ trước khi thêm vào giỏ hàng.");
       return;
     }
 
+    // Tạo dữ liệu sản phẩm để thêm vào giỏ hàng
     const data = {
-      user_id: userId,
-      product_id: id,
-      image: product.image,
-      name: product.name,
-      price: product.price,
-      description: product.description,
-      size: selectedSize,
+      user_id: userId, // ID người dùng
+      product_id: id, // ID sản phẩm
+      image: product.image, // Hình ảnh sản phẩm
+      name: product.name, // Tên sản phẩm
+      price: product.price, // Giá sản phẩm
+      description: product.description, // Mô tả sản phẩm
+      size: selectedSize, // Kích cỡ đã chọn
     };
+
+    // Gửi yêu cầu thêm sản phẩm vào giỏ hàng và chuyển hướng đến trang giỏ hàng
     dispatch(addToCart(data));
     navigate("/cart");
   };

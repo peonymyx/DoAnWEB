@@ -37,19 +37,6 @@ const ProductCard = ({ product }) => {
         <h2 className="text-sm sm:text-lg mt-3 font-bold truncate">
           {product.name}
         </h2>
-        {/* <div className="flex items-center mt-1">
-          {[...Array(5)].map((_, index) => (
-            <Star
-              key={index}
-              className={`h-4 w-4 ${
-                index < product.rating ? "text-yellow-500" : "text-gray-300"
-              }`}
-            />
-          ))}
-          <span className="ml-1 text-xs sm:text-sm text-gray-600">
-            ({product.rating})
-          </span>
-        </div> */}
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
         </p>
@@ -82,62 +69,73 @@ const ListProducts = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // useEffect đầu tiên để lấy dữ liệu khi component được render
   useEffect(() => {
+    // Hàm bất đồng bộ `fetchData` để lấy dữ liệu sản phẩm và danh mục
     const fetchData = async () => {
       try {
-        setIsLoading(true);
-        await dispatch(getProduct());
-        await getCategoryList();
-        setIsLoading(false);
+        setIsLoading(true); // Bắt đầu quá trình tải dữ liệu
+        await dispatch(getProduct()); // Gửi yêu cầu lấy danh sách sản phẩm từ Redux store
+        await getCategoryList(); // Gọi hàm lấy danh sách danh mục
+        setIsLoading(false); // Kết thúc quá trình tải dữ liệu
       } catch (err) {
-        setError("An error occurred while fetching data.");
-        setIsLoading(false);
+        // Nếu có lỗi xảy ra, đặt thông báo lỗi và ngừng tải dữ liệu
+        setError("An error occurred while fetching data."); // Thông báo lỗi
+        setIsLoading(false); // Ngừng trạng thái tải
       }
     };
-    fetchData();
-  }, [dispatch]);
 
+    fetchData(); // Gọi hàm `fetchData` khi component render lần đầu
+  }, [dispatch]); // useEffect này phụ thuộc vào `dispatch`
+
+  // useEffect thứ hai để cuộn trang lên đầu khi component render lần đầu
   useEffect(() => {
     window.scrollTo(0, 0); // Cuộn lên đầu trang
   }, []);
 
+  // Hàm bất đồng bộ `getCategoryList` để lấy danh sách danh mục từ API
   const getCategoryList = async () => {
     try {
+      // Gửi yêu cầu GET tới API để lấy danh sách danh mục
       const res = await axios.get("http://localhost:3000/api/v1/category");
-      setCategories(res.data.category);
+      setCategories(res.data.category); // Cập nhật state `categories` với dữ liệu danh mục
     } catch (error) {
+      // Nếu có lỗi xảy ra, in ra console và hiển thị thông báo lỗi
       console.error("Error fetching categories:", error);
-      setError("An error occurred while fetching categories.");
+      setError("An error occurred while fetching categories."); // Thông báo lỗi
     }
   };
 
+  // Hàm `handleCategoryChange` để xử lý sự kiện thay đổi danh mục được chọn
   const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
+    setSelectedCategory(event.target.value); // Cập nhật danh mục được chọn dựa trên giá trị sự kiện
   };
 
-  const filteredProducts = Array.isArray(products)
+  // Lọc và sắp xếp sản phẩm dựa trên danh mục được chọn, từ khóa tìm kiếm, và tiêu chí sắp xếp
+  const filteredProducts = Array.isArray(products) // Kiểm tra `products` có phải là một mảng hay không
     ? products
         .filter(
           (product) =>
-            (selectedCategory === "All" ||
-              product.category === selectedCategory) &&
-            product.name.toLowerCase().includes(searchTerm.toLowerCase())
+            (selectedCategory === "All" || // Nếu danh mục là "All", lấy tất cả sản phẩm
+              product.category === selectedCategory) && // Nếu không, lọc theo danh mục được chọn
+            product.name.toLowerCase().includes(searchTerm.toLowerCase()) // Lọc theo tên sản phẩm có chứa từ khóa tìm kiếm (không phân biệt hoa thường)
         )
         .sort((a, b) => {
+          // Sắp xếp sản phẩm dựa trên tiêu chí `sortBy`
           switch (sortBy) {
             case "name-asc":
-              return a.name.localeCompare(b.name);
+              return a.name.localeCompare(b.name); // Sắp xếp tên sản phẩm từ A-Z
             case "name-desc":
-              return b.name.localeCompare(a.name);
+              return b.name.localeCompare(a.name); // Sắp xếp tên sản phẩm từ Z-A
             case "price-asc":
-              return a.price - b.price;
+              return a.price - b.price; // Sắp xếp giá từ thấp đến cao
             case "price-desc":
-              return b.price - a.price;
+              return b.price - a.price; // Sắp xếp giá từ cao đến thấp
             default:
-              return 0;
+              return 0; // Không thay đổi thứ tự nếu không có tiêu chí sắp xếp
           }
         })
-    : [];
+    : []; // Nếu `products` không phải là mảng, trả về mảng rỗng
 
   if (isLoading) {
     return <div className="text-center mt-8">Đang tải......</div>;

@@ -11,94 +11,115 @@ const initialState = {
 
 const token = Cookies.get("token");
 
+// Thêm bình luận
 export const addComment = createAsyncThunk(
-  "comment/addComment",
+  "comment/addComment", // Tên action
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu POST để thêm bình luận mới với token trong headers
       const res = await axios.post(
         "http://localhost:3000/api/v1/comment/addComment",
-        payload,
+        payload, // Dữ liệu gửi lên để thêm bình luận
         {
           headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${token}`,
+            "Content-Type": "application/json", // Xác định loại nội dung gửi lên là JSON
+            token: `Bearer ${token}`, // Gửi token xác thực trong header
           },
         }
       );
+      // Hiển thị thông báo thành công khi thêm bình luận thành công
       Swal.fire({
         icon: "success",
-        text: "Thêm bình luận thành công",
+        text: "Thêm bình luận thành công", // Thông báo thành công
       });
+      // Trả về bình luận đã được thêm từ phản hồi của API
       return res.data.comment;
     } catch (error) {
+      // Hiển thị thông báo lỗi nếu có lỗi xảy ra
       Swal.fire({
         icon: "error",
-        title: "Lỗi",
-        text: "Vui lòng đăng nhập để bình luận",
-        confirmButtonText: ` <a href="/login">Đăng Nhập</a> `,
+        title: "Lỗi", // Tiêu đề thông báo lỗi
+        text: "Vui lòng đăng nhập để bình luận", // Thông báo lỗi khi chưa đăng nhập
+        confirmButtonText: ` <a href="/login">Đăng Nhập</a> `, // Link đăng nhập
       });
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Lấy danh sách bình luận
 export const getComment = createAsyncThunk(
-  "comment/getComment",
+  "comment/getComment", // Tên action
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu GET để lấy danh sách bình luận từ API
       const res = await axios.get(
         "http://localhost:3000/api/v1/comment/getComment",
         {
           headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${token}`,
+            "Content-Type": "application/json", // Xác định loại nội dung gửi lên là JSON
+            token: `Bearer ${token}`, // Gửi token xác thực trong header
           },
         }
       );
+      // Trả về danh sách bình luận nhận được từ phản hồi của API
       return res.data.comment;
     } catch (error) {
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Lấy bình luận theo ID sản phẩm
 export const getCommentByProductId = createAsyncThunk(
-  "comment/getCommentByProductId",
+  "comment/getCommentByProductId", // Tên action
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu GET để lấy bình luận theo ID sản phẩm
       const res = await axios.get(
         `http://localhost:3000/api/v1/comment/getCommentByProductId/${payload}`,
         {
           headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${token}`,
+            "Content-Type": "application/json", // Xác định loại nội dung gửi lên là JSON
+            token: `Bearer ${token}`, // Gửi token xác thực trong header
           },
         }
       );
-      console.log(res.data.comment);
+      console.log(res.data.comment); // Hiển thị bình luận nhận được từ API
+      // Trả về danh sách bình luận nhận được từ phản hồi của API
       return res.data.comment;
     } catch (error) {
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
+
+// Xóa bình luận của tác giả
 export const deleteCommentByAuthor = createAsyncThunk(
-  "comment/deleteCommentByAuthor",
+  "comment/deleteCommentByAuthor", // Tên action
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu DELETE để xóa bình luận theo ID của tác giả
       const res = await axios.delete(
         "http://localhost:3000/api/v1/comment/deleteCommentByAuthor/" + payload
       );
+      // Hiển thị thông báo thành công khi xóa bình luận thành công
       Swal.fire({
         icon: "success",
-        text: "Xóa bình luận thành công",
+        text: "Xóa bình luận thành công", // Thông báo thành công
       });
+      // Trả về ID của bình luận đã bị xóa từ phản hồi của API
       return res.data.comment._id;
     } catch (error) {
+      // Hiển thị thông báo lỗi nếu có lỗi xảy ra
       Swal.fire({
         icon: "error",
-        title: "Lỗi",
+        title: "Lỗi", // Tiêu đề thông báo lỗi
       });
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }

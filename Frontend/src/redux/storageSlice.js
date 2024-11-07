@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "./api";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -10,93 +10,109 @@ const initialState = {
   error: null,
 };
 
+// Thực hiện gọi API để lấy thông tin kho
 export const getStorage = createAsyncThunk(
-  "storage/getStorage",
+  "storage/getStorage", // Tên action trong Redux
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu GET đến API để lấy thông tin kho
       const res = await API.get("/api/v1/getStorage");
-      console.log(res.data);
-      return res.data.storage;
+      console.log(res.data); // Hiển thị dữ liệu nhận được từ API
+      return res.data.storage; // Trả về dữ liệu kho nhận được
     } catch (error) {
+      // Nếu có lỗi xảy ra, trả về lỗi
       return rejectWithValue(error.response.data);
     }
   }
 );
-const token = Cookies.get("token");
+
+const token = Cookies.get("token"); // Lấy token từ cookie
+
+// Xóa thông tin kho theo ID
 export const deleteStorage = createAsyncThunk(
-  "storage/deleteStorage",
+  "storage/deleteStorage", // Tên action trong Redux
   async (id, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu DELETE đến API để xóa kho theo ID
       const res = await axios.delete(
         `http://localhost:3000/api/v1/deleteStorage/${id}`,
         {
           headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${token}`,
+            "Content-Type": "application/json", // Định dạng nội dung
+            token: `Bearer ${token}`, // Thêm token vào header để xác thực
           },
         }
       );
 
+      // Hiển thị thông báo thành công khi xóa thành công
       Swal.fire({
         icon: "success",
         title: "Delete storage successfully",
         showConfirmButton: false,
         timer: 1500,
       });
-      return res.data.storage;
+      return res.data.storage; // Trả về dữ liệu kho sau khi xóa
     } catch (error) {
+      // Hiển thị thông báo lỗi nếu có lỗi xảy ra
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: error.response.data.message,
       });
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response.data); // Trả về lỗi nếu có
     }
   }
 );
 
+// Xóa thông tin kho theo product_id
 export const deleteStorageByproduct_id = createAsyncThunk(
-  "storage/deleteStorageByproduct_id",
+  "storage/deleteStorageByproduct_id", // Tên action trong Redux
   async (id, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu DELETE đến API để xóa kho theo product_id
       const res = await API.delete(`/api/v1/deleteStorage/${id}`);
-      console.log("xoa thanh cong");
-      return res.data;
+      console.log("xoa thanh cong"); // Hiển thị thông báo khi xóa thành công
+      return res.data; // Trả về kết quả sau khi xóa
     } catch (error) {
+      // Trả về lỗi nếu có
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Cập nhật thông tin kho theo product_id
 export const updateStorageByproduct_id = createAsyncThunk(
-  "storage/updateStorageByproduct_id",
+  "storage/updateStorageByproduct_id", // Tên action trong Redux
   async (data, { rejectWithValue }) => {
-    console.log(data)
+    console.log(data); // Hiển thị dữ liệu cần cập nhật
     try {
+      // Gửi yêu cầu PUT để cập nhật thông tin kho
       const res = await axios.put(
         `http://localhost:3000/api/v1/updateStorage`,
         data,
         {
           headers: {
-            "Content-Type": "application/json",
-            token: `Bearer ${token}`,
+            "Content-Type": "application/json", // Định dạng nội dung
+            token: `Bearer ${token}`, // Thêm token vào header để xác thực
           },
         }
       );
+      // Hiển thị thông báo thành công khi cập nhật thành công
       Swal.fire({
         icon: "success",
         title: "Update storage successfully",
         showConfirmButton: false,
         timer: 1500,
       });
-      return res.data.storage;
+      return res.data.storage; // Trả về dữ liệu kho đã cập nhật
     } catch (error) {
+      // Hiển thị thông báo lỗi nếu có lỗi xảy ra
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: error.response.data.message,
       });
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response.data); // Trả về lỗi nếu có
     }
   }
 );

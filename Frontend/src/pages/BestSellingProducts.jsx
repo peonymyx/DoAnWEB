@@ -15,18 +15,6 @@ const ProductCard = ({ product }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* <div
-        className="absolute top-4 right-4 cursor-pointer z-10"
-        onClick={handleFavoriteClick}
-      >
-        <Heart
-          className={`h-6 w-6 transition-colors duration-300 ${
-            isFavorited ? "text-red-500" : "text-white stroke-black"
-          }`}
-          fill={isFavorited ? "red" : "none"}
-        />
-      </div> */}
-
       <Link to={`/productdetail/${product._id}`}>
         <div className="relative overflow-hidden rounded-lg">
           <img
@@ -45,19 +33,6 @@ const ProductCard = ({ product }) => {
         <h2 className="text-sm sm:text-lg font-bold mt-3 truncate">
           {product.name}
         </h2>
-        {/* <div className="flex items-center mt-1">
-          {[...Array(5)].map((_, index) => (
-            <Star
-              key={index}
-              className={`h-3 w-3 sm:h-4 sm:w-4 ${
-                index < product.rating ? "text-yellow-500" : "text-gray-300"
-              }`}
-            />
-          ))}
-          <span className="ml-1 text-xs sm:text-sm text-gray-600">
-            ({product.rating})
-          </span>
-        </div> */}
         <p className="text-sm sm:text-lg font-semibold mt-1 text-blue-600">
           {product.price?.toLocaleString()}₫
         </p>
@@ -87,22 +62,38 @@ const BestSellingProducts = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Hàm `fetchBestSellers` để lấy dữ liệu sản phẩm bán chạy từ API
     const fetchBestSellers = async () => {
       try {
+        // Khi bắt đầu gọi API, đặt trạng thái `isLoading` thành `true` để hiển thị loading
         setIsLoading(true);
+
+        // Gọi API với phương thức GET tới endpoint `http://localhost:3000/api/v1/best-sellers`
         const response = await axios.get(
           "http://localhost:3000/api/v1/best-sellers"
         );
+
+        // Lấy danh sách sản phẩm từ `response.data.products` và chọn 4 sản phẩm đầu tiên
         setBestSellers(response.data.products.slice(0, 4));
+
+        // Sau khi lấy dữ liệu thành công, đặt `isLoading` thành `false` để ẩn loading
         setIsLoading(false);
       } catch (err) {
+        // Xử lý khi có lỗi xảy ra trong quá trình gọi API
         console.error("Error fetching best sellers:", err);
+
+        // Đặt trạng thái `error` với thông báo lỗi để thông báo cho người dùng
         setError("An error occurred while fetching best-selling products.");
+
+        // Đặt `isLoading` thành `false` để ẩn loading ngay cả khi gặp lỗi
         setIsLoading(false);
       }
     };
 
+    // Gọi hàm `fetchBestSellers` ngay khi component này được render lần đầu tiên
     fetchBestSellers();
+
+    // Mảng rỗng `[]` đảm bảo rằng `useEffect` chỉ chạy một lần khi component được mount
   }, []);
 
   if (isLoading) {

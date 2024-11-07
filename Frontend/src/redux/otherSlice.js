@@ -9,72 +9,86 @@ const initialState = {
   error: null,
 };
 
+// Lấy sản phẩm khác
 export const getOther = createAsyncThunk(
-  "other/getOther",
+  "other/getOther", // Tên action
   async (_, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu GET để lấy danh sách sản phẩm khác
       const res = await axios.get("http://localhost:3000/api/v1/otherProduct");
-      console.log(res.data.otherProduct);
-      return res.data.otherProduct;
+      console.log(res.data.otherProduct); // In ra dữ liệu sản phẩm khác nhận được
+      return res.data.otherProduct; // Trả về dữ liệu sản phẩm khác
     } catch (error) {
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Cập nhật trạng thái đơn hàng
 export const updateStatusOder = createAsyncThunk(
-  "other/updateStatusOder",
+  "other/updateStatusOder", // Tên action
   async (payload, { rejectWithValue }) => {
-    console.log(payload);
+    console.log(payload); // In ra payload (dữ liệu trạng thái đơn hàng)
     try {
+      // Gửi yêu cầu PUT để cập nhật trạng thái đơn hàng
       const res = await axios.put(
         "http://localhost:3000/api/v1/otherProduct/update",
-        payload
+        payload // Truyền dữ liệu trạng thái đơn hàng
       );
-      console.log(res.data.otherProduct);
-      return res.data.otherProduct;
+      console.log(res.data.otherProduct); // In ra sản phẩm đã được cập nhật
+      return res.data.otherProduct; // Trả về dữ liệu sản phẩm đã cập nhật
     } catch (error) {
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Lấy sản phẩm khác theo ID
 export const getOtherById = createAsyncThunk(
-  "other/getOtherById",
+  "other/getOtherById", // Tên action
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu GET để lấy sản phẩm khác theo ID
       const res = await axios.get(
-        `http://localhost:3000/api/v1/otherProduct/${payload}`
+        `http://localhost:3000/api/v1/otherProduct/${payload}` // payload là ID sản phẩm
       );
-      return res.data.otherProduct;
+      return res.data.otherProduct; // Trả về dữ liệu sản phẩm khác
     } catch (error) {
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Thêm sản phẩm khác
 export const addOther = createAsyncThunk(
-  "other/addOther",
+  "other/addOther", // Tên action
   async (payload, { rejectWithValue }) => {
     try {
+      // Gửi yêu cầu POST để thêm sản phẩm khác
       const res = await axios.post(
         "http://localhost:3000/api/v1/otherProduct/add",
-        payload,
+        payload, // Dữ liệu sản phẩm khác cần thêm
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json", // Định dạng dữ liệu là JSON
           },
         }
       );
+      // Xóa dữ liệu trong localStorage và chuyển hướng đến trang thành công
       localStorage.clear();
       window.location.href = "/othersuccess";
-      return res.data.other;
+      return res.data.other; // Trả về sản phẩm đã thêm
     } catch (error) {
+      // Hiển thị thông báo lỗi nếu có lỗi xảy ra
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response.data.message,
+        text: error.response.data.message, // Lỗi từ API
       });
+      // Trả về lỗi nếu có lỗi xảy ra
       return rejectWithValue(error.response.data);
     }
   }

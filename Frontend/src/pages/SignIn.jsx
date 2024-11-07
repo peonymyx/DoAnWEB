@@ -6,34 +6,43 @@ import { useDispatch } from "react-redux";
 import { login } from "../redux/authSlice";
 import { useState } from "react";
 
+// Định nghĩa schema để xác thực form sử dụng yup
 const schema = yup.object().shape({
+  // Xác thực trường email phải là một chuỗi và có định dạng email hợp lệ
   email: yup.string().email().required("Vui lòng nhập email!"),
+  // Xác thực trường password là một chuỗi và yêu cầu nhập
   password: yup.string().required("Vui lòng nhập mật khẩu!"),
 });
 
 const SignIn = () => {
+  // Khai báo state để điều khiển việc hiển thị mật khẩu
   const [showPassword, setShowPassword] = useState(false);
 
+  // Dùng hook useForm của React Hook Form để xử lý form, bao gồm đăng ký, submit, và lỗi form
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
+    register, // Hàm đăng ký các trường form
+    handleSubmit, // Hàm xử lý sự kiện submit form
+    formState: { errors }, // Lấy lỗi nếu có từ form
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema), // Xác thực form bằng schema đã định nghĩa với yup
   });
 
+  // Sử dụng dispatch để gửi action đến Redux store
   const dispatch = useDispatch();
 
+  // Hàm xử lý khi người dùng submit form đăng nhập
   const handleSignIn = async (data) => {
     try {
+      // Gửi dữ liệu đăng nhập đến Redux để xử lý login
       dispatch(login(data));
     } catch (error) {
-      console.log(error);
+      console.log(error); // Nếu có lỗi, in lỗi ra console
     }
   };
 
+  // Hàm để chuyển đổi trạng thái hiển thị mật khẩu (ẩn hoặc hiển thị)
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+    setShowPassword(!showPassword); // Đổi giá trị của showPassword để thay đổi trạng thái hiển thị
   };
 
   return (
