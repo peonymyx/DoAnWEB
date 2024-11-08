@@ -53,7 +53,8 @@ Sau đó, bạn có thể đăng ký tài khoản mới, đăng nhập, lấy l�
 - Trang cập nhật thông tin cá nhân
 ![image](https://github.com/user-attachments/assets/bae7da83-e441-4b3a-a15e-78b8386b8cc4)
 
-
+- Trang thanh toán đơn hàng: có tính năng thanh toán paypal, thẻ ngân hàng
+![image](https://github.com/user-attachments/assets/624d8ced-af1d-484a-9ae0-81c42262bd7d)
 
 
 
