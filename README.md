@@ -47,7 +47,7 @@ Password: 123456
 
 ## Tác giả
 
-* **La Hoàng Giang** - Tác giả  https://github.com/lhggiang
+* **La Hoàng Giang** - Đồng tác giả  https://github.com/lhggiang
 * **Trịnh Liên Hưng** - Đồng tác giả  https://github.com/lien-hung
 * **Trần Đặng Mỹ Phương** - Đồng tác giả https://github.com/peonymyx
 * **Phan Thị Vân Duyên** - Đồng tác giả https://github.com/vanduyn39
@@ -80,6 +80,9 @@ Password: 123456
 ### Backend
 - 
 - 
+
+## Thiết kế giao diện website
+[XEM TẠI ĐÂY](https://github.com/peonymyx/DoAnWEB/blob/main/NguoiDungCuoi.md)
 
 ## Tài liệu cho người dùng cuối
 [XEM TẠI ĐÂY](https://github.com/peonymyx/DoAnWEB/blob/main/NguoiDungCuoi.md)
