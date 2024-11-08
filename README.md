@@ -36,11 +36,13 @@ Website thương mại điện tử cửa hàng quần áo hỗ trợ quản lý
 ### ADMIN: 
 Demo admin:
 Email: admin@gmail.com
+
 Password: 123456
 
 ### USER:
 Demo user:
 Email: user@gmail.com
+
 Password: 123456
 
 ## Tác giả
