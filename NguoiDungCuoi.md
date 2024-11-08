@@ -9,5 +9,8 @@ Sau đó, bạn có thể đăng ký tài khoản mới, đăng nhập, lấy l�
 ![image](https://github.com/user-attachments/assets/1e47708e-2a60-439a-945b-e52079b3b77f)
 ![image](https://github.com/user-attachments/assets/b41b2557-2259-41dd-8647-92fe50f84657)
 
+## Đăng nhập với Role ADMIN:
+- Trang thống kê
+![image](https://github.com/user-attachments/assets/d48645da-2717-4ee6-b500-aa606610cef6)
 
 
