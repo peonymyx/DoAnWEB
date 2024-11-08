@@ -31,6 +31,18 @@ Website thương mại điện tử cửa hàng quần áo hỗ trợ quản lý
 - Chỉnh sửa thông tin cá nhân
 - Nhắn tin với người quản trị
 
+## DEMO
+
+### ADMIN: 
+Demo admin:
+Email: admin@gmail.com
+Password: 123456
+
+### USER:
+Demo user:
+Email: user@gmail.com
+Password: 123456
+
 ## Tác giả
 
 * **La Hoàng Giang** - Tác giả  https://github.com/lhggiang
@@ -41,8 +53,9 @@ Website thương mại điện tử cửa hàng quần áo hỗ trợ quản lý
 
 ## Kiến thức áp dụng
 ### Frontend
-- HTML5, CSS và JavaScript
-- ReactJS: functional component, react hooks (useEffect, useState, useNavigate,...), components & props, routing, redux,...
+- HTML5 and CSS3: Semantic Elements, CSS Grid, Flexbox
+- React: Components, Props, Events, Hooks, Router, Axios, Routing,...
+- Redux: Store, Reducers, Actions
 
 ### Backend
 - 
@@ -55,24 +68,24 @@ Website thương mại điện tử cửa hàng quần áo hỗ trợ quản lý
 
 ### Build Tool: Vite
 
-###Frontend
+### Frontend
 - **ReactJs** - thư viện Javascript phổ biến nhất để tạo ra các SPA
 - **Tailwind CSS** - framework CSS được ưa chuộng hiện nay
 - **Redux** - thư viện quản lý state phổ biến nhất trong ReactJs
 - **React Hook Form** - thư viện quản lý form số 1 trong hệ sinh thái ReactJs
 - **Framer Motion** - thư viện tạo animation phổ biến nhất trong ReactJs
 
-###Backend
+### Backend
 - 
 - 
 
 ## Triển khai
 
 ## Tài liệu cho người dùng cuối
-[XEM TẠI ĐÂY]https://github.com/peonymyx/DoAnWEB/blob/main/NguoiDungCuoi.md
+[XEM TẠI ĐÂY](https://github.com/peonymyx/DoAnWEB/blob/main/NguoiDungCuoi.md)
 
 ## Lời cảm ơn
-Để có thể hoàn thành tốt đề tài “Thiết kế website thương mại điện tử cửa hàng quần áo” này. nhóm chúng em xin cảm ơn thầy Nguyễn Mạnh Tuấn vì những kiến thức, bài giảng, bài thực hành mà thầy đã truyền đạt cho nhóm trong những buổi học. Những kiến thức đó không chỉ giúp ích cho nhóm trong việc xây dựng đề tài mà còn giúp là nền tảng để các thành viên nhóm có thể học thêm những kiến thức mới, nâng cao trong tương tai. 
+Để có thể hoàn thành tốt đề tài “Thiết kế website thương mại điện tử cửa hàng quần áo” này, nhóm chúng em xin cảm ơn thầy Nguyễn Mạnh Tuấn vì những kiến thức, bài giảng, bài thực hành mà thầy đã truyền đạt cho nhóm trong những buổi học. Những kiến thức đó không chỉ giúp ích cho nhóm trong việc xây dựng đề tài mà còn giúp là nền tảng để các thành viên nhóm có thể học thêm những kiến thức mới, nâng cao trong tương tai. 
 
 ## Danh sách lỗi:
 - Khi đăng xuất ở trang bất kì chưa chuyển về đăng nhập
