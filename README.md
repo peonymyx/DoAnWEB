@@ -2,12 +2,18 @@
 
 # Tên đề tài : Thiết kế website thương mại điện tử cửa hàng quần áo
 
-Ngành công nghệ thông tin (CNTT) trong những năm gần đây đã có những bước phát triển vượt bậc trên thế giới cũng như trong nước. CNTT đã góp phần rất lớn cho sự phát triển kinh tế của nước ta trong thời kỳ đổi mới. Chính vì thế nhu cầu tin học hóa các chương trình quản lý hàng hóa cũng đang rất cần thiết để có thể đổi mới với quy định quản lý, đạt hiệu quả cao. 
-Ứng dụng tin học trong công tác quản lý đã phát triển mạnh mẽ giúp cho công tác quản lý ngày càng trở nên hiệu quả hơn như nâng cao hiệu suất trong công việc, đưa ra các báo cáo, các số liệu thống kê một cách nhanh chóng chính xác và kịp thời. Đồng thời nhờ có việc ứng dụng tin học đã tiết kiệm được rất nhiều thời gian, công sức của con người, nó làm giảm nhẹ bộ máy quản lý vốn rất cồng kềnh từ trước tới nay
+Thời đại công nghệ phát triển dẫn đến thương mại điện thoại cũng trở nên phổ biến, vì vậy việc mua sắm online không còn xa lạ gì với tất cả mọi người, đặc biệt là quần áo. Vì vậy, có thể nói website bán quần áo là một công cụ cần thiết để mở rộng thị trường, giúp thương hiệu tiếp cận khách hàng trên phạm vi rộng hơn, không bị giới hạn bởi khoảng cách địa lý. Nó cung cấp cho khách hàng sự tiện lợi khi mua sắm mọi lúc, mọi nơi, chỉ cần có internet. Hơn nữa, website cho phép hiển thị sản phẩm một cách sinh động qua hình ảnh, mô tả và đánh giá, giúp khách hàng dễ dàng tìm hiểu và lựa chọn. Với hệ thống quản lý thông tin khách hàng, chủ shop có thể xây dựng các chiến lược marketing và chăm sóc khách hàng hiệu quả hơn. Cuối cùng, website giúp tối ưu chi phí vận hành so với cửa hàng vật lý và nâng cao uy tín thương hiệu trong mắt khách hàng.
 
-# Mô tả và mục tiêu dự án
+# MỤC TIÊU WEBSITE VÀ MÔ TẢ CHỨC NĂNG WEBSITE
 
-## Mô TẢ:
+## Mục tiêu website
+1. **Mở rộng phạm vi tiếp cận khách hàng**: Giúp shop tiếp cận khách hàng trên toàn quốc và quốc tế mà không bị giới hạn về khoảng cách địa lý
+2. **Tạo sự tiện lợi cho khách hàng**: Cho phép khách hàng mua sắm trực tuyến mọi lúc, mọi nơi, chỉ cần có internet, tăng cường trải nghiệm người dùng
+3. **Hiển thị sản phẩm sinh động**: Cung cấp hình ảnh, mô tả chi tiết, và đánh giá sản phẩm, giúp khách hàng dễ dàng tìm hiểu và chọn lựa
+4. **Tối ưu hóa marketing và chăm sóc khách hàng**: Hệ thống quản lý dữ liệu khách hàng giúp shop xây dựng chiến lược marketing và dịch vụ chăm sóc khách hàng cá nhân hóa, hiệu quả
+5. **Nâng cao uy tín và tiết kiệm chi phí**: Website chuyên nghiệp giúp tăng uy tín thương hiệu và giảm chi phí vận hành so với cửa hàng vật lý
+
+## Mô tả chức năng
 Website thương mại điện tử cửa hàng quần áo hỗ trợ quản lý cửa hàng quần áo có những chức năng:
 ### ADMIN/STAFF: 
 - Thống kê tổng doanh thu, khách hàng, sản phẩm, đơn hàng, bình luận theo ngày, sản phẩm bán chạy
@@ -25,16 +31,13 @@ Website thương mại điện tử cửa hàng quần áo hỗ trợ quản lý
 - Chỉnh sửa thông tin cá nhân
 - Nhắn tin với người quản trị
 
-## MỤC TIÊU:
-Xây dựng 1 website thương mại điện tử cửa hàng quần áo đáp ứng nhu cầu của mọi khách hàng trong việc quản lý cũng như lựa chọn các loại sản phẩm ưa thích một cách nhanh chóng và tiết kiệm thời gian, chi phí cũng như nắm được giá cả của các loại sản phẩm
-
 ## Tác giả
 
 * **La Hoàng Giang** - Tác giả  https://github.com/lhggiang
 * **Trịnh Liên Hưng** - Đồng tác giả  https://github.com/lien-hung
-* *Trần Đặng Mỹ Phương** - Đồng tác giả https://github.com/peonymyx
-* *Phan Thị Vân Duyên** - Đồng tác giả https://github.com/vanduyn39
-* *Hà Anh Duy** - Đồng tác giả https://github.com/alphadotnet
+* **Trần Đặng Mỹ Phương** - Đồng tác giả https://github.com/peonymyx
+* **Phan Thị Vân Duyên** - Đồng tác giả https://github.com/vanduyn39
+* **Hà Anh Duy** - Đồng tác giả https://github.com/alphadotnet
 
 # Xây dựng trang web bán hàng
                 
