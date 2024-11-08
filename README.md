@@ -81,8 +81,6 @@ Password: 123456
 - 
 - 
 
-## Triển khai
-
 ## Tài liệu cho người dùng cuối
 [XEM TẠI ĐÂY](https://github.com/peonymyx/DoAnWEB/blob/main/NguoiDungCuoi.md)
 
