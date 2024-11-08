@@ -13,4 +13,13 @@ Sau đó, bạn có thể đăng ký tài khoản mới, đăng nhập, lấy l�
 - Trang thống kê
 ![image](https://github.com/user-attachments/assets/d48645da-2717-4ee6-b500-aa606610cef6)
 
+- Trang danh mục sản phảm: thêm, xóa, sủa, tìm kiếm danh mục
+![image](https://github.com/user-attachments/assets/85146b10-fda7-47ea-97a0-f8057c541259)
+
+- Trang quản lý sản phẩm: thêm, xóa, sủa, tìm kiếm sản phẩm
+![image](https://github.com/user-attachments/assets/e8acc968-e2f2-450f-a4a1-d217e3ee058e)
+
+
+
+
 
