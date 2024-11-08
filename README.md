@@ -39,43 +39,44 @@ Website thương mại điện tử cửa hàng quần áo hỗ trợ quản lý
 * **Phan Thị Vân Duyên** - Đồng tác giả https://github.com/vanduyn39
 * **Hà Anh Duy** - Đồng tác giả https://github.com/alphadotnet
 
-# Xây dựng trang web bán hàng
-                
-Ngành công nghệ thông tin (CNTT) trong những năm gần đây đã có những bước phát triển vượt bậc trên thế giới cũng như trong nước. CNTT đã góp phần rất lớn cho sự phát triển kinh tế của nước ta trong thời kỳ đổi mới. Chính vì thế nhu cầu tin học hóa các chương trình quản lý bán hàng cũng đang rất cần thiết để có thể đổi mới với quy định quản lý, đạt hiệu quả cao. 
-
 ## Kiến thức áp dụng
-Frontend
-HTML5, CSS và JavaScript
-ReactJS: functional component, react hooks (useEffect, useState, useNavigate,...), components & props, routing, redux,...
-Backend
+### Frontend
+- HTML5, CSS và JavaScript
+- ReactJS: functional component, react hooks (useEffect, useState, useNavigate,...), components & props, routing, redux,...
 
+### Backend
+- 
+- 
 
-Database
+### Database
+- 
 
 ## Công nghệ sử dụng
-Build Tool: Vite
-Frontend
-ReactJs - thư viện Javascript phổ biến nhất để tạo ra các SPA
-Tailwind CSS - framework CSS được ưa chuộng hiện nay
-Redux - thư viện quản lý state phổ biến nhất trong ReactJs
-React Hook Form - thư viện quản lý form số 1 trong hệ sinh thái ReactJs
-Framer Motion - thư viện tạo animation phổ biến nhất trong ReactJs
-Backend
 
+### Build Tool: Vite
 
+###Frontend
+- **ReactJs** - thư viện Javascript phổ biến nhất để tạo ra các SPA
+- **Tailwind CSS** - framework CSS được ưa chuộng hiện nay
+- **Redux** - thư viện quản lý state phổ biến nhất trong ReactJs
+- **React Hook Form** - thư viện quản lý form số 1 trong hệ sinh thái ReactJs
+- **Framer Motion** - thư viện tạo animation phổ biến nhất trong ReactJs
 
+###Backend
+- 
+- 
 
 ## Triển khai
 
-
 ## Tài liệu cho người dùng cuối
-
+[XEM TẠI ĐÂY]https://github.com/peonymyx/DoAnWEB/blob/main/NguoiDungCuoi.md
 
 ## Lời cảm ơn
 Để có thể hoàn thành tốt đề tài “Thiết kế website thương mại điện tử cửa hàng quần áo” này. nhóm chúng em xin cảm ơn thầy Nguyễn Mạnh Tuấn vì những kiến thức, bài giảng, bài thực hành mà thầy đã truyền đạt cho nhóm trong những buổi học. Những kiến thức đó không chỉ giúp ích cho nhóm trong việc xây dựng đề tài mà còn giúp là nền tảng để các thành viên nhóm có thể học thêm những kiến thức mới, nâng cao trong tương tai. 
 
 ## Danh sách lỗi:
-- Chưa có giá giảm gia·
+- Khi đăng xuất ở trang bất kì chưa chuyển về đăng nhập
+- Tin nhắn của ADMIN chưa hiển thị được ở tin nhắn USER
 
 
 
