@@ -18,7 +18,7 @@ export const addComment = createAsyncThunk(
     try {
       // Gửi yêu cầu POST để thêm bình luận mới với token trong headers
       const res = await axios.post(
-        "http://localhost:3000/api/v1/comment/addComment",
+        "https://doanweb-api.onrender.com/api/v1/comment/addComment",
         payload, // Dữ liệu gửi lên để thêm bình luận
         {
           headers: {
@@ -55,7 +55,7 @@ export const getComment = createAsyncThunk(
     try {
       // Gửi yêu cầu GET để lấy danh sách bình luận từ API
       const res = await axios.get(
-        "http://localhost:3000/api/v1/comment/getComment",
+        "https://doanweb-api.onrender.com/api/v1/comment/getComment",
         {
           headers: {
             "Content-Type": "application/json", // Xác định loại nội dung gửi lên là JSON
@@ -79,7 +79,7 @@ export const getCommentByProductId = createAsyncThunk(
     try {
       // Gửi yêu cầu GET để lấy bình luận theo ID sản phẩm
       const res = await axios.get(
-        `http://localhost:3000/api/v1/comment/getCommentByProductId/${payload}`,
+        `https://doanweb-api.onrender.com/api/v1/comment/getCommentByProductId/${payload}`,
         {
           headers: {
             "Content-Type": "application/json", // Xác định loại nội dung gửi lên là JSON
@@ -104,7 +104,8 @@ export const deleteCommentByAuthor = createAsyncThunk(
     try {
       // Gửi yêu cầu DELETE để xóa bình luận theo ID của tác giả
       const res = await axios.delete(
-        "http://localhost:3000/api/v1/comment/deleteCommentByAuthor/" + payload
+        "https://doanweb-api.onrender.com/api/v1/comment/deleteCommentByAuthor/" +
+          payload
       );
       // Hiển thị thông báo thành công khi xóa bình luận thành công
       Swal.fire({

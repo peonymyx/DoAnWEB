@@ -19,11 +19,14 @@ export const getUsers = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       // Gửi yêu cầu GET đến API để lấy danh sách người dùng, thêm token vào header để xác thực
-      const res = await axios.get("http://localhost:3000/api/v1/getUsers", {
-        headers: {
-          token: `Bearer ${token}`, // Thêm token vào header
-        },
-      });
+      const res = await axios.get(
+        "https://doanweb-api.onrender.com/api/v1/getUsers",
+        {
+          headers: {
+            token: `Bearer ${token}`, // Thêm token vào header
+          },
+        }
+      );
       return res.data.users; // Trả về danh sách người dùng nhận được từ API
     } catch (error) {
       // Nếu có lỗi, trả về lỗi
@@ -39,7 +42,7 @@ export const updateRoleUser = createAsyncThunk(
     try {
       // Gửi yêu cầu PUT đến API để cập nhật vai trò người dùng, thêm token vào header
       const res = await axios.put(
-        "http://localhost:3000/api/v1/users/updateRole",
+        "https://doanweb-api.onrender.com/api/v1/users/updateRole",
         payload,
         {
           headers: {
@@ -62,7 +65,7 @@ export const updateUser = createAsyncThunk(
     try {
       // Gửi yêu cầu PUT để cập nhật thông tin người dùng với dữ liệu multipart/form-data và thêm token vào header
       const response = await axios.put(
-        `http://localhost:3000/api/v1/updateUser/${id}`,
+        `https://doanweb-api.onrender.com/api/v1/updateUser/${id}`,
         data1,
         {
           headers: {

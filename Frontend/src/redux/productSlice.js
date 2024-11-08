@@ -16,7 +16,7 @@ export const addComment = createAsyncThunk(
     try {
       // Gửi yêu cầu POST để thêm bình luận
       const res = await axios.post(
-        "http://localhost:3000/api/v1/comment",
+        "https://doanweb-api.onrender.com/api/v1/comment",
         commentData // Dữ liệu bình luận
       );
       return res.data; // Trả về dữ liệu bình luận đã thêm

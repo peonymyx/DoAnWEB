@@ -15,7 +15,9 @@ export const getOther = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       // Gửi yêu cầu GET để lấy danh sách sản phẩm khác
-      const res = await axios.get("http://localhost:3000/api/v1/otherProduct");
+      const res = await axios.get(
+        "https://doanweb-api.onrender.com/api/v1/otherProduct"
+      );
       console.log(res.data.otherProduct); // In ra dữ liệu sản phẩm khác nhận được
       return res.data.otherProduct; // Trả về dữ liệu sản phẩm khác
     } catch (error) {
@@ -33,7 +35,7 @@ export const updateStatusOder = createAsyncThunk(
     try {
       // Gửi yêu cầu PUT để cập nhật trạng thái đơn hàng
       const res = await axios.put(
-        "http://localhost:3000/api/v1/otherProduct/update",
+        "https://doanweb-api.onrender.com/api/v1/otherProduct/update",
         payload // Truyền dữ liệu trạng thái đơn hàng
       );
       console.log(res.data.otherProduct); // In ra sản phẩm đã được cập nhật
@@ -52,7 +54,7 @@ export const getOtherById = createAsyncThunk(
     try {
       // Gửi yêu cầu GET để lấy sản phẩm khác theo ID
       const res = await axios.get(
-        `http://localhost:3000/api/v1/otherProduct/${payload}` // payload là ID sản phẩm
+        `https://doanweb-api.onrender.com/api/v1/otherProduct/${payload}` // payload là ID sản phẩm
       );
       return res.data.otherProduct; // Trả về dữ liệu sản phẩm khác
     } catch (error) {
@@ -69,7 +71,7 @@ export const addOther = createAsyncThunk(
     try {
       // Gửi yêu cầu POST để thêm sản phẩm khác
       const res = await axios.post(
-        "http://localhost:3000/api/v1/otherProduct/add",
+        "https://doanweb-api.onrender.com/api/v1/otherProduct/add",
         payload, // Dữ liệu sản phẩm khác cần thêm
         {
           headers: {

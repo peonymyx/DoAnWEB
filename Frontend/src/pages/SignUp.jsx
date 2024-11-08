@@ -65,7 +65,7 @@ const SignUp = () => {
       dispatch(registerStart());
       // Gửi yêu cầu POST tới API để đăng ký tài khoản mới
       const res = await axios.post(
-        "http://localhost:3000/api/v1/signup", // API endpoint để đăng ký
+        "https://doanweb-api.onrender.com/api/v1/signup", // API endpoint để đăng ký
         data, // Dữ liệu form
         { headers } // Header của yêu cầu
       );

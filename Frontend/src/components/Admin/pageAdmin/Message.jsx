@@ -10,7 +10,7 @@ import SendIcon from "@mui/icons-material/Send"; // Import icon gửi tin nhắn
 import io from "socket.io-client"; // Import socket.io-client để kết nối socket
 
 // Tạo kết nối socket với server tại localhost cổng 3000
-const socket = io("http://localhost:3000");
+const socket = io("https://doanweb-api.onrender.com");
 
 // eslint-disable-next-line react/prop-types
 const Message = ({ role }) => {

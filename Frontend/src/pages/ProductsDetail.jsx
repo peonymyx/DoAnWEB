@@ -69,10 +69,13 @@ const ProductsDetail = () => {
   const handleWishlist = async () => {
     try {
       // Gửi yêu cầu POST tới API để thêm sản phẩm vào danh sách yêu thích
-      await axios.post("http://localhost:3000/api/v1/users/wishListProduct", {
-        id: userId, // ID người dùng
-        productId: id, // ID sản phẩm
-      });
+      await axios.post(
+        "https://doanweb-api.onrender.com/api/v1/users/wishListProduct",
+        {
+          id: userId, // ID người dùng
+          productId: id, // ID sản phẩm
+        }
+      );
       // Hiển thị thông báo thành công khi thêm sản phẩm vào danh sách yêu thích
       Swal.fire({
         icon: "success", // Biểu tượng thành công

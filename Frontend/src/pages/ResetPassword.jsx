@@ -22,7 +22,7 @@ const ResetPassword = () => {
     try {
       // Gửi yêu cầu POST tới API để đổi mật khẩu, truyền token và mật khẩu mới
       const res = await axios.post(
-        "http://localhost:3000/api/v1/resetpassword", // Địa chỉ API đổi mật khẩu
+        "https://doanweb-api.onrender.com/api/v1/resetpassword", // Địa chỉ API đổi mật khẩu
         { token, password }, // Dữ liệu gửi đi bao gồm token và mật khẩu
         headers // Tiêu đề của yêu cầu
       );

@@ -134,7 +134,9 @@ const Favatie = () => {
       const productsResponse = await Promise.all(
         uniqueProductIds.map((id) =>
           // Gọi API với từng ID để lấy thông tin chi tiết của sản phẩm
-          axios.get(`http://localhost:3000/api/v1/getProductById/${id}`)
+          axios.get(
+            `https://doanweb-api.onrender.com/api/v1/getProductById/${id}`
+          )
         )
       );
 
@@ -153,7 +155,7 @@ const Favatie = () => {
     try {
       // Gọi API xóa sản phẩm khỏi danh sách yêu thích của người dùng với `auth._id` và `productId`
       await axios.delete(
-        `http://localhost:3000/api/v1/users/removeFromWishList/${auth._id}/${productId}`
+        `https://doanweb-api.onrender.com/api/v1/users/removeFromWishList/${auth._id}/${productId}`
       );
 
       // Cập nhật `wishlist` để loại bỏ `productId` đã xóa
@@ -182,7 +184,7 @@ const Favatie = () => {
       try {
         // Gọi API để lấy danh sách sản phẩm yêu thích của người dùng với `auth._id`
         const response = await axios.get(
-          `http://localhost:3000/api/v1/users/wishListProduct/${auth._id}`
+          `https://doanweb-api.onrender.com/api/v1/users/wishListProduct/${auth._id}`
         );
 
         // Cập nhật `wishlist` với danh sách ID sản phẩm yêu thích nhận được từ API

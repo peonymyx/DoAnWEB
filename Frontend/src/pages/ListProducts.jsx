@@ -97,7 +97,9 @@ const ListProducts = () => {
   const getCategoryList = async () => {
     try {
       // Gửi yêu cầu GET tới API để lấy danh sách danh mục
-      const res = await axios.get("http://localhost:3000/api/v1/category");
+      const res = await axios.get(
+        "https://doanweb-api.onrender.com/api/v1/category"
+      );
       setCategories(res.data.category); // Cập nhật state `categories` với dữ liệu danh mục
     } catch (error) {
       // Nếu có lỗi xảy ra, in ra console và hiển thị thông báo lỗi

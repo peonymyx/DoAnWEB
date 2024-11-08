@@ -16,7 +16,7 @@ export const getMessenger = createAsyncThunk(
     try {
       // Gửi yêu cầu GET để lấy tin nhắn của người gửi theo senderId
       const res = await axios.get(
-        `http://localhost:3000/api/v1/messenger?senderId=${payload}`
+        `https://doanweb-api.onrender.com/api/v1/messenger?senderId=${payload}`
       );
       console.log(res.data); // In ra dữ liệu nhận được
       return res.data; // Trả về dữ liệu tin nhắn
@@ -34,7 +34,7 @@ export const addMessenger = createAsyncThunk(
     try {
       // Gửi yêu cầu POST để thêm tin nhắn mới
       const res = await axios.post(
-        "http://localhost:3000/api/v1/messenger/add",
+        "https://doanweb-api.onrender.com/api/v1/messenger/add",
         payload // Dữ liệu tin nhắn mới
       );
       return res.data.messenger; // Trả về dữ liệu tin nhắn đã thêm

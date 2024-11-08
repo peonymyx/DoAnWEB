@@ -35,7 +35,7 @@ export const deleteStorage = createAsyncThunk(
     try {
       // Gửi yêu cầu DELETE đến API để xóa kho theo ID
       const res = await axios.delete(
-        `http://localhost:3000/api/v1/deleteStorage/${id}`,
+        `https://doanweb-api.onrender.com/api/v1/deleteStorage/${id}`,
         {
           headers: {
             "Content-Type": "application/json", // Định dạng nội dung
@@ -88,7 +88,7 @@ export const updateStorageByproduct_id = createAsyncThunk(
     try {
       // Gửi yêu cầu PUT để cập nhật thông tin kho
       const res = await axios.put(
-        `http://localhost:3000/api/v1/updateStorage`,
+        `https://doanweb-api.onrender.com/api/v1/updateStorage`,
         data,
         {
           headers: {

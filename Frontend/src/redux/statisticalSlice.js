@@ -13,7 +13,7 @@ export const fetchStatistical = createAsyncThunk(
   async () => {
     // Gửi yêu cầu GET đến API để lấy thông tin thống kê
     const response = await axios.get(
-      "http://localhost:3000/api/v1/statistical" // Địa chỉ API lấy thông tin thống kê
+      "https://doanweb-api.onrender.com/api/v1/statistical" // Địa chỉ API lấy thông tin thống kê
     );
     // Trả về dữ liệu thống kê nhận được từ API
     return response.data;

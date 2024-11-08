@@ -17,7 +17,7 @@ const MyOrder = () => {
       try {
         // Gửi yêu cầu GET đến API để lấy danh sách đơn hàng cho người dùng
         const response = await axios.get(
-          `http://localhost:3000/api/v1/otherProduct?userId=${auth?._id}`
+          `https://doanweb-api.onrender.com/api/v1/otherProduct?userId=${auth?._id}`
         );
         // Cập nhật state `myOrder` với dữ liệu đơn hàng nhận được từ API
         setMyOrder(response.data.otherProduct);
@@ -84,7 +84,7 @@ const MyOrder = () => {
             <div className="flex justify-between items-center p-4 border-b">
               <div>
                 <img
-                  src="https://polyvac.com.vn/wp-content/uploads/2023/04/logo.png"
+                  src="https://designercomvn.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2018/12/06090103/logo-shop-qu%E1%BA%A7n-%C3%A1o-8.png"
                   alt="Logo"
                   className="h-12 w-auto"
                 />

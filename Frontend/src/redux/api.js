@@ -1,7 +1,7 @@
 // Nhập axios để thực hiện các yêu cầu HTTP
 import axios from "axios";
-// Tạo một instance của axios với base URL là "http://localhost:3000"
-const API = axios.create({ baseURL: "http://localhost:3000" });
+// Tạo một instance của axios với base URL là "https://doanweb-api.onrender.com"
+const API = axios.create({ baseURL: "https://doanweb-api.onrender.com" });
 
 // Nhập Cookies từ thư viện js-cookie để xử lý cookie trong trình duyệt
 import Cookies from "js-cookie";

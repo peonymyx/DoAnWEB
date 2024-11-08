@@ -16,7 +16,7 @@ const Message = () => {
     // Kiểm tra nếu người dùng đã đăng nhập (có tên đăng nhập)
     if (auth?.username) {
       // Tạo kết nối mới với server socket, truyền tên người dùng vào query
-      const newSocket = io("http://localhost:3000", {
+      const newSocket = io("https://doanweb-api.onrender.com", {
         query: { username: auth.username },
       });
 

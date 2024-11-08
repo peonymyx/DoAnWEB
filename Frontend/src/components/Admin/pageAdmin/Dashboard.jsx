@@ -26,54 +26,67 @@ const Dashboard = () => {
   const [bestSellers, setBestSellers] = useState([]);
   const [commentStats, setCommentStats] = useState([]);
 
+  // useEffect để gọi hàm dispatch để lấy dữ liệu thống kê khi component được render
   useEffect(() => {
-    dispatch(fetchStatistical());
+    dispatch(fetchStatistical()); // Gọi action fetchStatistical từ Redux để lấy dữ liệu thống kê
   }, [dispatch]);
 
+  // useEffect để lấy danh sách sản phẩm bán chạy và chuyển đổi dữ liệu bình luận cho biểu đồ
   useEffect(() => {
+    // Hàm lấy danh sách sản phẩm bán chạy từ API
     const fetchBestSellers = async () => {
       try {
+        // Gửi yêu cầu GET đến API để lấy dữ liệu sản phẩm bán chạy
         const response = await axios.get(
-          "https://doanweb-api.onrender.com//api/v1/best-sellers"
+          "https://doanweb-api.onrender.com/api/v1/best-sellers"
         );
-        setBestSellers(response.data.products);
+        setBestSellers(response.data.products); // Lưu dữ liệu sản phẩm bán chạy vào state
       } catch (err) {
-        console.error("Error fetching best sellers:", err);
+        console.error("Error fetching best sellers:", err); // In ra lỗi nếu có lỗi khi gọi API
       }
     };
 
+    // Hàm chuyển đổi dữ liệu bình luận để chuẩn bị cho biểu đồ
     const transformCommentStats = () => {
       if (Array.isArray(totalComments)) {
-        // Sort the comments by date in descending order (newest first)
+        // Kiểm tra nếu totalComments là mảng
+        // Sắp xếp bình luận theo ngày từ cũ đến mới
         const sortedComments = [...totalComments].sort((a, b) => {
+          // Tách ngày, tháng, năm từ chuỗi ngày tháng của bình luận
           const [dayA, monthA, yearA] = a._id.createdAt.split("/").map(Number);
           const [dayB, monthB, yearB] = b._id.createdAt.split("/").map(Number);
 
+          // Tạo đối tượng Date từ ngày, tháng, năm đã tách ra
           const dateA = new Date(yearA, monthA - 1, dayA);
           const dateB = new Date(yearB, monthB - 1, dayB);
 
           return dateA - dateB; // Đổi thành dateA - dateB để sắp xếp từ cũ đến mới
         });
 
-        // Format the data for the chart
+        // Định dạng dữ liệu bình luận để chuẩn bị cho biểu đồ
         const formattedStats = sortedComments.map((item) => ({
-          createdAt: item._id.createdAt,
-          comments: item.comments,
+          createdAt: item._id.createdAt, // Ngày tạo bình luận
+          comments: item.comments, // Số lượng bình luận
         }));
-        setCommentStats(formattedStats);
+        setCommentStats(formattedStats); // Lưu dữ liệu đã định dạng vào state commentStats
       }
     };
 
+    // Gọi hàm lấy sản phẩm bán chạy và chuyển đổi dữ liệu bình luận
     fetchBestSellers();
     transformCommentStats();
-  }, [totalComments]);
+  }, [totalComments]); // useEffect phụ thuộc vào totalComments, sẽ chạy lại khi totalComments thay đổi
+
+  // Component StatBox hiển thị thông tin thống kê
   // eslint-disable-next-line react/prop-types
   const StatBox = ({ title, value, icon, color }) => (
     <div className={`${color} text-white p-4 rounded-lg shadow-lg`}>
-      <div className="text-lg">{title}</div>
-      <div className="text-3xl font-bold mt-2">{value}</div>
+      <div className="text-lg">{title}</div> {/* Tiêu đề của hộp thống kê */}
+      <div className="text-3xl font-bold mt-2">{value}</div>{" "}
+      {/* Giá trị thống kê */}
       <div className="text-right mt-2">
-        <i className={`fas ${icon} text-xl`}></i>
+        <i className={`fas ${icon} text-xl`}></i>{" "}
+        {/* Icon hiển thị ở góc phải */}
       </div>
     </div>
   );

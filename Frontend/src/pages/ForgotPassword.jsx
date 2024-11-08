@@ -15,7 +15,7 @@ const ForgotPassword = () => {
     try {
       // Gửi yêu cầu POST tới API 'forgotpassword' với email người dùng
       const res = await axios.post(
-        "http://localhost:3000/api/v1/forgotpassword",
+        "https://doanweb-api.onrender.com/api/v1/forgotpassword",
         { email }, // Dữ liệu gửi đi là một đối tượng chứa `email`
         headers
       );

@@ -30,7 +30,7 @@ function Cart() {
         try {
           // Gọi API lấy mã giảm giá của người dùng với `_id` từ `auth`
           const response = await axios.get(
-            `http://localhost:3000/api/v1/users/${auth._id}/coupons`
+            `https://doanweb-api.onrender.com/api/v1/users/${auth._id}/coupons`
           );
           // Cập nhật danh sách mã giảm giá với dữ liệu nhận được từ API
           setCoupons(response.data);

@@ -14,7 +14,9 @@ export const getCategoryPost = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       // Gửi yêu cầu GET đến API để lấy danh mục bài viết
-      const res = await axios.get("http://localhost:3000/api/v1/category-post");
+      const res = await axios.get(
+        "https://doanweb-api.onrender.com/api/v1/category-post"
+      );
       // Trả về dữ liệu categoryPost nhận được từ phản hồi của API
       return res.data.categoryPost;
     } catch (error) {
@@ -31,7 +33,7 @@ export const addCategoryPost = createAsyncThunk(
     try {
       // Gửi yêu cầu POST đến API để thêm danh mục bài viết mới
       const res = await axios.post(
-        "http://localhost:3000/api/v1/category-post/add",
+        "https://doanweb-api.onrender.com/api/v1/category-post/add",
         payload
       );
       // Hiển thị thông báo thành công khi thêm danh mục bài viết thành công
@@ -62,7 +64,7 @@ export const deleteCategoryPost = createAsyncThunk(
     try {
       // Gửi yêu cầu DELETE đến API để xóa danh mục bài viết theo ID
       const res = await axios.delete(
-        `http://localhost:3000/api/v1/category-post/delete/${payload}`
+        `https://doanweb-api.onrender.com/api/v1/category-post/delete/${payload}`
       );
       // Hiển thị thông báo thành công khi xóa danh mục bài viết thành công
       Swal.fire({
@@ -92,7 +94,7 @@ export const updateCategoryPost = createAsyncThunk(
     try {
       // Gửi yêu cầu PUT đến API để cập nhật danh mục bài viết
       const res = await axios.put(
-        `http://localhost:3000/api/v1/category-post/update`,
+        `https://doanweb-api.onrender.com/api/v1/category-post/update`,
         data
       );
       // Hiển thị thông báo thành công khi cập nhật danh mục bài viết thành công

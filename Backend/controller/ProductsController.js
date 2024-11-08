@@ -96,13 +96,13 @@ const updateSoldCount = async (req, res) => {
             $in: ["Đã hoàn thành", "Đã thanh toán"]
           } }
         ] 
-      } },
-      { $unwind: "$cart" },
+      } }, // Lấy order mà cart có ít nhất một sản phẩm trùng id
+      { $unwind: "$cart" }, // Tách mảng để trả nhiều document
       { $group: {
           _id: "$cart.product_id",
           quantity: { $sum: "$cart.quantity" }
         }
-      }
+      } // Cộng gộp số lượng theo id sản phẩm
     ]);
     const Product = product.findByIdAndUpdate(id, { soldCount });
     res.status(200).json({ Product });

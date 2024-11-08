@@ -14,7 +14,7 @@ const MyOrderDetail = () => {
   useEffect(() => {
     // Gửi yêu cầu GET đến API để lấy thông tin sản phẩm theo `id`
     axios
-      .get(`http://localhost:3000/api/v1/otherProduct/${id}`)
+      .get(`https://doanweb-api.onrender.com/api/v1/otherProduct/${id}`)
       .then((res) => {
         // Khi dữ liệu nhận được, cập nhật state `other` với thông tin sản phẩm
         setOther(res.data.otherProduct);

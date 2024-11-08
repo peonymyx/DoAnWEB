@@ -12,12 +12,12 @@ const forgotPassword = async (req, res) => {
     const { passwordReset } = user.createChangePasswordToken(); // Create token for resetting password
     await user.save(); // Save the token to the user document
 
-    const resetLink = `http://localhost:5173/reset-password?token=${passwordReset}`; // The reset password link
+    const resetLink = `https://doanweb-api.onrender.com/reset-password?token=${passwordReset}`; // The reset password link
 
     const mailOptions = {
       from: {
-        name: "Shop 2and",
-        address: "Vaccine@gmail.com",
+        name: "ASIN - Thương Hiệu Thời Trang Cao Cấp",
+        address: "ASINShop@gmail.com",
       }, // sender address
       to: user.email, // list of receivers
       subject: "Khôi phục mật khẩu", // Subject line

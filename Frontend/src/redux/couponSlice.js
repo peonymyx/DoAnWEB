@@ -16,7 +16,7 @@ export const createCoupon = createAsyncThunk(
     try {
       // Gửi yêu cầu POST để tạo mã giảm giá mới
       const response = await axios.post(
-        "http://localhost:3000/api/v1/coupons",
+        "https://doanweb-api.onrender.com/api/v1/coupons",
         couponData
       );
       return response.data; // Trả về dữ liệu mã giảm giá đã tạo
@@ -33,7 +33,9 @@ export const fetchCoupons = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       // Gửi yêu cầu GET để lấy tất cả mã giảm giá
-      const response = await axios.get("http://localhost:3000/api/v1/coupons");
+      const response = await axios.get(
+        "https://doanweb-api.onrender.com/api/v1/coupons"
+      );
       return response.data; // Trả về danh sách mã giảm giá
     } catch (error) {
       // Trả về lỗi nếu có lỗi xảy ra
@@ -49,7 +51,7 @@ export const updateCoupon = createAsyncThunk(
     try {
       // Gửi yêu cầu PUT để cập nhật mã giảm giá theo ID
       const response = await axios.put(
-        `http://localhost:3000/api/v1/coupons/${id}`,
+        `https://doanweb-api.onrender.com/api/v1/coupons/${id}`,
         couponData
       );
       return response.data; // Trả về dữ liệu mã giảm giá đã cập nhật
@@ -67,7 +69,9 @@ export const deleteCoupon = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       // Gửi yêu cầu DELETE để xóa mã giảm giá theo ID
-      await axios.delete(`http://localhost:3000/api/v1/coupons/${id}`);
+      await axios.delete(
+        `https://doanweb-api.onrender.com/api/v1/coupons/${id}`
+      );
       return id; // Trả về ID của mã giảm giá đã xóa
     } catch (error) {
       // Trả về lỗi nếu có lỗi xảy ra
@@ -82,9 +86,12 @@ export const applyCoupon = createAsyncThunk(
   async (code, { rejectWithValue }) => {
     try {
       // Gửi yêu cầu POST để áp dụng mã giảm giá
-      const response = await axios.post("http://localhost:3000/api/v1/apply", {
-        code,
-      });
+      const response = await axios.post(
+        "https://doanweb-api.onrender.com/api/v1/apply",
+        {
+          code,
+        }
+      );
       return response.data.discount; // Trả về giá trị giảm giá
     } catch (error) {
       // Trả về lỗi nếu có lỗi xảy ra
