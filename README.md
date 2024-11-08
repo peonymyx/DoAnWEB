@@ -9,14 +9,14 @@ Ngành công nghệ thông tin (CNTT) trong những năm gần đây đã có nh
 
 ## Mô TẢ:
 Website thương mại điện tử cửa hàng quần áo hỗ trợ quản lý cửa hàng quần áo có những chức năng:
-# ADMIN/STAFF: 
+### ADMIN/STAFF: 
 - Thống kê tổng doanh thu, khách hàng, sản phẩm, đơn hàng, bình luận theo ngày, sản phẩm bán chạy
 - Thêm, xóa, sửa, tìm kiếm danh mục sản phẩm, sản phẩm, mã giảm giá
 - Tìm kiếm, cập nhật, xem chi tiết và xuất báo cáo đơn hàng
 - Trả lời tin nhắn của người dùng
 - Tìm kiếm, phân quyền tài khoản (chỉ ADMIN)
 
-# USER:
+### USER:
 - Tìm kiếm sản phẩm, lọc danh mục, sắp xếp theo tên và giá
 - Xem chi tiết sản phẩm, bình luận sản phẩm
 - Thêm sản phẩm vào giỏ hàng, đặt hàng có mã giảm giá
