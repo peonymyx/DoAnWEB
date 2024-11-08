@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/0c1ffff8-3843-4a34-8067-c3381cdd829d)## Tài liệu người dùng cuối
+## Tài liệu người dùng cuối
 
 Đầu tiên, mọi người dùng truy cập vào website sẽ ở trang Trang Chủ
 
