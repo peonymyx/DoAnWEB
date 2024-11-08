@@ -34,6 +34,26 @@ Sau đó, bạn có thể đăng ký tài khoản mới, đăng nhập, lấy l�
 - Trang cập nhật thông tin cá nhân
 ![image](https://github.com/user-attachments/assets/2f875c39-e56a-4f34-9655-20b9af26182b)
 
+## Đăng nhập với Role USER:
+- Trang sản phẩm: tìm kiếm, lọc danh mục, sắp xếp theo tên và giá
+![image](https://github.com/user-attachments/assets/ef3f4612-e7db-4f17-aae6-2e7b874b3f3f)
+
+- Trang chi tiết sản phẩm: thêm giỏ hàng, thêm yêu thích, bình luận
+![image](https://github.com/user-attachments/assets/adc0906b-38dc-4763-9f2f-3ec6e27d18ba)
+
+- Trang sản phẩm yêu thích
+![image](https://github.com/user-attachments/assets/7a90a3a8-e861-4114-a4a0-5f23a540252c)
+
+- Trang giỏ hàng
+![image](https://github.com/user-attachments/assets/90dbae8e-06ff-4e98-8b78-bb9aafc63062)
+
+- Trang đơn hàng
+![image](https://github.com/user-attachments/assets/9b58c6c3-4f43-4da8-b195-823c70e7c8ce)
+
+- Trang cập nhật thông tin cá nhân
+![image](https://github.com/user-attachments/assets/bae7da83-e441-4b3a-a15e-78b8386b8cc4)
+
+
 
 
 
