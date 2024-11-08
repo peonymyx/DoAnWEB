@@ -12,7 +12,7 @@ const forgotPassword = async (req, res) => {
     const { passwordReset } = user.createChangePasswordToken(); // Create token for resetting password
     await user.save(); // Save the token to the user document
 
-    const resetLink = `https://doanweb-api.onrender.com/reset-password?token=${passwordReset}`; // The reset password link
+    const resetLink = `https://nhom2.myx.info.vn/reset-password?token=${passwordReset}`; // The reset password link
 
     const mailOptions = {
       from: {
