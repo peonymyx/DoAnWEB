@@ -353,7 +353,7 @@ const SignUp = () => {
         </div>
         <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
           <div className="max-w-md w-full p-6">
-            <h1 className="text-3xl font-semibold mb-6 text-black text-center">
+            <h1 className="text-xl font-semibold mb-4 text-black text-center">
               Đăng Ký
             </h1>
 
@@ -460,7 +460,7 @@ const SignUp = () => {
               <div className="flex flex-col mb-3">
                 <label
                   htmlFor="birthday"
-                  className="text-md font-medium cursor-pointer"
+                  className="text-md font-medium cursor-pointer text-gray-700"
                 >
                   Birthday
                 </label>
@@ -475,7 +475,7 @@ const SignUp = () => {
               <div className="flex flex-col mb-3">
                 <label
                   htmlFor="gender"
-                  className="text-md font-medium cursor-pointer"
+                  className="text-md font-medium cursor-pointer text-gray-700"
                 >
                   Gender
                 </label>
@@ -487,13 +487,13 @@ const SignUp = () => {
               <div>
                 <button
                   type="submit"
-                  className="w-full mt-3 bg-black text-white p-2 rounded-md hover:bg-gray-800 text-lg focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
+                  className="w-full mt-2 bg-black text-white p-2 rounded-md hover:bg-gray-800 text-lg focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
                 >
                   Đăng Ký
                 </button>
               </div>
             </form>
-            <div className="mt-4 text-md text-gray-600 text-center">
+            <div className="mt-2 text-md text-gray-600 text-center">
               <p>
                 Bạn đã có tài khoản?{" "}
                 <a
