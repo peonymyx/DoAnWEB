@@ -76,11 +76,7 @@ export const updateCategory = createAsyncThunk(
     try {
       // Gửi yêu cầu PUT đến API để cập nhật danh mục với token trong headers
       const res = await axios.put(
-<<<<<<< HEAD
-        `http://localhost:3000/api/v1/category/update`,
-=======
         `https://doanweb-api.onrender.com/api/v1/category/update`,
->>>>>>> 99f9255eaddf95c28707c0b07a2287e2ab17ac6f
         data, // Dữ liệu gửi lên để cập nhật danh mục
         {
           headers: {
