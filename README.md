@@ -95,8 +95,9 @@ Password: 123456
 Để có thể hoàn thành tốt đề tài “Thiết kế website thương mại điện tử cửa hàng quần áo” này, nhóm chúng em xin cảm ơn thầy **Nguyễn Mạnh Tuấn** vì những kiến thức, bài giảng, bài thực hành mà thầy đã truyền đạt cho nhóm trong những buổi học. Những kiến thức đó không chỉ giúp ích cho nhóm trong việc xây dựng đề tài mà còn giúp là nền tảng để các thành viên nhóm có thể học thêm những kiến thức mới, nâng cao trong tương tai. 
 
 ## Danh sách lỗi:
-- Tin nhắn của ADMIN chưa hiển thị được ở tin nhắn USER
 - Cập nhật sản phẩm chưa hiển thị được kích cỡ sản phẩm
+- Lỗi xóa sản phẩm yêu thích
+- Lỗi xem chi tiết sản phẩm ở role Khách
 
 
 
