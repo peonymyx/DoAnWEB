@@ -60,11 +60,11 @@ Password: 123456
 - Redux: Store, Reducers, Actions
 
 ### Backend
-- 
-- 
+- Express.js: giao tiếp và truyền tải dữ liệu trên API
+- Socket.io: kết nối client với server, lắng nghe và xử lý sự kiện
 
 ### Database
-- 
+- MongoDB: truy vấn cơ sở dữ liệu, làm việc với Mongoose
 
 ## Công nghệ sử dụng
 
@@ -78,11 +78,13 @@ Password: 123456
 - **Framer Motion** - thư viện tạo animation phổ biến nhất trong ReactJs
 
 ### Backend
-- 
-- 
+- Express.js - framework Node đơn giản, linh hoạt và thông dụng nhất hiện nay
+- Socket.io - thư viện quản lý giao tiếp thời gian thực client-server phổ biến
+- MongoDB và Mongoose - bộ cơ sở dữ liệu và ODM nổi tiếng trong cộng đồng Node
 
-## Thiết kế giao diện website
-[XEM TẠI ĐÂY](https://github.com/peonymyx/DoAnWEB/blob/main/NguoiDungCuoi.md)
+
+## Thiết kế giao diện Figma
+[XEM TẠI ĐÂY](https://www.figma.com/design/6o8cEogIJdEgO5mTB8fy5H/%C4%90%E1%BB%93-%C3%A1n-Website)
 
 ## Tài liệu cho người dùng cuối
 [XEM TẠI ĐÂY](https://github.com/peonymyx/DoAnWEB/blob/main/NguoiDungCuoi.md)
