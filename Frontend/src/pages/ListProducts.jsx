@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Search, ShoppingCart } from "lucide-react";
+import { Search, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import { getProduct } from "../redux/productSlice";
 import BestSellingProducts from "./BestSellingProducts";
 
+// ProductCard component remains the same
 const ProductCard = ({ product }) => {
-  // State để theo dõi trạng thái hover và yêu thích
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -59,6 +59,81 @@ ProductCard.propTypes = {
   }).isRequired,
 };
 
+// Pagination component
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const pageNumbers = [];
+  const maxDisplayedPages = 5;
+
+  let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
+  let endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
+
+  if (endPage - startPage + 1 < maxDisplayedPages) {
+    startPage = Math.max(1, endPage - maxDisplayedPages + 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <div className="flex items-center justify-center space-x-2 mt-8 mb-4">
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-white"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+
+      {startPage > 1 && (
+        <>
+          <button
+            onClick={() => onPageChange(1)}
+            className={`px-4 py-2 rounded-lg hover:bg-gray-100`}
+          >
+            1
+          </button>
+          {startPage > 2 && <span className="px-2">...</span>}
+        </>
+      )}
+
+      {pageNumbers.map((number) => (
+        <button
+          key={number}
+          onClick={() => onPageChange(number)}
+          className={`px-4 py-2 rounded-lg ${
+            currentPage === number
+              ? "bg-blue-500 text-white"
+              : "hover:bg-gray-100"
+          }`}
+        >
+          {number}
+        </button>
+      ))}
+
+      {endPage < totalPages && (
+        <>
+          {endPage < totalPages - 1 && <span className="px-2">...</span>}
+          <button
+            onClick={() => onPageChange(totalPages)}
+            className={`px-4 py-2 rounded-lg hover:bg-gray-100`}
+          >
+            {totalPages}
+          </button>
+        </>
+      )}
+
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-white"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </button>
+    </div>
+  );
+};
+
 const ListProducts = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
@@ -68,76 +143,89 @@ const ListProducts = () => {
   const [sortBy, setSortBy] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8; // 4 products per row * 2 rows
 
-  // useEffect đầu tiên để lấy dữ liệu khi component được render
   useEffect(() => {
-    // Hàm bất đồng bộ `fetchData` để lấy dữ liệu sản phẩm và danh mục
     const fetchData = async () => {
       try {
-        setIsLoading(true); // Bắt đầu quá trình tải dữ liệu
-        await dispatch(getProduct()); // Gửi yêu cầu lấy danh sách sản phẩm từ Redux store
-        await getCategoryList(); // Gọi hàm lấy danh sách danh mục
-        setIsLoading(false); // Kết thúc quá trình tải dữ liệu
+        setIsLoading(true);
+        await dispatch(getProduct());
+        await getCategoryList();
+        setIsLoading(false);
       } catch (err) {
-        // Nếu có lỗi xảy ra, đặt thông báo lỗi và ngừng tải dữ liệu
-        setError("An error occurred while fetching data."); // Thông báo lỗi
-        setIsLoading(false); // Ngừng trạng thái tải
+        setError("An error occurred while fetching data.");
+        setIsLoading(false);
       }
     };
 
-    fetchData(); // Gọi hàm `fetchData` khi component render lần đầu
-  }, [dispatch]); // useEffect này phụ thuộc vào `dispatch`
+    fetchData();
+  }, [dispatch]);
 
-  // useEffect thứ hai để cuộn trang lên đầu khi component render lần đầu
   useEffect(() => {
-    window.scrollTo(0, 0); // Cuộn lên đầu trang
-  }, []);
+    window.scrollTo(0, 0);
+  }, [currentPage]); // Also scroll to top when page changes
 
-  // Hàm bất đồng bộ `getCategoryList` để lấy danh sách danh mục từ API
   const getCategoryList = async () => {
     try {
-      // Gửi yêu cầu GET tới API để lấy danh sách danh mục
       const res = await axios.get(
         "https://doanweb-api.onrender.com/api/v1/category"
       );
-      setCategories(res.data.category); // Cập nhật state `categories` với dữ liệu danh mục
+      setCategories(res.data.category);
     } catch (error) {
-      // Nếu có lỗi xảy ra, in ra console và hiển thị thông báo lỗi
       console.error("Error fetching categories:", error);
-      setError("An error occurred while fetching categories."); // Thông báo lỗi
+      setError("An error occurred while fetching categories.");
     }
   };
 
-  // Hàm `handleCategoryChange` để xử lý sự kiện thay đổi danh mục được chọn
   const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value); // Cập nhật danh mục được chọn dựa trên giá trị sự kiện
+    setSelectedCategory(event.target.value);
+    setCurrentPage(1); // Reset to first page when category changes
   };
 
-  // Lọc và sắp xếp sản phẩm dựa trên danh mục được chọn, từ khóa tìm kiếm, và tiêu chí sắp xếp
-  const filteredProducts = Array.isArray(products) // Kiểm tra `products` có phải là một mảng hay không
+  // Reset to first page when search term changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory, sortBy]);
+
+  const filteredProducts = Array.isArray(products)
     ? products
         .filter(
           (product) =>
-            (selectedCategory === "All" || // Nếu danh mục là "All", lấy tất cả sản phẩm
-              product.category === selectedCategory) && // Nếu không, lọc theo danh mục được chọn
-            product.name.toLowerCase().includes(searchTerm.toLowerCase()) // Lọc theo tên sản phẩm có chứa từ khóa tìm kiếm (không phân biệt hoa thường)
+            (selectedCategory === "All" ||
+              product.category === selectedCategory) &&
+            product.name.toLowerCase().includes(searchTerm.toLowerCase())
         )
         .sort((a, b) => {
-          // Sắp xếp sản phẩm dựa trên tiêu chí `sortBy`
           switch (sortBy) {
             case "name-asc":
-              return a.name.localeCompare(b.name); // Sắp xếp tên sản phẩm từ A-Z
+              return a.name.localeCompare(b.name);
             case "name-desc":
-              return b.name.localeCompare(a.name); // Sắp xếp tên sản phẩm từ Z-A
+              return b.name.localeCompare(a.name);
             case "price-asc":
-              return a.price - b.price; // Sắp xếp giá từ thấp đến cao
+              return a.price - b.price;
             case "price-desc":
-              return b.price - a.price; // Sắp xếp giá từ cao đến thấp
+              return b.price - a.price;
             default:
-              return 0; // Không thay đổi thứ tự nếu không có tiêu chí sắp xếp
+              return 0;
           }
         })
-    : []; // Nếu `products` không phải là mảng, trả về mảng rỗng
+    : [];
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   if (isLoading) {
     return <div className="text-center mt-8">Đang tải......</div>;
@@ -199,16 +287,23 @@ const ListProducts = () => {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
-        {filteredProducts.map((product) => (
+        {currentProducts.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}
       </div>
 
-      {filteredProducts.length === 0 && (
+      {filteredProducts.length === 0 ? (
         <p className="text-center text-gray-500 my-4 sm:my-8 text-sm sm:text-base">
           Không tìm thấy sản phẩm phù hợp với tiêu chí của bạn.
         </p>
+      ) : (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       )}
+      
       <BestSellingProducts />
     </div>
   );
