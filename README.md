@@ -57,7 +57,7 @@ Password: 123456
 
 ## Kiến thức áp dụng
 ### Frontend
-- HTML5 and CSS3: Semantic Elements, CSS Grid, Flexbox
+- HTML5 and CSS3: Semantic Elements, CSS Grid, Flexbox,...
 - React: Components, Props, Events, Hooks, Router, Axios, Routing,...
 - Redux: Store, Reducers, Actions
 
