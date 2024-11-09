@@ -38,7 +38,7 @@ const EditProduct = () => {
 
   useEffect(() => {
     if (product && typeof product.size === "string") {
-      setSelectedSize(product.size.split(",")); // Chia chuỗi size thành mảng và lưu vào selectedSize
+      setSelectedSize(product.size); // Chia chuỗi size thành mảng và lưu vào selectedSize
     }
   }, [product]);
 
