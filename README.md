@@ -33,6 +33,8 @@ Website thương mại điện tử cửa hàng quần áo hỗ trợ quản lý
 
 ## DEMO
 
+Website thương mại điện tử cửa hàng quần áo: https://nhom2.myx.info.vn/
+
 #### ADMIN: 
 Demo admin:
 Email: admin@gmail.com
