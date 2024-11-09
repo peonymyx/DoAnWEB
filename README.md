@@ -76,7 +76,7 @@ Password: 123456
 - **ReactJs** - thư viện Javascript phổ biến nhất để tạo ra các SPA
 - **Tailwind CSS** - framework CSS được ưa chuộng hiện nay
 - **Redux** - thư viện quản lý state phổ biến nhất trong ReactJs
-- **React Hook Form** - thư viện quản lý form số 1 trong hệ sinh thái ReactJs
+- **React Hook Form** - thư viện quản lý form trong hệ sinh thái ReactJs
 - **Framer Motion** - thư viện tạo animation phổ biến nhất trong ReactJs
 
 ### Backend
