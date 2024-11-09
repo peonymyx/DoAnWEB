@@ -92,7 +92,7 @@ Password: 123456
 [XEM TẠI ĐÂY](https://github.com/peonymyx/DoAnWEB/blob/main/NguoiDungCuoi.md)
 
 ## Lời cảm ơn
-Để có thể hoàn thành tốt đề tài “Thiết kế website thương mại điện tử cửa hàng quần áo” này, nhóm chúng em xin cảm ơn thầy Nguyễn Mạnh Tuấn vì những kiến thức, bài giảng, bài thực hành mà thầy đã truyền đạt cho nhóm trong những buổi học. Những kiến thức đó không chỉ giúp ích cho nhóm trong việc xây dựng đề tài mà còn giúp là nền tảng để các thành viên nhóm có thể học thêm những kiến thức mới, nâng cao trong tương tai. 
+Để có thể hoàn thành tốt đề tài “Thiết kế website thương mại điện tử cửa hàng quần áo” này, nhóm chúng em xin cảm ơn thầy **Nguyễn Mạnh Tuấn** vì những kiến thức, bài giảng, bài thực hành mà thầy đã truyền đạt cho nhóm trong những buổi học. Những kiến thức đó không chỉ giúp ích cho nhóm trong việc xây dựng đề tài mà còn giúp là nền tảng để các thành viên nhóm có thể học thêm những kiến thức mới, nâng cao trong tương tai. 
 
 ## Danh sách lỗi:
 - Khi đăng xuất ở trang bất kì chưa chuyển về đăng nhập
