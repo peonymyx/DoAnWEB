@@ -35,11 +35,23 @@ const productSchema = new Schema(
       type: Number,
       default: 0,
     },
+    discount: { type: Number, default: 0 }
   },
   {
     timestamps: true,
   }
 );
+
+productSchema.methods.getFinalPrice = function() {
+  let finalPrice = this.price;
+  if (this.discountType === 'percentage') {
+    finalPrice = this.price - (this.price * (this.discount / 100));
+  } else if (this.discountType === 'fixed') {
+    finalPrice = this.price - this.discount;
+  }
+  return finalPrice > 0 ? finalPrice : 0;
+};
+
 
 const product = mongoose.model("Product", productSchema);
 module.exports = product;

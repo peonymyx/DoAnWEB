@@ -94,11 +94,12 @@ app.use("/api/v1/signup", require("./router/signUpRouter"));
 app.use("/api/v1/signin", require("./router/signInRouter"));
 app.use("/api/v1/forgotpassword", require("./router/forgot-password"));
 app.use("/api/v1/resetpassword", require("./router/reset-password"));
-
+app.use("/api/v1/products", require("./router/ProductRouter"));
 app.use("/api/v1/coupons", require("./router/couponRouter"));
 app.use("/api/v1/addProduct", require("./router/ProductRouter"));
 app.use("/api/v1/getProduct", require("./router/ProductRouter"));
 app.use("/api/v1/deleteProduct", require("./router/ProductRouter"));
+app.use("/api/v1/getProductDiscount", require("./router/ProductRouter"));
 app.use("/api/v1/updateProduct", require("./router/ProductRouter"));
 app.use("/api/v1/getProductById", require("./router/ProductRouter"));
 app.use("/api/v1/getUsers", require("./router/userRouter"));
