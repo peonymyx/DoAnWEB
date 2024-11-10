@@ -117,7 +117,7 @@ const ProductsDetail = () => {
       product_id: id, // ID sản phẩm
       image: product.image, // Hình ảnh sản phẩm
       name: product.name, // Tên sản phẩm
-      price: product.price, // Giá sản phẩm
+      price: product.price * (1 - product.discount / 100), // Giá sản phẩm
       description: product.description, // Mô tả sản phẩm
       size: selectedSize, // Kích cỡ đã chọn
     };
@@ -139,13 +139,31 @@ const ProductsDetail = () => {
             />
           </div>
         </div>
+        
         <div className="lg:w-1/2 flex flex-col">
           <h1 className="text-2xl sm:text-3xl font-bold mb-4">
             {product.name}
           </h1>
           <h2 className="text-xl sm:text-2xl text-red-600 font-semibold mb-4">
-            {formatPrice(product.price)} VNĐ
+            {(product.price * (1 - product.discount / 100)).toLocaleString()} VNĐ
           </h2>
+          {/* Original Price with Strike-through if discounted */}
+          {product.discount > 0 ? (
+            <div className="flex items-center gap-2">
+              <span className="text-gray-500 line-through text-xs sm:text-base">
+                {product.price?.toLocaleString()}₫
+              </span>
+              <span className="text-red-500 text-xs sm:text-sm font-medium">
+                -{product.discount}%
+              </span>
+            </div>
+          ) : null}
+          {product.discount > 0 && (
+              <span className="text-xs sm:text-sm text-green-600">
+                Tiết kiệm:{" "}
+                {(product.price * (product.discount / 100)).toLocaleString()}₫
+              </span>
+            )}
           <div
             className="prose prose-sm sm:prose mb-6 flex-grow overflow-auto max-h-48 sm:max-h-64 lg:max-h-96"
             dangerouslySetInnerHTML={{ __html: product.description }}
