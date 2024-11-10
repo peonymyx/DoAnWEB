@@ -61,7 +61,7 @@ const EditProduct = () => {
       name: name !== undefined ? name : product.name, // Kiểm tra tên trước khi cập nhật
       description:
         description !== undefined ? description : product.description, // Kiểm tra mô tả
-      size: selectedSize.length > 0 ? selectedSize.join(",") : product.size, // Kiểm tra và cập nhật size
+      size: selectedSize.length > 0 ? selectedSize : product.size, // Kiểm tra và cập nhật size
       category: category !== undefined ? category : product.category, // Kiểm tra danh mục
       price: price !== undefined ? price : product.price, // Kiểm tra giá
       image: imageUpload ? imageUpload : product.image, // Kiểm tra ảnh

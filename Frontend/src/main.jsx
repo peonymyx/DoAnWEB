@@ -16,7 +16,7 @@ import Product from "./components/Admin/pageAdmin/Product.jsx";
 import Addproduct from "./components/Admin/cruds/AddProduct.jsx";
 import EditProduct from "./components/Admin/cruds/EditProduct.jsx";
 import UpdateMain from "./components/Admin/pageAdmin/UpdateMain.jsx";
-import AddCategory from "./components/Admin/cruds/addCategory.jsx";
+import AddCategory from "./components/Admin/cruds/AddCategory.jsx";
 import ProductsDetail from "./pages/ProductsDetail.jsx";
 import PayProducts from "./pages/PayProduct.jsx";
 import Cart from "./pages/Cart.jsx";
@@ -31,7 +31,7 @@ import CategoryMain from "./components/Admin/pageAdmin/CategoryMain.jsx";
 import ListProducts from "./pages/ListProducts.jsx";
 import MyOrder from "./pages/MyOrder.jsx";
 import MyOrderDetail from "./pages/MyOrderDetail.jsx";
-import Favatie from "./pages/favatie.jsx";
+import Favatie from "./pages/Favatie.jsx";
 import CouponAdmin from "./components/Admin/pageAdmin/Coupon.jsx";
 const router = createBrowserRouter([
   {
