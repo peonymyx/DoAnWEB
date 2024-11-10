@@ -17,6 +17,7 @@ const TABLE_HEAD = [
   "Hình Ảnh",
   "Tên",
   "Giá",
+  "Mức Giảm Giá",
   "Size",
   "Ngày Tạo",
   "Ngày Sửa",
@@ -193,6 +194,12 @@ const Product = () => {
                         {/* Hiển thị giá sản phẩm */}
                         <Typography color="blueGray" variant="body2">
                           {formatPrice(row.price)}
+                        </Typography>
+                      </td>
+                      <td className="border-dashed border-t border-blue-gray-200 px-10 py-4">
+                        {/* Hiển thị mức giảm giá của sản phẩm */}
+                        <Typography color="blueGray" variant="body2">
+                          {row.discount}
                         </Typography>
                       </td>
                       <td className="border-dashed border-t border-blue-gray-200 px-10 py-4">

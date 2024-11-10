@@ -55,7 +55,7 @@ const EditProduct = () => {
   };
 
   const handleEditProduct = (data) => {
-    const { name, description, category, price } = data;
+    const { name, description, category, price, discount } = data;
     const updatedProduct = {
       id,
       name: name !== undefined ? name : product.name, // Kiểm tra tên trước khi cập nhật
@@ -64,6 +64,7 @@ const EditProduct = () => {
       size: selectedSize.length > 0 ? selectedSize : product.size, // Kiểm tra và cập nhật size
       category: category !== undefined ? category : product.category, // Kiểm tra danh mục
       price: price !== undefined ? price : product.price, // Kiểm tra giá
+      discount: discount !== undefined ? discount : product.discount, // Kiểm tra mức giảm giá
       image: imageUpload ? imageUpload : product.image, // Kiểm tra ảnh
     };
 
@@ -134,6 +135,23 @@ const EditProduct = () => {
                 {...register("price")}
               />
               <p className="text-red-500 mt-1">{errors.price?.message}</p>
+            </div>
+            {/* Nhập mức giảm giá */}
+            <div className="mb-4">
+              <label
+                htmlFor="discount"
+                className="text-lg text-gray-600 font-semibold mb-3"
+              >
+                Mức giảm giá (%)
+              </label>
+              <input
+                name="discount"
+                type="text"
+                placeholder="Hãy nhập mức giảm giá"
+                className="w-full border border-gray-300 rounded-lg py-2 px-3 outline-none bg-transparent focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                defaultValue={product?.discount}
+                {...register("discount")}
+              />
             </div>
             {/* Chọn size */}
             <div className="mb-4">

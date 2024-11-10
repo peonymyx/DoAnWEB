@@ -12,7 +12,7 @@ import "react-quill/dist/quill.snow.css";
 
 const schema = yup.object().shape({
   name: yup.string().required("Vui lòng nhập tên"),
-  price: yup.string().required("Vui lòng nhập giá"),
+  price: yup.string().required("Vui lòng nhập giá")
 });
 
 const AddProduct = () => {
@@ -80,7 +80,7 @@ const AddProduct = () => {
   };
 
   const handleAddProduct = async (data) => {
-    const { name, address, category, price } = data;
+    const { name, address, category, price, discount } = data;
     console.log("imageUpload", imageUpload);
     const imageUrl = await handleUploadToImgBB(imageUpload);
     if (!imageUrl) {
@@ -101,7 +101,8 @@ const AddProduct = () => {
         category,
         description: description,
         price,
-        image: imageUrl,
+        discount,
+        image: imageUrl
       })
     );
   };
@@ -154,6 +155,22 @@ const AddProduct = () => {
                 {...register("price")}
               />
               <p className="text-red-500 mt-1">{errors.price?.message}</p>
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="discount"
+                className="mb-3 block font-bold text-[#07074D] text-xl"
+              >
+                Mức giảm giá (%):
+              </label>
+              <input
+                name="discount"
+                type="text"
+                id="discount"
+                placeholder="Hãy nhập mức giảm giá"
+                className="w-full rounded-md border text-xl border-[#e0e0e0] bg-white py-3 px-6 font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                {...register("discount")}
+              />
             </div>
             <div className="flex gap-2 items-center mt-2 mb-4">
               <label
